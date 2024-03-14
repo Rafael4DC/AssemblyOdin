@@ -1,4 +1,3 @@
 package pt.isel.odin.controller
 
-class UserController {
-}
+class UserController

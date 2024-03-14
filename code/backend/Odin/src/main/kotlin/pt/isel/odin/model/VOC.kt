@@ -13,12 +13,20 @@ import pt.isel.odin.utils.DurationConverter
 import pt.isel.odin.utils.LocalDateConverter
 import kotlin.time.Duration
 
+/**
+ * Represents the Pratical classes (VOC) in the system
+ * @property id the VOC id
+ * @property student the student that is responsible for the VOC
+ * @property course the course that the VOC is about
+ * @property date the date of the VOC
+ * @property length the length of the VOC
+ */
 @Entity
 @Table(name = "voc")
-class VOC (
+class VOC(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id:Long,
+    val id: Long,
 
     @OneToOne
     val student: Student,
@@ -31,5 +39,4 @@ class VOC (
 
     @Convert(converter = DurationConverter::class)
     val length: Duration
-) {
-}
+)

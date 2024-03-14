@@ -1,19 +1,20 @@
 package pt.isel.odin.model
 
 import jakarta.persistence.Column
-import jakarta.persistence.DiscriminatorValue
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.Table
 
-
 /**
- * There should be a better way to do this
- * TODO() Fix it later
+ * Represents a student in the system, an extension of [User]
+ * for the cases where the user is a student, needing points
+ * @property id the student id
+ * @property username the student username
+ * @property email the student email
+ * @property role the student role, is a [Role]
+ * @property pontos the student points
  */
 @Entity
-@Table(name = "student")
+@Table(name = "students")
 class Student(
     id: Long,
     username: String,
