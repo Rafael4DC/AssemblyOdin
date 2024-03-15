@@ -12,7 +12,8 @@ import kotlinx.datetime.LocalDate
 import pt.isel.odin.utils.LocalDateConverter
 
 /**
- * Represents the Teoric lectures (TEC) in the system
+ * Represents the Teoric lectures (TEC) in the system.
+ *
  * @property id the TEC id
  * @property teacher the teacher that is responsible for the TEC
  * @property course the course that the TEC is about
@@ -22,7 +23,7 @@ import pt.isel.odin.utils.LocalDateConverter
  */
 @Entity
 @Table(name = "tec")
-class TEC(
+class Tec(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

@@ -2,16 +2,18 @@ package pt.isel.odin.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Inheritance
 import jakarta.persistence.InheritanceType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
+
 /**
- * Represents a user in the system, mainly used to represent Teacher and Admins
+ * Represents a user in the system, mainly used to represent Teacher and Admins.
+ *
  * @property id the user id
  * @property username the user username
  * @property email the user email
@@ -32,7 +34,8 @@ open class User(
     @Column(nullable = false)
     open val email: String,
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     @Column(name = "role", nullable = false)
     open val role: Role
 )

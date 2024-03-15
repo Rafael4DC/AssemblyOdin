@@ -20,7 +20,6 @@ repositories {
     mavenCentral()
 }
 
-
 val kotlinxDateTimeVersion = "0.5.0"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
