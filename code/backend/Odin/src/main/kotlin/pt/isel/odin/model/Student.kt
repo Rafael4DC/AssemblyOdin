@@ -15,7 +15,7 @@ import jakarta.persistence.Table
  * @property credits the student points
  */
 @Entity
-@Table(name = "students")
+@Table(name = "student")
 class Student(
     id: Long,
     username: String,

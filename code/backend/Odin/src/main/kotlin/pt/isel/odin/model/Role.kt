@@ -14,7 +14,7 @@ import jakarta.persistence.Table
  * @property name the course type name
  */
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -35,7 +35,6 @@ open class User(
     open val email: String,
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @Column(name = "role", nullable = false)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) // Corrected
     open val role: Role
 )

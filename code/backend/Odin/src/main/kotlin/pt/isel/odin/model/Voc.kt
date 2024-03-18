@@ -17,6 +17,7 @@ import kotlin.time.Duration
  * Represents the Pratical classes (VOC) in the system.
  *
  * @property id the VOC id
+ * @property description the description of the VOC
  * @property student the student that is responsible for the VOC
  * @property course the course that the VOC is about
  * @property date the date of the VOC
@@ -28,6 +29,7 @@ class Voc(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+    val description: String,
 
     @OneToOne
     val student: Student,
