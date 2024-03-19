@@ -19,7 +19,7 @@ import kotlin.time.Duration
  * @property id the VOC id
  * @property description the description of the VOC
  * @property student the student that is responsible for the VOC
- * @property course the course that the VOC is about
+ * @property curricularUnit the course that the VOC is about
  * @property date the date of the VOC
  * @property length the length of the VOC
  */
@@ -35,7 +35,7 @@ class Voc(
     val student: Student,
 
     @ManyToOne
-    val course: Course,
+    val curricularUnit: CurricularUnit,
 
     @Convert(converter = LocalDateConverter::class)
     val date: LocalDate,

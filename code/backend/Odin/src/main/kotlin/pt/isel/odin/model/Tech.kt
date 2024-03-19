@@ -16,14 +16,14 @@ import pt.isel.odin.utils.LocalDateConverter
  *
  * @property id the TEC id
  * @property teacher the teacher that is responsible for the TEC
- * @property course the course that the TEC is about
+ * @property curricularUnit the course that the TEC is about
  * @property date the date of the TEC
  * @property summary the summary of the TEC
  * @property students the students that are in the TEC
  */
 @Entity
-@Table(name = "tec")
-class Tec(
+@Table(name = "tech")
+class Tech(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -32,7 +32,7 @@ class Tec(
     val teacher: User,
 
     @ManyToOne
-    val course: Course,
+    val curricularUnit: CurricularUnit,
 
     @Convert(converter = LocalDateConverter::class)
     val date: LocalDate,
