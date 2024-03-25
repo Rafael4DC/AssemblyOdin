@@ -22,6 +22,7 @@ import kotlin.time.Duration
  * @property curricularUnit the course that the VOC is about
  * @property date the date of the VOC
  * @property length the length of the VOC
+ * @property approved if the VOC was approved
  */
 @Entity
 @Table(name = "voc")
@@ -41,5 +42,7 @@ class Voc(
     val date: LocalDate,
 
     @Convert(converter = DurationConverter::class)
-    val length: Duration
+    val length: Duration,
+
+    val approved: Boolean
 )
