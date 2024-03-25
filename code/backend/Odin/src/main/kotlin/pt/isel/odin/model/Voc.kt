@@ -1,5 +1,6 @@
 package pt.isel.odin.model
 
+import jakarta.persistence.Column
 import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -30,7 +31,12 @@ class Voc(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+
+    @Column(nullable = false)
     val description: String,
+
+    @Column(nullable = false)
+    val approved: Boolean,
 
     @OneToOne
     val student: Student,
@@ -42,7 +48,5 @@ class Voc(
     val date: LocalDate,
 
     @Convert(converter = DurationConverter::class)
-    val length: Duration,
-
-    val approved: Boolean
+    val length: Duration
 )
