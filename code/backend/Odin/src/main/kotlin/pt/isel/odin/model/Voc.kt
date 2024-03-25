@@ -1,5 +1,6 @@
 package pt.isel.odin.model
 
+import jakarta.persistence.Column
 import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -22,6 +23,7 @@ import kotlin.time.Duration
  * @property curricularUnit the course that the VOC is about
  * @property date the date of the VOC
  * @property length the length of the VOC
+ * @property approved if the VOC was approved
  */
 @Entity
 @Table(name = "voc")
@@ -29,7 +31,12 @@ class Voc(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+
+    @Column(nullable = false)
     val description: String,
+
+    @Column(nullable = false)
+    val approved: Boolean,
 
     @OneToOne
     val student: Student,

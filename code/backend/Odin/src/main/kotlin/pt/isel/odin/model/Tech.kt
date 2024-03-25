@@ -1,12 +1,12 @@
 package pt.isel.odin.model
 
+import jakarta.persistence.Column
 import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import kotlinx.datetime.LocalDate
 import pt.isel.odin.utils.LocalDateConverter
@@ -37,8 +37,6 @@ class Tech(
     @Convert(converter = LocalDateConverter::class)
     val date: LocalDate,
 
-    val summary: String,
-
-    @OneToMany
-    val students: List<Student>
+    @Column(nullable = false)
+    val summary: String
 )

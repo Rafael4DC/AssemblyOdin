@@ -22,7 +22,7 @@ class Student(
     email: String,
     role: Role,
 
-    @Column(nullable = true) // Assuming points can be nullable or have a default value
-    val credits: Int
+    @Column(nullable = false)
+    val credits: Int = 0
 
 ) : User(id, username, email, role)
