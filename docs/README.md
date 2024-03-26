@@ -1,1 +1,1 @@
-- [Guide of Business Rules](https://github.com/Rafael4DC/AssemblyOdin.wiki.git)
+- [Guide of Business Rules](https://github.com/Rafael4DC/AssemblyOdin/wiki)
