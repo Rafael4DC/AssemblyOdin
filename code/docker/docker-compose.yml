@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgresdb:
+    build:
+      context: ./DB/
+      dockerfile: Dockerfile-db  # Specify the name of your Dockerfile here
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass123  # Ensure this environment variable is set
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+#volumes: uncomment when data persistence is wanted
+#  postgres_data:
