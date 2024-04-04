@@ -20,9 +20,9 @@ class Student(
     id: Long,
     username: String,
     email: String,
-    role: Role,
+    /*role: Role,*/
 
     @Column(nullable = false)
     val credits: Int = 0
 
-) : User(id, username, email, role)
+) : User(id, username, email/*, role*/)

@@ -19,14 +19,13 @@ import pt.isel.odin.utils.LocalDateConverter
  * @property curricularUnit the course that the TEC is about
  * @property date the date of the TEC
  * @property summary the summary of the TEC
- * @property students the students that are in the TEC
  */
 @Entity
 @Table(name = "tech")
 class Tech(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @ManyToOne
     val teacher: User,
@@ -40,3 +39,11 @@ class Tech(
     @Column(nullable = false)
     val summary: String
 )
+
+fun Tech.copy(
+    id: Long = this.id,
+    teacher: User = this.teacher,
+    curricularUnit: CurricularUnit = this.curricularUnit,
+    date: LocalDate = this.date,
+    summary: String = this.summary
+) = Tech(id, teacher, curricularUnit, date, summary)

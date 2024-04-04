@@ -22,7 +22,7 @@ import jakarta.persistence.Table
 class ClassAttendance(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @ManyToOne
     @JoinColumn(name = "student_id")
@@ -35,3 +35,10 @@ class ClassAttendance(
     @Column(nullable = false)
     val attended: Boolean
 )
+
+fun ClassAttendance.copy(
+    id: Long = this.id,
+    student: Student = this.student,
+    tech: Tech = this.tech,
+    attended: Boolean = this.attended
+) = ClassAttendance(id, student, tech, attended)
