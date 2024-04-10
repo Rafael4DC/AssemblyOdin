@@ -9,7 +9,7 @@ module.exports = {
   entry: './src/index.tsx',
   mode: 'development',
   devServer: {
-    port: 1337,
+    port: 1338,
     historyApiFallback: true,
     compress: false,
     proxy: {
@@ -37,11 +37,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx', ".css"],
   },
-  plugins: [
-    new ESLintPlugin({
-      extensions: ['js', 'jsx', 'ts', 'tsx'],
-    }),
-  ],
+
   module: {
     rules: [
       {
