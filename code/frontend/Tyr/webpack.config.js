@@ -48,7 +48,6 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
-        include: resolve(__dirname, 'src'), // Include only files within the 'src' directory
       },
     ],
   },

@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Outlet } from "react-router-dom";
+import * as React from 'react';
+import { Outlet } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import './Layout.css'; // Make sure the path is correct for your project structure
 

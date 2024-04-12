@@ -1,0 +1,56 @@
+/* CurricularUnitManager.module.css */
+
+.curricularUnitManager {
+    display: flex;
+    height: 100vh;
+}
+
+.content {
+    margin-left: 250px; /* Adjust according to your sidebar width */
+    padding: 20px;
+    width: calc(100% - 250px); /* Adjust according to your sidebar width */
+}
+
+.searchSection {
+    margin-bottom: 20px;
+}
+
+.cuList {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.cuList div {
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cuList div:hover {
+    background-color: #f0f0f0;
+}
+
+.cuDetails {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+}
+
+.scheduledClasses {
+    margin-top: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

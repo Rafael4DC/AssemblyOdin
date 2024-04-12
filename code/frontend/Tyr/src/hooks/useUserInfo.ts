@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { UserService } from '../services/User/UserService';
 import { GetUserInfoOutputModel } from '../services/User/models/GetUserInfoOutputModel';
 

@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 //import { App } from './example-input-and-counter/App';
 //import { App } from './example-counter/App';
 // import { App } from './example-context/App';

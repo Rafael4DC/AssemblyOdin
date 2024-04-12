@@ -1,13 +1,11 @@
-
-
 function to<T, E = Error>(promise: Promise<T>): Promise<[E, null] | [null, T]> {
   return promise
     .then<[null, T]>(data => [null, data])
-    .catch<[E, null]>(err => [err, null])
+    .catch<[E, null]>(err => [err, null]);
 }
 
 export async function get<T>(input: RequestInfo | URL): Promise<T> {
-  return await apiFetch<T>(input, 'GET')
+  return await apiFetch<T>(input, 'GET');
 }
 
 async function apiFetch<T>(
@@ -21,25 +19,25 @@ async function apiFetch<T>(
     headers: headers ? headers : {
       'Content-Type': 'application/json',
     },
-    body
-  }))
+    body,
+  }));
 
   if (err) {
-    console.log("API fetch error:", err, res)
+    console.log('API fetch error:', err, res);
     //throw new NetworkError(err.message)
   }
 
   if (!res.ok) {
     //if (res?.headers.get('Content-Type') !== problemMediaType) {
-      // console.log("API fetch non-Problem+JSON error:", res)
-      //throw new UnexpectedResponseError(`Unexpected response type: ${res.headers.get('Content-Type')}`)
+    // console.log("API fetch non-Problem+JSON error:", res)
+    //throw new UnexpectedResponseError(`Unexpected response type: ${res.headers.get('Content-Type')}`)
     //}
 
-    console.log("API fetch Problem+JSON:", res)
+    console.log('API fetch Problem+JSON:', res);
     //throw new Problem(await res.json())
   }
   if (res?.headers.get('Content-Type') !== 'application/json')
     //throw new UnexpectedResponseError(`Unexpected response type: ${res.headers.get('Content-Type')}`)
 
-  return await res.json()
+    return await res.json();
 }
