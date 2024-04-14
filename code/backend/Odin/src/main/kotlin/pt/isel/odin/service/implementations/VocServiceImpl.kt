@@ -1,21 +1,19 @@
 package pt.isel.odin.service.implementations
 
 import org.springframework.stereotype.Service
-import pt.isel.odin.controller.dto.voc.VocSaveInputModel
-import pt.isel.odin.controller.dto.voc.VocUpdateInputModel
+import pt.isel.odin.controller.dto.voc.VocRequest
+import pt.isel.odin.controller.dto.voc.toVoc
+import pt.isel.odin.model.CurricularUnit
+import pt.isel.odin.model.Student
 import pt.isel.odin.model.Voc
 import pt.isel.odin.model.copy
-import pt.isel.odin.repository.CurricularUnitRepository
-import pt.isel.odin.repository.StudentRepository
 import pt.isel.odin.repository.VocRepository
 import pt.isel.odin.service.exception.NotFoundException
 import pt.isel.odin.service.interfaces.VocService
 
 @Service
 class VocServiceImpl(
-    private val vocRepository: VocRepository,
-    private val studentRepository: StudentRepository,
-    private val curricularUnitRepository: CurricularUnitRepository
+    private val vocRepository: VocRepository
 ) : VocService {
 
     override fun getById(id: Long): Voc {
@@ -26,43 +24,21 @@ class VocServiceImpl(
         return vocRepository.findAll()
     }
 
-    override fun save(vocInputModel: VocSaveInputModel): Voc {
-        val student = studentRepository.findById(vocInputModel.studentId)
-            .orElseThrow { NotFoundException("No Student Found") }
-        val curricularUnit =
-            curricularUnitRepository.findById(vocInputModel.curricularUnitId)
-                .orElseThrow { NotFoundException("No Curricular Unit Found") }
-
-        return vocRepository.save(
-            Voc(
-                description = vocInputModel.description,
-                approved = vocInputModel.approved,
-                student = student,
-                curricularUnit = curricularUnit,
-                started = vocInputModel.started,
-                ended = vocInputModel.ended
-            )
-        )
+    override fun save(vocRequest: VocRequest): Voc {
+        return vocRepository.save(vocRequest.toVoc())
     }
 
-    override fun update(vocInputModel: VocUpdateInputModel): Voc {
-        val voc = vocRepository.findById(vocInputModel.id)
-            .orElseThrow { NotFoundException("No Voc Found") }
-        val student = vocInputModel.studentId?.let {
-            studentRepository.findById(it).orElseThrow { NotFoundException("No Student Found") }
-        } ?: voc.student
-        val curricularUnit = vocInputModel.curricularUnitId?.let {
-            curricularUnitRepository.findById(it).orElseThrow { NotFoundException("No Curricular Unit Found") }
-        } ?: voc.curricularUnit
+    override fun update(vocRequest: VocRequest): Voc {
+        val voc = getById(vocRequest.id!!)
 
         return vocRepository.save(
             voc.copy(
-                description = vocInputModel.description ?: voc.description,
-                approved = vocInputModel.approved ?: voc.approved,
-                student = student,
-                curricularUnit = curricularUnit,
-                started = vocInputModel.started ?: voc.started,
-                ended = vocInputModel.ended ?: voc.ended
+                description = vocRequest.description ?: voc.description,
+                approved = vocRequest.approved ?: voc.approved,
+                student = vocRequest.studentId?.let { Student(it) } ?: voc.student,
+                curricularUnit = vocRequest.curricularUnitId?.let { CurricularUnit(it) } ?: voc.curricularUnit,
+                started = vocRequest.started ?: voc.started,
+                ended = vocRequest.ended ?: voc.ended
             )
         )
     }

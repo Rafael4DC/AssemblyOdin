@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.odin.controller.dto.voc.VocSaveInputModel
-import pt.isel.odin.controller.dto.voc.VocUpdateInputModel
+import pt.isel.odin.controller.dto.voc.VocRequest
 import pt.isel.odin.model.Voc
 import pt.isel.odin.service.interfaces.VocService
 
@@ -41,21 +40,21 @@ class VocController(private val vocService: VocService) {
     /**
      * Saves a voc.
      *
-     * @param vocInputModel the voc info to save.
+     * @param vocRequest the voc info to save.
      */
     @PostMapping("/save")
-    fun save(@RequestBody vocInputModel: VocSaveInputModel): Voc {
-        return vocService.save(vocInputModel)
+    fun save(@RequestBody vocRequest: VocRequest): Voc {
+        return vocService.save(vocRequest)
     }
 
     /**
      * Updates a voc.
      *
-     * @param vocInputModel the voc info to update.
+     * @param vocRequest the voc info to update.
      */
     @PutMapping("/update")
-    fun update(@RequestBody vocInputModel: VocUpdateInputModel): Voc {
-        return vocService.update(vocInputModel)
+    fun update(@RequestBody vocRequest: VocRequest): Voc {
+        return vocService.update(vocRequest)
     }
 
     /**

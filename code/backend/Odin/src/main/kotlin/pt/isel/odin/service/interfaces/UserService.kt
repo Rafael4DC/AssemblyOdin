@@ -1,5 +1,6 @@
 package pt.isel.odin.service.interfaces
 
+import pt.isel.odin.controller.dto.user.UserRequest
 import pt.isel.odin.model.User
 
 /**
@@ -22,9 +23,9 @@ interface UserService {
     /**
      * Saves or updates a user.
      *
-     * @param user the user to save.
+     * @param userRequest the user to save.
      */
-    fun save(user: User): User
+    fun save(userRequest: UserRequest): User
 
     /**
      * Deletes a user by its id.

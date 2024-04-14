@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.odin.controller.dto.curricularunit.CurricularUnitRequest
 import pt.isel.odin.model.CurricularUnit
 import pt.isel.odin.service.interfaces.CurricularUnitService
 
@@ -39,21 +40,21 @@ class CurricularUnitController(private val curricularUnitService: CurricularUnit
     /**
      * Save a Curricular Unit
      *
-     * @param curricularUnit the Curricular Unit to save
+     * @param curricularUnitRequest the Curricular Unit to save
      */
     @PostMapping("/save")
-    fun save(@RequestBody curricularUnit: CurricularUnit): CurricularUnit {
-        return curricularUnitService.save(curricularUnit)
+    fun save(@RequestBody curricularUnitRequest: CurricularUnitRequest): CurricularUnit {
+        return curricularUnitService.save(curricularUnitRequest)
     }
 
     /**
      * Update a Curricular Unit
      *
-     * @param curricularUnit the Curricular Unit to update
+     * @param curricularUnitRequest the Curricular Unit to update
      */
     @PutMapping("/update")
-    fun update(@RequestBody curricularUnit: CurricularUnit): CurricularUnit {
-        return curricularUnitService.save(curricularUnit)
+    fun update(@RequestBody curricularUnitRequest: CurricularUnitRequest): CurricularUnit {
+        return curricularUnitService.save(curricularUnitRequest)
     }
 
     /**

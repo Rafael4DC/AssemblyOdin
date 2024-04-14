@@ -20,11 +20,11 @@ import jakarta.persistence.Table
 class CurricularUnit(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     @Column(nullable = false)
-    val name: String,
+    val name: String? = null,
 
     @Column(nullable = false)
-    val description: String
+    val description: String? = null
 )

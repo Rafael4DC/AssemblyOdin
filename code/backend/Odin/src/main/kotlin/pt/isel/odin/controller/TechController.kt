@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.odin.controller.dto.tech.TechSaveInputModel
-import pt.isel.odin.controller.dto.tech.TechUpdateInputModel
+import pt.isel.odin.controller.dto.tech.TechRequest
 import pt.isel.odin.model.Tech
 import pt.isel.odin.service.interfaces.TechService
 
@@ -41,21 +40,21 @@ class TechController(private val techService: TechService) {
     /**
      * Saves a tech.
      *
-     * @param techSaveInputModel the tech info to save without id.
+     * @param techRequest the tech info to save without id.
      */
     @PostMapping("/save")
-    fun save(@RequestBody techSaveInputModel: TechSaveInputModel): Tech {
-        return techService.save(techSaveInputModel)
+    fun save(@RequestBody techRequest: TechRequest): Tech {
+        return techService.save(techRequest)
     }
 
     /**
      * Updates a tech.
      *
-     * @param techUpdateInputModel the tech info to update with id.
+     * @param techRequest the tech info to update with id.
      */
     @PutMapping("/update")
-    fun update(@RequestBody techUpdateInputModel: TechUpdateInputModel): Tech {
-        return techService.update(techUpdateInputModel)
+    fun update(@RequestBody techRequest: TechRequest): Tech {
+        return techService.update(techRequest)
     }
 
     /**

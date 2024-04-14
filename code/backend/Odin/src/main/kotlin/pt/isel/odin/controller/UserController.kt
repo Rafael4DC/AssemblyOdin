@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.odin.controller.dto.user.UserRequest
 import pt.isel.odin.model.User
 import pt.isel.odin.service.interfaces.UserService
 
@@ -39,21 +40,21 @@ class UserController(private val userService: UserService) {
     /**
      * Saves a user.
      *
-     * @param user the user to save.
+     * @param userRequest the user to save.
      */
     @PostMapping("/save")
-    fun save(@RequestBody user: User): User {
-        return userService.save(user)
+    fun save(@RequestBody userRequest: UserRequest): User {
+        return userService.save(userRequest)
     }
 
     /**
      * Updates a user.
      *
-     * @param user the user to update.
+     * @param userRequest the user to update.
      */
     @PutMapping("/update")
-    fun update(@RequestBody user: User): User {
-        return userService.save(user)
+    fun update(@RequestBody userRequest: UserRequest): User {
+        return userService.save(userRequest)
     }
 
     /**

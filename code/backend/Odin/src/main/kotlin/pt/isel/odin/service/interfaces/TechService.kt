@@ -1,7 +1,6 @@
 package pt.isel.odin.service.interfaces
 
-import pt.isel.odin.controller.dto.tech.TechSaveInputModel
-import pt.isel.odin.controller.dto.tech.TechUpdateInputModel
+import pt.isel.odin.controller.dto.tech.TechRequest
 import pt.isel.odin.model.Tech
 
 /**
@@ -24,16 +23,16 @@ interface TechService {
     /**
      * Saves a tech.
      *
-     * @param techSaveInputModel the tech info to save without id.
+     * @param techRequest the tech info to save without id.
      */
-    fun save(techSaveInputModel: TechSaveInputModel): Tech
+    fun save(techRequest: TechRequest): Tech
 
     /**
      * Updates a tech.
      *
-     * @param techUpdateInputModel the tech info to update with id.
+     * @param techRequest the tech info to update with id.
      */
-    fun update(techUpdateInputModel: TechUpdateInputModel): Tech
+    fun update(techRequest: TechRequest): Tech
 
     /**
      * Deletes a tech by its id.

@@ -1,5 +1,6 @@
 package pt.isel.odin.service.interfaces
 
+import pt.isel.odin.controller.dto.student.StudentRequest
 import pt.isel.odin.model.Student
 
 /**
@@ -22,9 +23,9 @@ interface StudentService {
     /**
      * Saves or Updates a student.
      *
-     * @param student the student to save.
+     * @param studentRequest the student to save.
      */
-    fun save(student: Student): Student
+    fun save(studentRequest: StudentRequest): Student
 
     /**
      * Deletes a student by its id.

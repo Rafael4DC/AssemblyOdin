@@ -25,25 +25,25 @@ import pt.isel.odin.utils.LocalDateConverter
 class Tech(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Long? = null,
 
     @ManyToOne
-    val teacher: User,
+    val teacher: User? = null,
 
     @ManyToOne
-    val curricularUnit: CurricularUnit,
+    val curricularUnit: CurricularUnit? = null,
 
     @Convert(converter = LocalDateConverter::class)
-    val date: LocalDate,
+    val date: LocalDate? = null,
 
     @Column(nullable = false)
-    val summary: String
+    val summary: String? = null
 )
 
 fun Tech.copy(
-    id: Long = this.id,
-    teacher: User = this.teacher,
-    curricularUnit: CurricularUnit = this.curricularUnit,
-    date: LocalDate = this.date,
-    summary: String = this.summary
+    id: Long? = this.id,
+    teacher: User? = this.teacher,
+    curricularUnit: CurricularUnit? = this.curricularUnit,
+    date: LocalDate? = this.date,
+    summary: String? = this.summary
 ) = Tech(id, teacher, curricularUnit, date, summary)

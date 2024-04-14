@@ -1,7 +1,6 @@
 package pt.isel.odin.service.interfaces
 
-import pt.isel.odin.controller.dto.voc.VocSaveInputModel
-import pt.isel.odin.controller.dto.voc.VocUpdateInputModel
+import pt.isel.odin.controller.dto.voc.VocRequest
 import pt.isel.odin.model.Voc
 
 /**
@@ -24,16 +23,16 @@ interface VocService {
     /**
      * Saves a voc.
      *
-     * @param vocInputModel the voc info to save.
+     * @param vocRequest the voc info to save.
      */
-    fun save(vocInputModel: VocSaveInputModel): Voc
+    fun save(vocRequest: VocRequest): Voc
 
     /**
      * Updates a voc.
      *
-     * @param vocInputModel the voc info to update.
+     * @param vocRequest the voc info to update.
      */
-    fun update(vocInputModel: VocUpdateInputModel): Voc
+    fun update(vocRequest: VocRequest): Voc
 
     /**
      * Deletes a voc by its id.

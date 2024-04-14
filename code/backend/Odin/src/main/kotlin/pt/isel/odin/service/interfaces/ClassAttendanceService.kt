@@ -1,7 +1,6 @@
 package pt.isel.odin.service.interfaces
 
-import pt.isel.odin.controller.dto.classattendance.ClassAttendSaveInputModel
-import pt.isel.odin.controller.dto.classattendance.ClassAttendUpdateInputModel
+import pt.isel.odin.controller.dto.classattendance.ClassAttendanceRequest
 import pt.isel.odin.model.ClassAttendance
 
 /**
@@ -24,16 +23,16 @@ interface ClassAttendanceService {
     /**
      * Saves a class attendance.
      *
-     * @param classAttendInputModel the class attendance info to save.
+     * @param classAttendRequest the class attendance info to save.
      */
-    fun save(classAttendInputModel: ClassAttendSaveInputModel): ClassAttendance
+    fun save(classAttendRequest: ClassAttendanceRequest): ClassAttendance
 
     /**
      * Updates a class attendance.
      *
-     * @param classAttendInputModel the class attendance info to update.
+     * @param classAttendRequest the class attendance info to update.
      */
-    fun update(classAttendInputModel: ClassAttendUpdateInputModel): ClassAttendance
+    fun update(classAttendRequest: ClassAttendanceRequest): ClassAttendance
 
     /**
      * Deletes a class attendance by its id.

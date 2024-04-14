@@ -6,5 +6,4 @@ import pt.isel.odin.model.User
 /**
  * Repository for users.
  */
-interface UserRepository : JpaRepository<User, Long> {
-}
+interface UserRepository : JpaRepository<User, Long>

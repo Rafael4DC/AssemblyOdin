@@ -1,5 +1,6 @@
 package pt.isel.odin.service.interfaces
 
+import pt.isel.odin.controller.dto.curricularunit.CurricularUnitRequest
 import pt.isel.odin.model.CurricularUnit
 
 /**
@@ -22,9 +23,9 @@ interface CurricularUnitService {
     /**
      * Saves or Updates a curricular unit.
      *
-     * @param curricularUnit the curricular unit to save.
+     * @param curricularUnitRequest the curricular unit to save.
      */
-    fun save(curricularUnit: CurricularUnit): CurricularUnit
+    fun save(curricularUnitRequest: CurricularUnitRequest): CurricularUnit
 
     /**
      * Deletes a curricular unit by its id.

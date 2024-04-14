@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.odin.controller.dto.classattendance.ClassAttendSaveInputModel
-import pt.isel.odin.controller.dto.classattendance.ClassAttendUpdateInputModel
+import pt.isel.odin.controller.dto.classattendance.ClassAttendanceRequest
 import pt.isel.odin.model.ClassAttendance
 import pt.isel.odin.service.interfaces.ClassAttendanceService
 
@@ -41,21 +40,21 @@ class ClassAttendanceController(private val classAttendanceService: ClassAttenda
     /**
      * Saves a class attendance.
      *
-     * @param classAttendInputModel the class attendance info to save.
+     * @param classAttendResquest the class attendance info to save.
      */
     @PostMapping("/save")
-    fun save(@RequestBody classAttendInputModel: ClassAttendSaveInputModel): ClassAttendance {
-        return classAttendanceService.save(classAttendInputModel)
+    fun save(@RequestBody classAttendResquest: ClassAttendanceRequest): ClassAttendance {
+        return classAttendanceService.save(classAttendResquest)
     }
 
     /**
      * Updates a class attendance.
      *
-     * @param classAttendInputModel the class attendance info to update.
+     * @param classAttendRequest the class attendance info to update.
      */
     @PutMapping("/update")
-    fun update(@RequestBody classAttendInputModel: ClassAttendUpdateInputModel): ClassAttendance {
-        return classAttendanceService.update(classAttendInputModel)
+    fun update(@RequestBody classAttendRequest: ClassAttendanceRequest): ClassAttendance {
+        return classAttendanceService.update(classAttendRequest)
     }
 
     /**

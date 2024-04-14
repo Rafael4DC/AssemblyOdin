@@ -24,13 +24,13 @@ import jakarta.persistence.Table
 open class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open val id: Long,
+    open val id: Long? = null,
 
     @Column(nullable = false)
-    open val username: String,
+    open val username: String? = null,
 
     @Column(nullable = false)
-    open val email: String
+    open val email: String? = null
 
 /*    @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) // Corrected

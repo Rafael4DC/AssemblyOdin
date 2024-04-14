@@ -1,21 +1,19 @@
 package pt.isel.odin.service.implementations
 
 import org.springframework.stereotype.Service
-import pt.isel.odin.controller.dto.tech.TechSaveInputModel
-import pt.isel.odin.controller.dto.tech.TechUpdateInputModel
+import pt.isel.odin.controller.dto.tech.TechRequest
+import pt.isel.odin.controller.dto.tech.toTech
+import pt.isel.odin.model.CurricularUnit
 import pt.isel.odin.model.Tech
+import pt.isel.odin.model.User
 import pt.isel.odin.model.copy
-import pt.isel.odin.repository.CurricularUnitRepository
 import pt.isel.odin.repository.TechRepository
-import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.exception.NotFoundException
 import pt.isel.odin.service.interfaces.TechService
 
 @Service
 class TechServiceImpl(
-    private val techRepository: TechRepository,
-    private val userRepository: UserRepository,
-    private val curricularUnitRepository: CurricularUnitRepository
+    private val techRepository: TechRepository
 ) : TechService {
 
     override fun getById(id: Long): Tech {
@@ -26,38 +24,19 @@ class TechServiceImpl(
         return techRepository.findAll()
     }
 
-    override fun save(techSaveInputModel: TechSaveInputModel): Tech {
-        val teacher =
-            userRepository.findById(techSaveInputModel.teacherId).orElseThrow { NotFoundException("No Teacher Found") }
-        val curricularUnit =
-            curricularUnitRepository.findById(techSaveInputModel.curricularUnitId)
-                .orElseThrow { NotFoundException("No Curricular Unit Found") }
-        return techRepository.save(
-            Tech(
-                teacher = teacher,
-                curricularUnit = curricularUnit,
-                date = techSaveInputModel.date,
-                summary = techSaveInputModel.summary
-            )
-        )
+    override fun save(techRequest: TechRequest): Tech {
+        return techRepository.save(techRequest.toTech())
     }
 
-    override fun update(techUpdateInputModel: TechUpdateInputModel): Tech {
-        val tech = techRepository.findById(techUpdateInputModel.id)
-            .orElseThrow { NotFoundException("No Tech Found") }
-        val teacher = techUpdateInputModel.teacherId
-            ?.let { userRepository.findById(it).orElseThrow { NotFoundException("No Teacher Found") } } ?: tech.teacher
-        val curricularUnit = techUpdateInputModel.curricularUnitId
-            ?.let {
-                curricularUnitRepository.findById(it).orElseThrow { NotFoundException("No Curricular Unit Found") }
-            } ?: tech.curricularUnit
+    override fun update(techRequest: TechRequest): Tech {
+        val tech = getById(techRequest.id!!)
 
         return techRepository.save(
             tech.copy(
-                teacher = teacher,
-                curricularUnit = curricularUnit,
-                date = techUpdateInputModel.date ?: tech.date,
-                summary = techUpdateInputModel.summary ?: tech.summary
+                teacher = techRequest.teacherId?.let { User(it) } ?: tech.teacher,
+                curricularUnit = techRequest.curricularUnitId?.let { CurricularUnit(it) } ?: tech.curricularUnit,
+                date = techRequest.date ?: tech.date,
+                summary = techRequest.summary ?: tech.summary
             )
         )
     }

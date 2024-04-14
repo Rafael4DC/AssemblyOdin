@@ -28,35 +28,35 @@ import pt.isel.odin.utils.LocalDateConverter
 class Voc(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val id: Long? = null,
 
     @Column(nullable = false)
-    val description: String,
+    val description: String? = null,
 
     @Column(nullable = false)
-    val approved: Boolean,
+    val approved: Boolean? = null,
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    val student: Student,
+    val student: Student? = null,
 
     @ManyToOne
     @JoinColumn(name = "curricular_unit_id", nullable = false)
-    val curricularUnit: CurricularUnit,
+    val curricularUnit: CurricularUnit? = null,
 
     @Convert(converter = LocalDateConverter::class)
-    val started: LocalDate,
+    val started: LocalDate? = null,
 
     @Convert(converter = LocalDateConverter::class)
-    val ended: LocalDate
+    val ended: LocalDate? = null
 )
 
 fun Voc.copy(
-    id: Long = this.id,
-    description: String = this.description,
-    approved: Boolean = this.approved,
-    student: Student = this.student,
-    curricularUnit: CurricularUnit = this.curricularUnit,
-    started: LocalDate = this.started,
-    ended: LocalDate = this.ended
+    id: Long? = this.id,
+    description: String? = this.description,
+    approved: Boolean? = this.approved,
+    student: Student? = this.student,
+    curricularUnit: CurricularUnit? = this.curricularUnit,
+    started: LocalDate? = this.started,
+    ended: LocalDate? = this.ended
 ) = Voc(id, description, approved, student, curricularUnit, started, ended)

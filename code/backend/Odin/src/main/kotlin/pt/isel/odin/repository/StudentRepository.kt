@@ -6,5 +6,4 @@ import pt.isel.odin.model.Student
 /**
  * Repository for students.
  */
-interface StudentRepository : JpaRepository<Student, Long> {
-}
+interface StudentRepository : JpaRepository<Student, Long>

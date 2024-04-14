@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.odin.controller.dto.student.StudentRequest
 import pt.isel.odin.model.Student
 import pt.isel.odin.service.interfaces.StudentService
 
@@ -39,21 +40,21 @@ class StudentController(private val studentService: StudentService) {
     /**
      * Saves a student.
      *
-     * @param student the student to save.
+     * @param studentRequest the student to save.
      */
     @PostMapping("/save")
-    fun save(@RequestBody student: Student): Student {
-        return studentService.save(student)
+    fun save(@RequestBody studentRequest: StudentRequest): Student {
+        return studentService.save(studentRequest)
     }
 
     /**
      * Updates a student.
      *
-     * @param student the student to update.
+     * @param studentRequest the student to update.
      */
     @PutMapping("/update")
-    fun update(@RequestBody student: Student): Student {
-        return studentService.save(student)
+    fun update(@RequestBody studentRequest: StudentRequest): Student {
+        return studentService.save(studentRequest)
     }
 
     /**
