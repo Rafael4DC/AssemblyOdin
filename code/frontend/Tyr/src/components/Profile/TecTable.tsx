@@ -2,27 +2,9 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import TextModal from '../Shared/TextModal';
-import { TecClassPersonal } from './TecClassPersonal';
+import { TecClassPersonal } from '../../model/TecClassPersonal';
 
-const courses: TecClassPersonal[] = [
-  {
 
-    id: 1,
-    teacher: 'Tomas Santos',
-    date: '10/10/2002',
-    summary: 'LOREM IPSUM',
-    course_name: 'Code VI',
-    attendance: true,
-  },
-  {
-    id: 2,
-    teacher: 'Manuel Santos',
-    date: '10/10/2002',
-    summary: 'LOREM IPSUM',
-    course_name: 'Design',
-    attendance: true,
-  },
-];
 
 enum FilterOptions {
   Happened = 'Happened',
@@ -39,8 +21,10 @@ const scrollableTableStyle: React.CSSProperties = {
   overflowY: 'auto',
 };
 
-
-function TecTable() {
+interface TecTableProps {
+  courses: TecClassPersonal[];
+}
+const TecTable: React.FC<TecTableProps> = ({ courses }) => {
   const [filter, setFilter] = useState(FilterOptions.Happened);
   const [modalShow, setModalShow] = useState(false);
   const [currentSummary, setCurrentSummary] = useState('');

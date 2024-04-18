@@ -131,10 +131,7 @@ function CurricularUnitManager() {
 
       {
         selectedCourse && (
-          <DetailView
-            course={selectedCourse}
-            onSave={saveCourse}
-          />
+          <DetailView course={selectedCourse} onSave={saveCourse} />
         )}
     </div>
   );

@@ -3,7 +3,47 @@ import TecTable from '../../components/Profile/TecTable';
 import VocTable from '../../components/Profile/VocTable';
 import * as React from 'react';
 import { Col, Container, Image, Row } from 'react-bootstrap';
+import { TecClassPersonal } from '../../model/TecClassPersonal';
+import tecTable from '../../components/Profile/TecTable';
 
+const tecCourses: TecClassPersonal[] = [
+  {
+
+    id: 1,
+    teacher: 'Tomas Santos',
+    date: '10/10/2002',
+    summary: 'LOREM IPSUM',
+    course_name: 'Code VI',
+    attendance: true,
+  },
+  {
+    id: 2,
+    teacher: 'Manuel Santos',
+    date: '10/10/2002',
+    summary: 'LOREM IPSUM',
+    course_name: 'Design',
+    attendance: true,
+  },
+];
+
+const vocCourses: VocClass[] = [
+  {
+    description: 'Code VI Practical',
+    date: '11/10/2002',
+    length: 60,
+    approved: true,
+    studentId: 0,
+    curricularUnitId: 0,
+  },
+  {
+    description: 'Code I Practical',
+    date: '20/05/2024',
+    length: 120,
+    approved: true,
+    studentId: 0,
+    curricularUnitId: 0,
+  },
+];
 
 function Profile() {
   const { userInfo, isLoading, error } = useUserInfo();
@@ -27,14 +67,14 @@ function Profile() {
           </Col>
         </Row>
       <Row>
-      <Col className="mb-3">
-            <TecTable />
-          </Col>
-          <Col className="mb-3">
-            <VocTable />
-          </Col>
-        </Row>
-      </Container>
+        <Col className="mb-3">
+          <TecTable courses={tecCourses}/>
+        </Col>
+        <Col className="mb-3">
+          <VocTable courses={vocCourses}/>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

@@ -1,27 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
+import { TecClassPersonal } from '../../model/TecClassPersonal';
 
 
 
-const vocCourses: VocClass[] = [
-  {
-    description: 'Code VI Practical',
-    date: '11/10/2002',
-    length: 60,
-    approved: true,
-    studentId: 0,
-    curricularUnitId: 0,
-  },
-  {
-    description: 'Code I Practical',
-    date: '20/05/2024',
-    length: 120,
-    approved: true,
-    studentId: 0,
-    curricularUnitId: 0,
-  },
-];
+
 
 enum FilterOptions {
   Happened = 'Happened',
@@ -39,9 +23,11 @@ const scrollableTableStyle: React.CSSProperties = {
   overflowY: 'auto',
 };
 
+interface VocTableProps {
+  courses: VocClass[];
+}
 
-
-function VocTable() {
+const VocTable : React.FC<VocTableProps> = ({courses}) => {
   const [filter, setFilter] = useState(FilterOptions.Happened);
 
   const handleEditClick = (course: VocClass) => {
@@ -80,7 +66,7 @@ function VocTable() {
         </tr>
         </thead>
         <tbody>
-        {vocCourses.map(renderCourseRow)}
+        {courses.map(renderCourseRow)}
         </tbody>
       </Table>
       </div>

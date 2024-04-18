@@ -1,7 +1,7 @@
 import { Button, Table, Modal, Form, InputGroup, FormControl } from 'react-bootstrap';
 import  { useState } from 'react';
 import * as React from 'react';
-import { RoleOptions, User } from '../../services/User/models/GetUserInfoOutputModel';
+import { RoleOptions, User } from '../../model/GetUserInfoOutputModel';
 
 
 const mockUsers : User[] = [
