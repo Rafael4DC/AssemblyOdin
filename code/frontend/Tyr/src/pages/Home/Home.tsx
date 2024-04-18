@@ -3,7 +3,7 @@ import * as React from 'react';
 function Home() {
   return (
     <div>
-      <h1>ASSEMBLY ODIN MANY PAGE</h1>
+      <h1>ASSEMBLY ODIN MAIN PAGE</h1>
     </div>
   );
 }

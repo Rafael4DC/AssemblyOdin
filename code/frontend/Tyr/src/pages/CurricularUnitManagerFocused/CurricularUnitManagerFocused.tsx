@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-// Extended mock data to include students for each class
 const mockCUs = [
   {
     id: 'cu1',
@@ -20,10 +19,8 @@ const mockCUs = [
           { name: 'Ormonda Luis', attendance: false },
         ],
       },
-      // ... other classes
     ],
   },
-  // ... other CUs
 ];
 
 function CurricularUnitManagerFocused() {
@@ -32,12 +29,10 @@ function CurricularUnitManagerFocused() {
   const [selectedClass, setSelectedClass] = useState(selectedCU.classes[0]);
 
   const handleDeleteClass = (classId: string) => {
-    // Implement class deletion logic here
     console.log('Delete class:', classId);
   };
 
   const handleDeleteAllClasses = () => {
-    // Implement logic to delete all classes in a trimester here
     console.log('Delete all classes in trimester');
   };
 

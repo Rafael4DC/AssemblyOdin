@@ -1,14 +1,14 @@
-/* Dashboard.module.css */
+
 .link {
-    color: inherit; /* Override default link color */
-    text-decoration: none; /* Remove underline */
+    color: inherit;
+    text-decoration: none;
 }
 
 .clickedLink {
     box-shadow: 0 0 8px 0 rgba(0,0,0,0.2);
     border-radius: 5px;
-    color: inherit; /* This can be adjusted if you want a specific color for active links */
-    text-decoration: none; /* Optional, if you want to ensure no underline */
+    color: inherit;
+    text-decoration: none;
 }
 
 .text-center {
@@ -16,6 +16,6 @@
 }
 
 .list-unstyled {
-    list-style-type: none; /* Removes default list styling */
-    padding-left: 0; /* Removes default padding */
+    list-style-type: none;
+    padding-left: 0;
 }

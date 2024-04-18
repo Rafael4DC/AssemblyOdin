@@ -1,18 +1,18 @@
 .dashboard-container {
     display: grid;
-    grid-template-columns: 250px auto; /* 250px for sidebar and the rest for main content */
+    grid-template-columns: 250px auto;
     height: 100vh;
 }
 
 .sidebar {
-    background-color: #f0f0f0; /* Light gray background */
+    background-color: #f0f0f0;
     padding: 20px;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
-    margin: 0; /* Ensures that there's no default margin */
+    margin: 0;
 }
 
 .sidebar li {
@@ -22,16 +22,16 @@
 
 .main-content {
     padding: 20px;
-    overflow: auto; /* In case the content overflows, it will be scrollable */
+    overflow: auto;
 }
 
-/* Add styling for NavLink active state */
+
 .sidebar .active {
     font-weight: bold;
 }
 
 h2 a:active {
-    color: #ff0000; /* Change this to the color you want when the link is clicked */
+    color: #ff0000;
     text-decoration: none;
 }
 

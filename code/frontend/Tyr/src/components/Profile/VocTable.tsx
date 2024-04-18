@@ -3,24 +3,24 @@ import { useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
 
 
-interface VocCourse {
-  name: string;
-  date: string;
-  approved: boolean;
-}
 
-const vocCourses: VocCourse[] = [
+const vocCourses: VocClass[] = [
   {
-    name: 'Code VI Practical',
+    description: 'Code VI Practical',
     date: '11/10/2002',
+    length: 60,
     approved: true,
+    studentId: 0,
+    curricularUnitId: 0,
   },
   {
-    name: 'Code VI Practical',
-    date: '11/10/2002',
-    approved: false,
+    description: 'Code I Practical',
+    date: '20/05/2024',
+    length: 120,
+    approved: true,
+    studentId: 0,
+    curricularUnitId: 0,
   },
-  // ... more courses
 ];
 
 enum FilterOptions {
@@ -29,26 +29,30 @@ enum FilterOptions {
   Upcoming = 'Upcoming (Next Week)'
 }
 
+
+const maxRows = 5;
+const fixedRowHeight = '60px';
+const tableMaxHeight = maxRows * parseInt(fixedRowHeight, 10);
+
+const scrollableTableStyle: React.CSSProperties = {
+  maxHeight: `${tableMaxHeight}px`,
+  overflowY: 'auto',
+};
+
+
+
 function VocTable() {
   const [filter, setFilter] = useState(FilterOptions.Happened);
 
-  const handleEditClick = (course: VocCourse) => {
-    // Handle the edit action here, such as navigation or displaying a form
+  const handleEditClick = (course: VocClass) => {
     console.log('Edit course:', course);
   };
 
-  const renderCourseRow = (course: VocCourse) => (
-    <tr key={course.name + course.date}>
-      <td>{course.name}</td>
+  const renderCourseRow = (course: VocClass) => (
+    <tr key={course.description + course.date} style={{ height: fixedRowHeight }}>
+      <td>{course.description}</td>
       <td>{course.date}</td>
       <td>{course.approved ? '✓' : '—'}</td>
-      <td>
-        <Button variant="link" onClick={() => {
-          handleEditClick(course);
-        }}>
-          Edit
-        </Button>
-      </td>
     </tr>
   );
 
@@ -56,7 +60,7 @@ function VocTable() {
     <div>
       <h3>Voc Courses</h3>
       <select
-        className="form-select mb-3" // Bootstrap class for styling select element
+        className="form-select mb-3"
         value={filter}
         onChange={(e) => setFilter(e.target.value as FilterOptions)}
       >
@@ -66,19 +70,20 @@ function VocTable() {
           </option>
         ))}
       </select>
-      <Table striped bordered hover responsive> {/* Bootstrap classes added */}
+      <div style={scrollableTableStyle}>
+      <Table striped bordered hover responsive>
         <thead>
-        <tr>
+        <tr style={{ height: fixedRowHeight }}>
           <th>Name</th>
           <th>Date</th>
           <th>Approved</th>
-          <th>Edit</th>
         </tr>
         </thead>
         <tbody>
         {vocCourses.map(renderCourseRow)}
         </tbody>
       </Table>
+      </div>
     </div>
   );
 }

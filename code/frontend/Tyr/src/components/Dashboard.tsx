@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import "./Dashboard.css"; // Ensure this path is correct
+import "./Dashboard.css";
 
 const Dashboard: React.FC = () => {
   const [activeLink, setActiveLink] = React.useState<string>('');
@@ -13,19 +13,23 @@ const Dashboard: React.FC = () => {
     <div className="text-center">
       <h1><Link to="/" className={linkClass('/')} onClick={() => setActiveLink('/')}>Assembly</Link></h1>
       <ul className="list-unstyled">
-        <li><Link to="/NAN" className={linkClass('/NAN')} onClick={() => setActiveLink('/NAN')}>Curricular Units</Link></li>
-        <li><Link to="/profile" className={linkClass('/profile')} onClick={() => setActiveLink('/profile')}>Profile</Link></li>
 
-        <h3>Students</h3>
-        <li><Link to="/NAN" className={linkClass('/NAN-students')} onClick={() => setActiveLink('/NAN-students')}>Class Schedule</Link></li>
-        <li><Link to="/NAN" className={linkClass('/NAN-voc')} onClick={() => setActiveLink('/NAN-voc')}>Voc Class Declarer</Link></li>
+        <li><Link to="/profile" className={linkClass('/profile')}
+                  onClick={() => setActiveLink('/profile')}>Profile</Link></li>
+        <li><Link to="/CU" className={linkClass('/CU')} onClick={() => setActiveLink('/CU')}>Curricular Units</Link>
+        </li>
 
         <h3>Teachers</h3>
-        <li><Link to="/NAN" className={linkClass('/NAN-teachers')} onClick={() => setActiveLink('/NAN-teachers')}>Manage Classes</Link></li>
+        <li><Link to="/TeacherClassManager" className={linkClass('/TeacherClassManager')}
+                  onClick={() => setActiveLink('/TeacherClassManager')}>Manage Classes</Link></li>
+        <li><Link to="/VocClass" className={linkClass('/VocClass')} onClick={() => setActiveLink('/VocClass')}>Create a
+          Voc Class</Link></li>
 
         <h3>Admins</h3>
-        <li><Link to="/NAN" className={linkClass('/NAN-admins')} onClick={() => setActiveLink('/NAN-admins')}>Manage Users</Link></li>
-        <li><Link to="/CurricularUnitManager" className={linkClass('/CurricularUnitManager')} onClick={() => setActiveLink('/CurricularUnitManager')}>Curricular Unit Manager</Link></li>
+        <li><Link to="/ManageUsers" className={linkClass('/ManageUsers')} onClick={() => setActiveLink('/ManageUsers')}>Manage
+          Users</Link></li>
+        <li><Link to="/CurricularUnitManager" className={linkClass('/CurricularUnitManager')}
+                  onClick={() => setActiveLink('/CurricularUnitManager')}>Curricular Unit Manager</Link></li>
 
         <li><Link to="/404" className={linkClass('/404')} onClick={() => setActiveLink('/404')}>404</Link></li>
       </ul>

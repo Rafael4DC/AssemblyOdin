@@ -1,13 +1,14 @@
-import { GetUserInfoOutputModel } from './models/GetUserInfoOutputModel';
+import { RoleOptions, User } from './models/GetUserInfoOutputModel';
 
 export namespace UserService {
 
-  export async function getUserInfo(): Promise<GetUserInfoOutputModel> {
+  export async function getUserInfo(): Promise<User> {
     console.log('Getting user info');
     return {
+      id:1,
       name: 'Example Name',
       email: 'example@email.com',
-      role: 'Example Role',
+      role: RoleOptions.Admin,
       credits: 100,
     };
   }

@@ -1,6 +1,14 @@
-export interface GetUserInfoOutputModel {
+export interface User {
+  id: number;
   name: string;
-  email: string;
   role: string;
+  email: string;
   credits: number;
+}
+
+
+export enum RoleOptions {
+  Admin = 'Admin',
+  Teacher = 'Teacher',
+  Student = 'Student'
 }

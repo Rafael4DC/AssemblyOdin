@@ -2,29 +2,25 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import TextModal from '../Shared/TextModal';
+import { TecClassPersonal } from './TecClassPersonal';
 
-interface Course {
-  name: string;
-  teacher: string;
-  date: string;
-  attendance: boolean;
-  summary: string;
-}
-
-const courses: Course[] = [
+const courses: TecClassPersonal[] = [
   {
-    name: 'Code VI',
+
+    id: 1,
     teacher: 'Tomas Santos',
     date: '10/10/2002',
-    attendance: true,
     summary: 'LOREM IPSUM',
+    course_name: 'Code VI',
+    attendance: true,
   },
   {
-    name: 'Code VI',
-    teacher: 'Tomas Santos',
-    date: '18/10/2002',
-    attendance: false,
+    id: 2,
+    teacher: 'Manuel Santos',
+    date: '10/10/2002',
     summary: 'LOREM IPSUM',
+    course_name: 'Design',
+    attendance: true,
   },
 ];
 
@@ -34,22 +30,27 @@ enum FilterOptions {
   Upcoming = 'Upcoming (Next Week)'
 }
 
+const maxRows = 5; // The threshold for when to start scrolling
+const fixedRowHeight = '60px';
+const tableMaxHeight = maxRows * parseInt(fixedRowHeight, 10);
+
+const scrollableTableStyle: React.CSSProperties = {
+  maxHeight: `${tableMaxHeight}px`,
+  overflowY: 'auto',
+};
+
+
 function TecTable() {
   const [filter, setFilter] = useState(FilterOptions.Happened);
   const [modalShow, setModalShow] = useState(false);
   const [currentSummary, setCurrentSummary] = useState('');
 
-  const renderCourseRow = (course: Course) => (
-    <tr key={course.name + course.date}>
-      <td>{course.name}</td>
+  const renderCourseRow = (course: TecClassPersonal) => (
+    <tr key={course.course_name + course.date} style={{ height: fixedRowHeight }}>
+      <td>{course.course_name}</td>
       <td>{course.teacher}</td>
       <td>{course.date}</td>
-      <td>
-        <Form.Check
-          type="checkbox"
-          checked={course.attendance}
-        />
-      </td>
+      <td>{course.attendance ? '✓' : '—'}</td>
       <td>
         <Button variant="link" onClick={() => {
           setCurrentSummary(course.summary);
@@ -60,6 +61,7 @@ function TecTable() {
       </td>
     </tr>
   );
+
 
   return (
     <div>
@@ -75,10 +77,10 @@ function TecTable() {
           </option>
         ))}
       </select>
-
+      <div style={scrollableTableStyle}>
       <Table striped bordered hover responsive>
         <thead>
-        <tr>
+        <tr style={{ height: fixedRowHeight }}>
           <th>Name</th>
           <th>Teacher</th>
           <th>Date</th>
@@ -90,7 +92,7 @@ function TecTable() {
         {courses.map(renderCourseRow)}
         </tbody>
       </Table>
-
+      </div>
       <TextModal
         title="Course Summary"
         content={currentSummary}

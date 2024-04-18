@@ -26,8 +26,8 @@ function Profile() {
             </div>
           </Col>
         </Row>
-        <Row>
-          <Col className="mb-3">
+      <Row>
+      <Col className="mb-3">
             <TecTable />
           </Col>
           <Col className="mb-3">
