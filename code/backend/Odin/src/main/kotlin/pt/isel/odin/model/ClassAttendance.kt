@@ -22,16 +22,23 @@ import jakarta.persistence.Table
 class ClassAttendance(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
-    @ManyToOne
+    @ManyToOne // (cascade = CascadeType.)
     @JoinColumn(name = "student_id")
-    val student: Student,
+    val student: Student? = null,
 
     @ManyToOne
     @JoinColumn(name = "tech_id")
-    val tech: Tech,
+    val tech: Tech? = null,
 
     @Column(nullable = false)
-    val attended: Boolean
+    val attended: Boolean? = null
 )
+
+fun ClassAttendance.copy(
+    id: Long? = this.id,
+    student: Student? = this.student,
+    tech: Tech? = this.tech,
+    attended: Boolean? = this.attended
+) = ClassAttendance(id, student, tech, attended)
