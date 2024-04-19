@@ -17,12 +17,12 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "student")
 class Student(
-    id: Long,
-    username: String,
-    email: String,
-    role: Role,
+    id: Long? = null,
+    username: String? = null,
+    email: String? = null,
+    /*role: Role,*/
 
     @Column(nullable = false)
-    val credits: Int = 0
+    val credits: Int? = null
 
-) : User(id, username, email, role)
+) : User(id, username, email/*, role*/)
