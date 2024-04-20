@@ -1,4 +1,4 @@
-import { TecClass } from '../../TecClass';
+import { Tech } from '../../Tech';
 import { TechDTO } from './TechDTO';
 
 export interface DateDTO {

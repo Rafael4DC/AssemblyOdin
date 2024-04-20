@@ -1,4 +1,4 @@
-import { Course } from './Course';
+import { CurricularUnit } from './CurricularUnit';
 import { Student } from './Student';
 
 export interface VocClass {
@@ -8,5 +8,5 @@ export interface VocClass {
   length?: number,
   approved?: boolean,
   student?: Student,
-  course?: Course,
+  course?: CurricularUnit,
 }

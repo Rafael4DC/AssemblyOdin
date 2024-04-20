@@ -9,7 +9,7 @@ export interface UserDTO {
 export function UserDTOtoUser(userDTO: UserDTO): User {
   return {
     id: userDTO.id,
-    name: userDTO.username,
+    username: userDTO.username,
     role: null,
     email: userDTO.email,
     credits: null

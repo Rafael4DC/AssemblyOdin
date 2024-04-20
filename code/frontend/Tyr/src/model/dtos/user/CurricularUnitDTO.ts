@@ -1,4 +1,4 @@
-import { Course } from '../../Course';
+import { CurricularUnit } from '../../CurricularUnit';
 
 export interface CurricularUnitDTO {
   id: number;
@@ -6,15 +6,15 @@ export interface CurricularUnitDTO {
   description: string;
 }
 
-export function CurricularUnitDTOToCourse(cuDTO: CurricularUnitDTO): Course {
+export function CurricularUnitDTOToCourse(cuDTO: CurricularUnitDTO): CurricularUnit {
   return {
     id: cuDTO.id,
-    title: cuDTO.name,
+    name: cuDTO.name,
     description: cuDTO.description,
     classes: []
   };
 }
 
-export function CurricularUnitDTOListToCourseList(cuDTOs: CurricularUnitDTO[]): Course[] {
+export function CurricularUnitDTOListToCourseList(cuDTOs: CurricularUnitDTO[]): CurricularUnit[] {
   return cuDTOs.map(CurricularUnitDTOToCourse);
 }

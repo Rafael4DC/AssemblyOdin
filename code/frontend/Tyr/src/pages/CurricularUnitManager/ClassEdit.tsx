@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
-import { TecClass } from '../../model/TecClass';
+import { Tech } from '../../model/Tech';
 
 interface ClassEditModalProps {
   show: boolean;
   onHide: () => void;
-  classInfo: TecClass | null;
-  onSave: (updatedClass: TecClass) => void;
+  classInfo: Tech | null;
+  onSave: (updatedClass: Tech) => void;
   onDelete: () => void;
 }
 
@@ -18,7 +18,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
                                                          onSave,
                                                          onDelete,
                                                        }) => {
-  const [editedClass, setEditedClass] = useState<TecClass | null>(null);
+  const [editedClass, setEditedClass] = useState<Tech | null>(null);
 
   useEffect(() => {
     if (classInfo) {
@@ -31,7 +31,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
   const handleTeacherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditedClass(prevClass => ({
       ...prevClass,
-      teacher: { ...prevClass.teacher, name: e.target.value }
+      teacher: { ...prevClass.teacher, username: e.target.value }
     }));
   };
 
@@ -77,7 +77,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
           <Form.Label>Teacher</Form.Label>
           <Form.Control
             type="text"
-            value={editedClass.teacher.name}
+            value={editedClass.teacher.username}
             onChange={handleTeacherChange}
           />
         </Form.Group>

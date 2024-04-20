@@ -1,4 +1,5 @@
 import { makeApiRequest } from '../axios/apiRequest';
+import {Voc} from "../model/Voc";
 
 export class VocService {
 
@@ -10,11 +11,11 @@ export class VocService {
         return makeApiRequest('get', '/vocs');
     }
 
-    static async save(vocRequest: VocRequest): Promise<Voc> {
+    static async save(vocRequest: Voc): Promise<Voc> {
         return makeApiRequest('post', '/vocs/save', vocRequest);
     }
 
-    static async update(vocRequest: VocRequest): Promise<Voc> {
+    static async update(vocRequest: Voc): Promise<Voc> {
         return makeApiRequest('put', '/vocs/update', vocRequest);
     }
 

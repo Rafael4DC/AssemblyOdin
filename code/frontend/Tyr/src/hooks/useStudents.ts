@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { UserService } from '../services/UserService';
-import {User} from "../model/User";
+import { TechService } from '../services/TechService';
+import { Tech } from "../model/Tech";
 
-const useUsers = () => {
-    const [users, setUsers] = useState<User[] | null>(null);
+const useTechs = () => {
+    const [techs, setTechs] = useState<Tech[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        UserService.getAll()
+        TechService.getAll()
             .then(data => {
-                setUsers(data);
+                setTechs(data);
             })
             .catch(err => {
                 setError(err);
@@ -18,24 +18,24 @@ const useUsers = () => {
 
 
     return {
-        users,
+        techs,
         error,
-        handleSaveUser1: async (user: User) => {
+        handleSaveTech: async (tech: Tech) => {
             setError(null);
             try {
-                if (user.id) {
-                    return await UserService.update(user);
+                if (tech.id) {
+                    return await TechService.update(tech);
                 } else {
-                    return await UserService.save(user);
+                    return await TechService.save(tech);
                 }
             } catch (err) {
                 setError(err);
             }
         },
-        handleDeleteUser: async (id: number) => {
+        handleDeleteTech: async (id: number) => {
             setError(null);
             try {
-                await UserService.delete(id);
+                await TechService.delete(id);
             } catch (err) {
                 setError(err);
             }
@@ -43,4 +43,4 @@ const useUsers = () => {
     };
 };
 
-export default useUsers;
+export default useTechs;

@@ -1,13 +1,15 @@
 import { Student } from './Student';
 import { User } from './User';
-import { Course } from './Course';
+import { CurricularUnit } from './CurricularUnit';
 
-export interface TecClass {
+export interface Tech {
   id?: number;
   teacher?: User;
-  course?: Course;
+  course?: CurricularUnit;
   date?: Date;
   summary?: string;
   personal_attendance?: boolean ;
   students?: Student[];
+  teacherId?: number;
+  CurricularUnitId?: number;
 }

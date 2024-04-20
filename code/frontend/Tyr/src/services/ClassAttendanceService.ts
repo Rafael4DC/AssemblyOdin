@@ -1,4 +1,5 @@
 import { makeApiRequest } from '../axios/apiRequest';
+import {ClassAttendance} from "../model/ClassAtendance";
 
 export class ClassAttendanceService {
 
@@ -10,11 +11,11 @@ export class ClassAttendanceService {
         return makeApiRequest('get', '/classattendances');
     }
 
-    static async save(classAttendanceRequest: ClassAttendanceRequest): Promise<ClassAttendance> {
+    static async save(classAttendanceRequest: ClassAttendance): Promise<ClassAttendance> {
         return makeApiRequest('post', '/classattendances/save', classAttendanceRequest);
     }
 
-    static async update(classAttendanceRequest: ClassAttendanceRequest): Promise<ClassAttendance> {
+    static async update(classAttendanceRequest: ClassAttendance): Promise<ClassAttendance> {
         return makeApiRequest('put', '/classattendances/update', classAttendanceRequest);
     }
 

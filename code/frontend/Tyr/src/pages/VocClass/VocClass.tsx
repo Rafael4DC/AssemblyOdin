@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { VocClass } from '../../model/VocClass';
+import useVocs from "../../hooks/useVocs";
 
 const CreateVocClass = () => {
   const [vocData, setVocData] = useState<VocClass>({
@@ -13,12 +14,15 @@ const CreateVocClass = () => {
     course: { id: 0 },
   });
 
+  const {vocs, error, handleSaveVocClass, handleDeleteVocClass} = useVocs();
+
   // Mock data
   const students = [{ id: '1', name: 'John Doe' },{ id: '2', name: 'Doe John' }];
   const curricularUnits = [{ id: '1', name: 'Computer Science' },{ id: '2', name: 'Design' }];
 
   const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
+    handleSaveVocClass(vocData);
     console.log(vocData);
   };
 

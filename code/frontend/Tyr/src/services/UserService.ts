@@ -1,5 +1,6 @@
-import { RoleOptions, User } from '../model/GetUserInfoOutputModel';
 import {makeApiRequest} from "../axios/apiRequest";
+import {User} from "../model/User";
+import {UserDTO} from "../model/dtos/user/UserDTO";
 
 export class UserService {
   static async getById(id: number): Promise<User> {
@@ -23,19 +24,4 @@ export class UserService {
     }
 }
 
-
-/*export async function getUserInfo(): Promise<User> {
-  console.log('Getting user info');
-  const a = await makeApiRequest('get', '/users')
-  //.then(data => console.log('Data received:', data))
-  //.catch(err => console.error('Error occurred:', err.message));
-
-  return {
-    id: 1,
-    name: 'Example Name',
-    email: 'example@email.com',
-    role: RoleOptions.Admin,
-    credits: 100,
-  };
-}*/
 

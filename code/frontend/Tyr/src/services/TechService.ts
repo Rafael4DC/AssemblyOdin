@@ -1,4 +1,5 @@
 import { makeApiRequest } from '../axios/apiRequest';
+import {Tech} from "../model/Tech";
 
 export class TechService {
 
@@ -10,11 +11,11 @@ export class TechService {
         return makeApiRequest('get', '/techs');
     }
 
-    static async save(techRequest: TechRequest): Promise<Tech> {
+    static async save(techRequest: Tech): Promise<Tech> {
         return makeApiRequest('post', '/techs/save', techRequest);
     }
 
-    static async update(techRequest: TechRequest): Promise<Tech> {
+    static async update(techRequest: Tech): Promise<Tech> {
         return makeApiRequest('put', '/techs/update', techRequest);
     }
 

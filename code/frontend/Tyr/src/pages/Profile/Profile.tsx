@@ -4,25 +4,25 @@ import VocTable from '../../components/Profile/VocTable';
 import * as React from 'react';
 import { Col, Container, Image, Row } from 'react-bootstrap';
 import { VocClass } from '../../model/VocClass';
-import { TecClass } from '../../model/TecClass';
+import { Tech } from '../../model/Tech';
 
-const tecCourses: TecClass[] = [
+const tecCourses: Tech[] = [
   {
 
     id: 1,
-    teacher: {name: 'Tomas Santos'},
+    teacher: {username: 'Tomas Santos'},
     date: new Date('10/10/2002'),
     summary: 'LOREM IPSUM',
-    course: {title: 'Code VI'},
+    course: {name: 'Code VI'},
     personal_attendance: false,
     students: [],
   },
   {
     id: 2,
-    teacher: {name:'Manuel Santos'},
+    teacher: {username:'Manuel Santos'},
     date: new Date('10/10/2002'),
     summary: 'LOREM IPSUM',
-    course: {title:'Design'},
+    course: {name:'Design'},
     personal_attendance: true,
     students: [],
   },
@@ -47,10 +47,12 @@ const vocCourses: VocClass[] = [
   },
 ];
 
-function Profile() {
-  const { userInfo, isLoading, error } = useUserInfo();
+const userId = 1;
 
-  if (isLoading) return <div className="text-center my-5">
+function Profile() {
+  const { userInfo, error } = useUserInfo(userId);
+
+  if (userInfo == null) return <div className="text-center my-5">
     <div className="spinner-border" role="status"></div>
   </div>;
   if (error) return <div className="alert alert-danger" role="alert">Error: {error.message}</div>;
@@ -61,7 +63,7 @@ function Profile() {
           <Col md={6} lg={4} className="mb-3">
             <Image src="https://bootdey.com/img/Content/avatar/avatar7.png" roundedCircle width="150" />
             <div className="mt-3">
-              <h4>{userInfo.name}</h4>
+              <h4>{userInfo.username}</h4>
               <p className="text-secondary mb-1">{userInfo.role}</p>
               <p className="text-muted mb-1">{userInfo.email}</p>
               <p className="text-muted font-size-sm">Pontos: {userInfo.credits}</p>

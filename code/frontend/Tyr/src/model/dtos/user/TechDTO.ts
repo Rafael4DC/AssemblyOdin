@@ -1,4 +1,4 @@
-import { TecClass } from '../../TecClass';
+import { Tech } from '../../Tech';
 import { DateDTO, DateDTOToDate } from './DateDTO';
 import { UserDTOtoUser } from './UserDTO';
 import { CurricularUnitDTOToCourse } from './CurricularUnitDTO';
@@ -21,7 +21,7 @@ export interface TechDTO {
 }
 
 
-export function TechDTOToTecClass(techDTO: TechDTO): TecClass {
+export function TechDTOToTecClass(techDTO: TechDTO): Tech {
   return {
     id: techDTO.id,
     teacher: UserDTOtoUser(techDTO.teacher),
@@ -33,6 +33,6 @@ export function TechDTOToTecClass(techDTO: TechDTO): TecClass {
   };
 }
 
-export function TechDTOListToTecClassList(techDTOs: TechDTO[]): TecClass[] {
+export function TechDTOListToTecClassList(techDTOs: TechDTO[]): Tech[] {
   return techDTOs.map(TechDTOToTecClass);
 }

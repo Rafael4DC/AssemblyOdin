@@ -1,6 +1,6 @@
 import { TechDTO } from './TechDTO';
 import { StudentDTO } from './StudentDTO';
-import { TecClass } from '../../TecClass';
+import { Tech } from '../../Tech';
 import { UserDTOtoUser } from './UserDTO';
 import { CurricularUnitDTOToCourse } from './CurricularUnitDTO';
 import { DateDTOToDate } from './DateDTO';
@@ -12,7 +12,7 @@ export interface ClassAttendanceDTO {
   attended: boolean;
 }
 
-export function ClassAttendanceDTOToTecClass(dto: ClassAttendanceDTO): TecClass {
+export function ClassAttendanceDTOToTecClass(dto: ClassAttendanceDTO): Tech {
   return {
     id: dto.tech.id,
     teacher: UserDTOtoUser(dto.tech.teacher),
@@ -29,6 +29,6 @@ export function ClassAttendanceDTOToTecClass(dto: ClassAttendanceDTO): TecClass 
     }]
   };
 }
-export function ClassAttendanceDTOListToTecClassList(dtos: ClassAttendanceDTO[]): TecClass[] {
+export function ClassAttendanceDTOListToTecClassList(dtos: ClassAttendanceDTO[]): Tech[] {
   return dtos.map(ClassAttendanceDTOToTecClass);
 }

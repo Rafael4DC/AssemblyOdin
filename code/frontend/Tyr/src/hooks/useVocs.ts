@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { UserService } from '../services/UserService';
-import {User} from "../model/User";
+import { VocService } from '../services/VocService';
+import {VocClass} from "../model/VocClass";
 
-const useUsers = () => {
-    const [users, setUsers] = useState<User[] | null>(null);
+const useVocs = () => {
+    const [vocs, setVocs] = useState<VocClass[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        UserService.getAll()
+        VocService.getAll()
             .then(data => {
-                setUsers(data);
+                setVocs(data);
             })
             .catch(err => {
                 setError(err);
@@ -18,24 +18,24 @@ const useUsers = () => {
 
 
     return {
-        users,
+        vocs,
         error,
-        handleSaveUser1: async (user: User) => {
+        handleSaveVocClass: async (vocClass: VocClass) => {
             setError(null);
             try {
-                if (user.id) {
-                    return await UserService.update(user);
+                if (vocClass.id) {
+                    return await VocService.update(vocClass);
                 } else {
-                    return await UserService.save(user);
+                    return await VocService.save(vocClass);
                 }
             } catch (err) {
                 setError(err);
             }
         },
-        handleDeleteUser: async (id: number) => {
+        handleDeleteVocClass: async (id: number) => {
             setError(null);
             try {
-                await UserService.delete(id);
+                await VocService.delete(id);
             } catch (err) {
                 setError(err);
             }
@@ -43,4 +43,4 @@ const useUsers = () => {
     };
 };
 
-export default useUsers;
+export default useVocs;

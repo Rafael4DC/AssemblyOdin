@@ -1,4 +1,5 @@
 import { makeApiRequest } from '../axios/apiRequest';
+import {Student} from "../model/Student";
 
 export class StudentService {
 
@@ -10,11 +11,11 @@ export class StudentService {
         return makeApiRequest('get', '/students');
     }
 
-    static async save(studentRequest: StudentRequest): Promise<Student> {
+    static async save(studentRequest: Student): Promise<Student> {
         return makeApiRequest('post', '/students/save', studentRequest);
     }
 
-    static async update(studentRequest: StudentRequest): Promise<Student> {
+    static async update(studentRequest: Student): Promise<Student> {
         return makeApiRequest('put', '/students/update', studentRequest);
     }
 

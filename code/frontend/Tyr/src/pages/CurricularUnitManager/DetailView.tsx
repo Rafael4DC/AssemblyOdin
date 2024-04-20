@@ -3,23 +3,23 @@ import { Button, Table } from 'react-bootstrap';
 import * as React from 'react';
 import { useState } from 'react'; // Assuming you've created this component in a separate file
 import ClassEdit from './ClassEdit';
-import { Course } from '../../model/Course';
-import { TecClass } from '../../model/TecClass';
+import { CurricularUnit } from '../../model/CurricularUnit';
+import { Tech } from '../../model/Tech';
 
 
 interface DetailViewProps {
-  course: Course;
-  onSave: (updatedCourse: Course) => void;
+  course: CurricularUnit;
+  onSave: (updatedCourse: CurricularUnit) => void;
 }
 
 const DetailView: React.FC<DetailViewProps> = ({ course, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedCourse, setEditedCourse] = useState(course);
-  const [selectedClass, setSelectedClass] = useState<TecClass | null>(null);
+  const [selectedClass, setSelectedClass] = useState<Tech | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedCourse({ ...editedCourse, title: e.target.value });
+    setEditedCourse({ ...editedCourse, name: e.target.value });
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -31,7 +31,7 @@ const DetailView: React.FC<DetailViewProps> = ({ course, onSave }) => {
     setIsEditing(false);
   };
 
-  const handleEditClassClick = (cls: TecClass) => {
+  const handleEditClassClick = (cls: Tech) => {
     setSelectedClass(cls);
     setShowEditModal(true);
   };
@@ -46,7 +46,7 @@ const DetailView: React.FC<DetailViewProps> = ({ course, onSave }) => {
         <tbody>
         {course.classes.map((cls, index) => (
           <tr key={index}>
-            <td>{cls.teacher.name}</td>
+            <td>{cls.teacher.username}</td>
             <td>{cls.date.toLocaleDateString()}</td>
             <td>
               <Button variant="outline-primary" onClick={() => handleEditClassClick(cls)}>Edit</Button>
