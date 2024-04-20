@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
-import { TecClassPersonal } from '../../model/TecClassPersonal';
+import { VocClass } from '../../model/VocClass';
 
 
 
@@ -37,7 +37,7 @@ const VocTable : React.FC<VocTableProps> = ({courses}) => {
   const renderCourseRow = (course: VocClass) => (
     <tr key={course.description + course.date} style={{ height: fixedRowHeight }}>
       <td>{course.description}</td>
-      <td>{course.date}</td>
+      <td>{course.date.toLocaleDateString()}</td>
       <td>{course.approved ? '✓' : '—'}</td>
     </tr>
   );

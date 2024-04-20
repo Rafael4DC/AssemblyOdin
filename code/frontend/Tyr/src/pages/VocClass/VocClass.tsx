@@ -1,15 +1,16 @@
 import * as React from "react";
 import { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
+import { VocClass } from '../../model/VocClass';
 
 const CreateVocClass = () => {
-  const [vocData , setVocData] = useState<VocClass>({
+  const [vocData, setVocData] = useState<VocClass>({
     description: "",
-    date: "",
+    date: new Date(), // Use a valid default date, such as the current date
     length: 0,
     approved: false,
-    studentId: 0,
-    curricularUnitId: 0,
+    student: { id: 0 },
+    course: { id: 0 },
   });
 
   // Mock data
@@ -19,6 +20,27 @@ const CreateVocClass = () => {
   const handleSubmit = (event: { preventDefault: () => void; }) => {
     event.preventDefault();
     console.log(vocData);
+  };
+
+  const handleStudentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setVocData((prevVocData) => ({
+      ...prevVocData,
+      student: { ...prevVocData.student, id: Number(e.target.value) },
+    }));
+  };
+
+  const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setVocData((prevVocData) => ({
+      ...prevVocData,
+      course: { ...prevVocData.course, id: Number(e.target.value) },
+    }));
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVocData((prevVocData) => ({
+      ...prevVocData,
+      date: e.target.value ? new Date(e.target.value) : new Date(),
+    }));
   };
 
   return (
@@ -40,8 +62,8 @@ const CreateVocClass = () => {
           <Form.Control
             type="date"
             required
-            value={vocData.date}
-            onChange={(e) => setVocData({ ...vocData, date: e.target.value })}
+            value={vocData.date instanceof Date ? vocData.date.toISOString().substring(0, 10) : ""}
+            onChange={(e) => setVocData({ ...vocData, date: new Date(e.target.value) })}
           />
         </Form.Group>
 
@@ -59,8 +81,8 @@ const CreateVocClass = () => {
           <Form.Label>Student</Form.Label>
           <Form.Select
             required
-            value={vocData.studentId}
-            onChange={(e) => setVocData({ ...vocData, studentId:  Number(e.target.value) })}
+            value={vocData.student.id.toString()} // Ensure the value is a string
+            onChange={handleStudentChange} // Use the correct handler
           >
             {students.map(student => (
               <option key={student.id} value={student.id}>{student.name}</option>
@@ -72,8 +94,8 @@ const CreateVocClass = () => {
           <Form.Label>Curricular Unit</Form.Label>
           <Form.Select
             required
-            value={vocData.curricularUnitId}
-            onChange={(e) => setVocData({ ...vocData, curricularUnitId:  Number(e.target.value) })}
+            value={vocData.course.id.toString()} // Ensure the value is a string
+            onChange={handleCourseChange} // Use the correct handler
           >
             {curricularUnits.map(unit => (
               <option key={unit.id} value={unit.id}>{unit.name}</option>

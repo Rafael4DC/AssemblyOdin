@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Button, Form, Table } from 'react-bootstrap';
 import TextModal from '../Shared/TextModal';
-import { TecClassPersonal } from '../../model/TecClassPersonal';
+import { TecClass } from '../../model/TecClass';
 
 
 
@@ -22,19 +22,19 @@ const scrollableTableStyle: React.CSSProperties = {
 };
 
 interface TecTableProps {
-  courses: TecClassPersonal[];
+  courses: TecClass[];
 }
 const TecTable: React.FC<TecTableProps> = ({ courses }) => {
   const [filter, setFilter] = useState(FilterOptions.Happened);
   const [modalShow, setModalShow] = useState(false);
   const [currentSummary, setCurrentSummary] = useState('');
 
-  const renderCourseRow = (course: TecClassPersonal) => (
-    <tr key={course.course_name + course.date} style={{ height: fixedRowHeight }}>
-      <td>{course.course_name}</td>
-      <td>{course.teacher}</td>
-      <td>{course.date}</td>
-      <td>{course.attendance ? '✓' : '—'}</td>
+  const renderCourseRow = (course: TecClass) => (
+    <tr key={course.course.title + course.date} style={{ height: fixedRowHeight }}>
+      <td>{course.course.title}</td>
+      <td>{course.teacher.name}</td>
+      <td>{course.date.toLocaleDateString()}</td>
+      <td>{course.personal_attendance ? '✓' : '—'}</td>
       <td>
         <Button variant="link" onClick={() => {
           setCurrentSummary(course.summary);

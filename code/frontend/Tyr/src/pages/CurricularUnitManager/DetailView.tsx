@@ -3,6 +3,8 @@ import { Button, Table } from 'react-bootstrap';
 import * as React from 'react';
 import { useState } from 'react'; // Assuming you've created this component in a separate file
 import ClassEdit from './ClassEdit';
+import { Course } from '../../model/Course';
+import { TecClass } from '../../model/TecClass';
 
 
 interface DetailViewProps {
@@ -44,8 +46,8 @@ const DetailView: React.FC<DetailViewProps> = ({ course, onSave }) => {
         <tbody>
         {course.classes.map((cls, index) => (
           <tr key={index}>
-            <td>{cls.teacher}</td>
-            <td>{cls.date}</td>
+            <td>{cls.teacher.name}</td>
+            <td>{cls.date.toLocaleDateString()}</td>
             <td>
               <Button variant="outline-primary" onClick={() => handleEditClassClick(cls)}>Edit</Button>
             </td>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { UserService } from '../services/UserService';
-import { User } from '../model/GetUserInfoOutputModel';
+import { User } from '../model/User';
 
 const useUserInfo = () => {
   const [userInfo, setUserInfo] = useState<User | null>(null);

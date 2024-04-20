@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Table } from 'react-bootstrap';
-import useCurricularUnits from "../../hooks/useCurricularUnits";
+import { Course } from '../../model/Course';
 
 
-/*
 const courses: Course[] = [
   {
     id: 1,
@@ -14,16 +13,16 @@ const courses: Course[] = [
 
       {
         id: 1,
-        teacher: 'Tomás Santos',
-        date: '10/10/2024',
+        teacher:{name : 'Tomás Santos'},
+        date: new Date('10/10/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: []
       },
       {
         id: 2,
-        teacher: 'Tomás Santos',
-        date: '15/10/2024',
+        teacher: {name : 'Tomás Santos'},
+        date: new Date('5/10/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: []
@@ -37,16 +36,16 @@ const courses: Course[] = [
     classes: [
       {
         id:3,
-        teacher: 'Ana Silva',
-        date: '11/10/2024',
+        teacher: {name : 'Ana Silva'},
+        date: new Date('11/13/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: []
       },
       {
         id:4,
-        teacher: 'Gil Reis',
-        date: '18/10/2024',
+        teacher: {name : 'Gil Reis'},
+        date: new Date('1/18/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: []
@@ -60,16 +59,16 @@ const courses: Course[] = [
     classes: [
       {
         id:5,
-        teacher: 'Carlos Pereira',
-        date: '12/10/2024',
+        teacher: {name : 'Carlos Pereira'},
+        date:  new Date('11/15/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: []
       },
       {
         id:6,
-        teacher: 'Carlos Pereira',
-        date: '19/10/2024',
+        teacher: {name : 'Carlos Pereira'},
+        date:  new Date('4/19/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: []
@@ -77,7 +76,6 @@ const courses: Course[] = [
     ],
   },
 ];
-*/
 
 
 enum FilterOptions {
@@ -108,8 +106,8 @@ const DetailView: React.FC<DetailViewProps> = ({course}) => {
         <tbody>
         {course.classes.map((cls, index) => (
           <tr key={index}>
-            <td>{cls.teacher}</td>
-            <td>{cls.date}</td>
+            <td>{cls.teacher.name}</td>
+            <td>{cls.date.toLocaleDateString()}</td>
           </tr>
         ))}
         </tbody>
@@ -119,19 +117,18 @@ const DetailView: React.FC<DetailViewProps> = ({course}) => {
 };
 
 function CurricularUnits() {
-  const { courses, isLoading, error } = useCurricularUnits();
   const [filter, setFilter] = useState(FilterOptions.Ongoing);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   const getUniqueTeachers = (course: Course) => {
-    const teacherSet = new Set(course.classes.map(cls => cls.teacher));
+    const teacherSet = new Set(course.classes.map(cls => cls.teacher.name));
     return Array.from(teacherSet).join(', ');
   };
 
   const getUniqueWeekdays = (course: Course) => {
     const dateSet = new Set(
       course.classes.map(cls => {
-        const date = new Date(cls.date.split('/').reverse().join('-'));
+        const date = new Date(cls.date);
         return date.toLocaleString('en-US', { weekday: 'long' });
       })
     );

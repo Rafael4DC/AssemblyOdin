@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
+import { TecClass } from '../../model/TecClass';
 
 interface ClassEditModalProps {
   show: boolean;
@@ -28,15 +29,17 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
   }, [classInfo]);
 
   const handleTeacherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (editedClass) {
-      setEditedClass({ ...editedClass, teacher: e.target.value });
-    }
+    setEditedClass(prevClass => ({
+      ...prevClass,
+      teacher: { ...prevClass.teacher, name: e.target.value }
+    }));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (editedClass) {
-      setEditedClass({ ...editedClass, date: e.target.value });
-    }
+    setEditedClass(prevClass => ({
+      ...prevClass,
+      date: new Date(e.target.value) // Assuming date is a Date object in editedClass
+    }));
   };
 
   const saveClass = () => {
@@ -74,7 +77,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
           <Form.Label>Teacher</Form.Label>
           <Form.Control
             type="text"
-            value={editedClass.teacher}
+            value={editedClass.teacher.name}
             onChange={handleTeacherChange}
           />
         </Form.Group>
@@ -82,7 +85,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="text"
-            value={editedClass.date}
+            value={editedClass.date.toISOString().substring(0, 10)}
             onChange={handleDateChange}
           />
         </Form.Group>
