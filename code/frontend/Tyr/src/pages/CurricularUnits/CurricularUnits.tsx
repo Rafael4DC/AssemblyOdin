@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Table } from 'react-bootstrap';
+import useCurricularUnits from "../../hooks/useCurricularUnits";
 
 
+/*
 const courses: Course[] = [
   {
     id: 1,
@@ -75,6 +77,7 @@ const courses: Course[] = [
     ],
   },
 ];
+*/
 
 
 enum FilterOptions {
@@ -116,6 +119,7 @@ const DetailView: React.FC<DetailViewProps> = ({course}) => {
 };
 
 function CurricularUnits() {
+  const { courses, isLoading, error } = useCurricularUnits();
   const [filter, setFilter] = useState(FilterOptions.Ongoing);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 

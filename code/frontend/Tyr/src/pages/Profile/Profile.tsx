@@ -4,7 +4,6 @@ import VocTable from '../../components/Profile/VocTable';
 import * as React from 'react';
 import { Col, Container, Image, Row } from 'react-bootstrap';
 import { TecClassPersonal } from '../../model/TecClassPersonal';
-import tecTable from '../../components/Profile/TecTable';
 
 const tecCourses: TecClassPersonal[] = [
   {
@@ -45,6 +44,8 @@ const vocCourses: VocClass[] = [
   },
 ];
 
+const userId = 1;
+
 function Profile() {
   const { userInfo, isLoading, error } = useUserInfo();
 
@@ -59,7 +60,7 @@ function Profile() {
           <Col md={6} lg={4} className="mb-3">
             <Image src="https://bootdey.com/img/Content/avatar/avatar7.png" roundedCircle width="150" />
             <div className="mt-3">
-              <h4>{userInfo.name}</h4>
+              <h4>{userInfo.username}</h4>
               <p className="text-secondary mb-1">{userInfo.role}</p>
               <p className="text-muted mb-1">{userInfo.email}</p>
               <p className="text-muted font-size-sm">Pontos: {userInfo.credits}</p>

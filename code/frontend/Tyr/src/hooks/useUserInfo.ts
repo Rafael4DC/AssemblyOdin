@@ -8,8 +8,8 @@ const useUserInfo = () => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-    UserService.getUserInfo()
+    //setTimeout(() => {
+    UserService.getById(1)
       .then(data => {
         setUserInfo(data);
         setIsLoading(false);
@@ -18,9 +18,8 @@ const useUserInfo = () => {
         setError(err);
         setIsLoading(false);
       });
-    }
-    , 1000);
-  });
+    //}, 3000);
+  }, []);
 
   return { userInfo, isLoading, error };
 };

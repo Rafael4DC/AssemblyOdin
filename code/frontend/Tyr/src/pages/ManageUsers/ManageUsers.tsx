@@ -2,47 +2,49 @@ import { Button, Table, Modal, Form, InputGroup, FormControl } from 'react-boots
 import  { useState } from 'react';
 import * as React from 'react';
 import { RoleOptions, User } from '../../model/GetUserInfoOutputModel';
+import useUsers from "../../hooks/useUsers";
+import useSaveUser from "../../hooks/useSaveUser";
 
 
 const mockUsers : User[] = [
   {
     id: 1,
-    name: 'Tomas Santos',
+    username: 'Tomas Santos',
     role: RoleOptions.Admin,
     email: 'tomas.santos@assembly.pt',
     credits: 10,
   },
   {
     id: 2,
-    name: 'Marta Rebelo',
+    username: 'Marta Rebelo',
     role: RoleOptions.Student,
     email: 'marta.rebelo@domain.com',
     credits: 20,
   },
   {
     id: 3,
-    name: 'João Almeida',
+    username: 'João Almeida',
     role: RoleOptions.Teacher,
     email: 'joao.almeida@domain.com',
     credits: 30,
   },
   {
     id: 4,
-    name: 'Ana Silva',
+    username: 'Ana Silva',
     role: RoleOptions.Student,
     email: 'ana.silva@domain.com',
     credits: 40,
   },
   {
     id: 5,
-    name: 'Luís Soares',
+    username: 'Luís Soares',
     role: RoleOptions.Admin,
     email: 'luis.soares@domain.com',
     credits: 50,
   },
   {
     id: 6,
-    name: 'Sofia Pereira',
+    username: 'Sofia Pereira',
     role: RoleOptions.Student,
     email: 'sofia.pereira@domain.com',
     credits: 60,
@@ -50,7 +52,8 @@ const mockUsers : User[] = [
 ];
 
 const UserManager = () => {
-  const [users, setUsers] = useState(mockUsers)
+  const { users, isLoading, error } = useUsers();
+  const { saveUser/*, isLoading*/, errorSave } = useSaveUser();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -60,19 +63,18 @@ const UserManager = () => {
     setShowEditModal(true);
   };
 
-  const handleSaveUser = (updatedUser: User) => {
-    const updatedUsers = users.map(user => user.id === updatedUser.id ? updatedUser : user);
-    setUsers(updatedUsers);
+  const handleSaveUser = async (updatedUser: User) => {
+    await saveUser(updatedUser)
     setShowEditModal(false);
   };
 
   const filteredUsers = searchTerm
-    ? users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    ? users.filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
     : users;
 
   const renderUserRow = (user: User) => (
     <tr key={user.id}>
-      <td>{user.name}</td>
+      <td>{user.username}</td>
       <td>{user.role}</td>
       <td>{user.email}</td>
       <td>{user.credits}</td>
@@ -116,8 +118,8 @@ const UserManager = () => {
                 <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
-                  defaultValue={selectedUser.name}
-                  onChange={(e) => setSelectedUser({ ...selectedUser, name: e.target.value })}
+                  defaultValue={selectedUser.username}
+                  onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })}
                 />
               </Form.Group>
 
