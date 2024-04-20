@@ -1,4 +1,5 @@
-import { RoleOptions, User } from '../model/GetUserInfoOutputModel';
+import { RoleOptions, User } from '../model/User';
+
 
 export namespace UserService {
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Form, Table } from 'react-bootstrap';
 import DetailView from './DetailView';
+import { Course } from '../../model/Course';
 
 
 const coursesMock: Course[] = [
@@ -12,8 +13,8 @@ const coursesMock: Course[] = [
     classes: [
       {
         id: 101,
-        teacher: 'Tomás Santos',
-        date: '10/10/2024',
+        teacher: {name: 'Tomás Santos'},
+        date: new Date('10/10/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: [
@@ -25,8 +26,8 @@ const coursesMock: Course[] = [
       },
       {
         id: 102,
-        teacher: 'Tomás Santos',
-        date: '15/10/2024',
+        teacher: {name: 'Tomás Santos'},
+        date: new Date('1/15/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: [
@@ -43,8 +44,8 @@ const coursesMock: Course[] = [
     classes: [
       {
         id: 201,
-        teacher: 'Ana Silva',
-        date: '11/10/2024',
+        teacher: {name: 'Ana Silva'},
+        date: new Date('11/10/2024'),
         summary: 'Covered basic syntax and script execution.',
         course: null,
         students: [
@@ -87,15 +88,17 @@ function CurricularUnitManager() {
   );
 
   const getUniqueTeachers = (course: Course) => {
-    const teacherSet = new Set(course.classes.map(cls => cls.teacher));
+    const teacherSet = new Set(course.classes.map(cls => cls.teacher.name));
     return Array.from(teacherSet).join(', ');
   };
 
   const getUniqueWeekdays = (course: Course) => {
-    const dateSet = new Set(course.classes.map(cls => {
-      const date = new Date(cls.date.split('/').reverse().join('-'));
-      return date.toLocaleString('en-US', { weekday: 'long' });
-    }));
+    const dateSet = new Set(
+      course.classes.map(cls => {
+        const date = new Date(cls.date);
+        return date.toLocaleString('en-US', { weekday: 'long' });
+      })
+    );
     return Array.from(dateSet).join(', ');
   };
 

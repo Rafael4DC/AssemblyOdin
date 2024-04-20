@@ -3,45 +3,47 @@ import TecTable from '../../components/Profile/TecTable';
 import VocTable from '../../components/Profile/VocTable';
 import * as React from 'react';
 import { Col, Container, Image, Row } from 'react-bootstrap';
-import { TecClassPersonal } from '../../model/TecClassPersonal';
-import tecTable from '../../components/Profile/TecTable';
+import { VocClass } from '../../model/VocClass';
+import { TecClass } from '../../model/TecClass';
 
-const tecCourses: TecClassPersonal[] = [
+const tecCourses: TecClass[] = [
   {
 
     id: 1,
-    teacher: 'Tomas Santos',
-    date: '10/10/2002',
+    teacher: {name: 'Tomas Santos'},
+    date: new Date('10/10/2002'),
     summary: 'LOREM IPSUM',
-    course_name: 'Code VI',
-    attendance: true,
+    course: {title: 'Code VI'},
+    personal_attendance: false,
+    students: [],
   },
   {
     id: 2,
-    teacher: 'Manuel Santos',
-    date: '10/10/2002',
+    teacher: {name:'Manuel Santos'},
+    date: new Date('10/10/2002'),
     summary: 'LOREM IPSUM',
-    course_name: 'Design',
-    attendance: true,
+    course: {title:'Design'},
+    personal_attendance: true,
+    students: [],
   },
 ];
 
 const vocCourses: VocClass[] = [
   {
     description: 'Code VI Practical',
-    date: '11/10/2002',
+    date: new Date('11/10/2002'),
     length: 60,
     approved: true,
-    studentId: 0,
-    curricularUnitId: 0,
+    student: {id:0},
+    course: {  },
   },
   {
     description: 'Code I Practical',
-    date: '20/05/2024',
+    date: new Date('11/10/2024'),
     length: 120,
     approved: true,
-    studentId: 0,
-    curricularUnitId: 0,
+    student: {id:0},
+    course: {  },
   },
 ];
 

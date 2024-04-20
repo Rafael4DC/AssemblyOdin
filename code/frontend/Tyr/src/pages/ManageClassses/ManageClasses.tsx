@@ -1,6 +1,7 @@
 import { Button, Table, Modal, Form } from 'react-bootstrap';
 import * as React from 'react';
 import { useState } from 'react';
+import { Student } from '../../model/Student';
 
 const mockTeacherClasses = [
   {
