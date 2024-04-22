@@ -5,24 +5,17 @@ import useUsers from "../../hooks/useUsers";
 import {RoleOptions, User} from "../../model/User";
 
 const UserManager = () => {
-    const {users, handleSaveUser1, handleDeleteUser, error} = useUsers();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [showEditModal, setShowEditModal] = useState(false);
-
-    const handleEditUserClick = (user: User) => {
-        setSelectedUser(user);
-        setShowEditModal(true);
-    };
-
-    const handleSaveUser = async (updatedUser: User) => {
-        await handleSaveUser1(updatedUser)
-        setShowEditModal(false);
-    };
-
-    const filteredUsers = searchTerm
-        ? users.filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
-        : users;
+    const {
+      filteredUsers,
+      selectedUser,
+      error,
+      showEditModal,
+      setSearchTerm,
+      setShowEditModal,
+      handleSaveUser,
+      handleDeleteUser,
+      handleEditUserClick,
+      setSelectedUser} = useUsers();
 
     const renderUserRow = (user: User) => (
         <tr key={user.id}>
@@ -115,13 +108,6 @@ const UserManager = () => {
                                     })}
                                 />
                             </Form.Group>
-
-                            <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-                                Close
-                            </Button>
-                            <Button variant="primary" onClick={() => selectedUser && handleSaveUser(selectedUser)}>
-                                Save Changes
-                            </Button>
                         </Form>
                     )}
                 </Modal.Body>
@@ -129,7 +115,7 @@ const UserManager = () => {
                     <Button variant="secondary" onClick={() => setShowEditModal(false)}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => selectedUser && handleSaveUser(selectedUser)}>
+                    <Button variant="primary" onClick={() =>handleSaveUser(selectedUser)}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
