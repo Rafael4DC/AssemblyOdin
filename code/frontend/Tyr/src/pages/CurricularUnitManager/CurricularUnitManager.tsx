@@ -6,18 +6,6 @@ import { CurricularUnit } from '../../model/CurricularUnit';
 import useCurricularUnits from "../../hooks/useCurricularUnits";
 
 
-const classes= [
-      {
-        id: 201,
-        teacher: {username: 'Ana Silva'},
-        date: new Date('11/10/2024'),
-        summary: 'Covered basic syntax and script execution.',
-        students: [
-          { id: 3, name: 'Ormonda Luis', attendance: true },
-          { id: 4, name: 'Alina Costa', attendance: true },
-        ],
-      },
-    ]
 
 
 enum FilterOptions {
@@ -52,14 +40,14 @@ function CurricularUnitManager() {
     </tr>
   );
 
-  const getUniqueTeachers = (course: CurricularUnit) => {
-    const teacherSet = new Set(classes.map(cls => cls.teacher.username));
+  const getUniqueTeachers = (curricularUnit: CurricularUnit) => {
+    const teacherSet = new Set(curricularUnit.classes.map(cls => cls.teacher.username));
     return Array.from(teacherSet).join(', ');
   };
 
-  const getUniqueWeekdays = (course: CurricularUnit) => {
+  const getUniqueWeekdays = (curricularUnit: CurricularUnit) => {
     const dateSet = new Set(
-      classes.map(cls => {
+        curricularUnit.classes.map(cls => {
         const date = new Date(cls.date);
         return date.toLocaleString('en-US', { weekday: 'long' });
       })

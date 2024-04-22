@@ -9,7 +9,7 @@ module.exports = {
   entry: './src/index.tsx',
   mode: 'development',
   devServer: {
-    port: 1338,
+    port: 1337,
     historyApiFallback: true,
     compress: false,
     proxy: {
