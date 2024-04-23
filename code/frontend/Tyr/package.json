@@ -1,0 +1,45 @@
+{
+  "name": "assembly_tyr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.tsx",
+  "scripts": {
+    "build": "webpack build",
+    "start": "webpack serve",
+    "test": "npx playright test"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.35",
+    "@types/react-dom": "^18.2.14",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "css-loader": "^7.1.1",
+    "eslint": "^8.52.0",
+    "eslint-plugin-playwright": "^0.18.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-webpack-plugin": "^4.0.1",
+    "prettier": "^3.0.3",
+    "style-loader": "^3.3.4",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-keywords": "^5.1.0",
+    "all": "^0.0.0",
+    "axios": "^1.6.8",
+    "bootstrap": "^5.3.3",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.2",
+    "react-dom": "^18.2.0",
+    "react-router-bootstrap": "^0.26.2",
+    "react-router-dom": "^6.18.0"
+  }
+}

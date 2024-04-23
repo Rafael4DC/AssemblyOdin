@@ -8,8 +8,8 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass123  # Ensure this environment variable is set
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
