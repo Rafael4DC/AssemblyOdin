@@ -8,21 +8,10 @@ using System.IO;
 
 var builder = Host.CreateDefaultBuilder(args);
 
-builder.ConfigureAppConfiguration((hostContext, config) =>
+builder.ConfigureServices((hostContext, services) =>
     {
-        var basePath = Path.GetFullPath(@"..\..\..\..\", Directory.GetCurrentDirectory());
-        var appSettingsPath = Path.Combine(basePath, "appsettings.json");
-
-        config.AddJsonFile(appSettingsPath, optional: true, reloadOnChange: true);
-
-    })
-    .ConfigureServices((hostContext, services) =>
-    {
-        var configuration = hostContext.Configuration;
-        var projectSettings = configuration.GetSection("ProjectSettings").Get<ProjectSettings>();
-
         // Ensure the log directory exists
-        string logDirectory = projectSettings?.LogFolder ?? throw new InvalidOperationException("Log folder path must be set in project settings.");
+        string logDirectory = Directory.GetCurrentDirectory()+"\\AHeimdall\\Logs"; //this is kinda sussy
         if (!Directory.Exists(logDirectory))
         {
             Directory.CreateDirectory(logDirectory);
@@ -32,7 +21,7 @@ builder.ConfigureAppConfiguration((hostContext, config) =>
         {
             options.ServiceName = "Assembly Heimdall";
         });
-        services.AddSingleton(new LogService()); // Assuming LogService takes a logDirectory parameter
+        services.AddSingleton(new LogService());
         services.AddSingleton(logDirectory); 
         services.AddHostedService<HeimdallWindowsService>();
         
@@ -47,10 +36,3 @@ builder.ConfigureAppConfiguration((hostContext, config) =>
 
 var host = builder.Build();
 host.Run();
-
-public class ProjectSettings
-{
-    public string? ProjectLocation { get; set; }
-    public string? InstallLocation { get; set; }
-    public string? LogFolder { get; set; }
-}

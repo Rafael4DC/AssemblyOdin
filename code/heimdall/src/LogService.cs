@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Text;
-using System.Linq;
 using System.Text.RegularExpressions;
+using System.Text.Json;
+
 
 namespace AssemblyHeimdall
 {
@@ -10,29 +10,36 @@ namespace AssemblyHeimdall
         private readonly long[] _logonLogoffEventIds = { 4624, 4634 };
         private readonly int[] _desiredLogonTypes = { 2, 3 }; // Example logon types; update with actual types you're interested in
 
-        public string GetAllEventLogs(int maxEvents = 1000)
+        public string GetAllEventLogs(int maxEvents = 10)
         {
-            StringBuilder eventLogInfo = new StringBuilder();
+            List<Dictionary<string, string>> logsList = new List<Dictionary<string, string>>();
 
             using (EventLog securityLog = new EventLog("Security"))
             {
                 var entries = securityLog.Entries.Cast<EventLogEntry>()
                     .Where(entry => _logonLogoffEventIds.Contains(entry.InstanceId))
+                    .Where(entry => _desiredLogonTypes.Contains(int.Parse(ExtractDetails(entry.Message).logonType)))
                     .OrderByDescending(entry => entry.TimeGenerated)
                     .Take(maxEvents);
 
                 foreach (EventLogEntry entry in entries)
                 {
                     var details = ExtractDetails(entry.Message);
-                    // Check if the logon type is one of the desired types before appending
                     if (_desiredLogonTypes.Contains(int.Parse(details.logonType)))
                     {
-                        eventLogInfo.AppendLine($"Time: {entry.TimeGenerated}, Event ID: {entry.InstanceId}, User: {entry.UserName}, Account Name: {details.accountName}, Account Domain: {details.domain}, Logon Type: {details.logonType}");
+                        logsList.Add(new Dictionary<string, string>
+                        {
+                            { "Time", entry.TimeGenerated.ToString("o") }, // "o" for ISO 8601 format
+                            { "Event ID", entry.InstanceId.ToString() },
+                            { "User", entry.UserName },
+                            { "Account Name", details.accountName },
+                            { "Account Domain", details.domain },
+                            { "Logon Type", details.logonType }
+                        });
                     }
                 }
             }
-
-            return eventLogInfo.ToString();
+            return JsonSerializer.Serialize(logsList);
         }
 
         private (string accountName, string domain, string logonType) ExtractDetails(string message)
