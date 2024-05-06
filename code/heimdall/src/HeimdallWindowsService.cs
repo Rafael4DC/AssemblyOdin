@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Diagnostics.Eventing.Reader;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -24,15 +25,18 @@ public sealed class HeimdallWindowsService : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 string logg = _logService.GetAllEventLogs();
+                
+                if(logg.Length != 0){
 
-                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string fileName = $@"{_logBasePath}\log_{timestamp}.txt";
+                    string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    string fileName = $@"{_logBasePath}\log_{timestamp}.txt";
 
-                await File.WriteAllTextAsync(fileName, logg);
+                    await File.WriteAllTextAsync(fileName, logg);
 
-                _logger.LogWarning("Log written to {FileName} at {LogBasePath}", fileName,_logBasePath);
+                    _logger.LogWarning("Log written to {FileName} at {LogBasePath}", fileName,_logBasePath);
 
-                await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                    await Task.Delay(TimeSpan.FromMinutes(10), stoppingToken);
+                }
             }
         }
         catch (OperationCanceledException)
