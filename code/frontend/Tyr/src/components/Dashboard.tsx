@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import "./Dashboard.css";
+import {Button} from "react-bootstrap";
 
 const Dashboard: React.FC = () => {
   const [activeLink, setActiveLink] = React.useState<string>('');
@@ -32,6 +33,13 @@ const Dashboard: React.FC = () => {
                   onClick={() => setActiveLink('/CurricularUnitManager')}>Curricular Unit Manager</Link></li>
 
         <li><Link to="/404" className={linkClass('/404')} onClick={() => setActiveLink('/404')}>404</Link></li>
+
+        <li><Button
+            variant="contained"
+            onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/office365"}
+        >
+          Sign In
+        </Button></li>
       </ul>
     </div>
   );

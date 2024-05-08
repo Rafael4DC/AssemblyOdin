@@ -1,45 +1,41 @@
-import axios, {AxiosError, AxiosRequestConfig} from 'axios';
-
-const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/'
-});
 
 /**
- * Handles errors by logging and re-throwing them.
+ * Enhanced wrapper function for making API calls using Fetch API.
  *
- * @param {Error} error - The error caught from Axios.
- */
-function handleError(error: AxiosError) {
-    console.error('API Request Failed:', error);
-    if (error.response) {
-        throw new Error(`API Error: ${error.response.status} ${error.response.statusText}`);
-    } else if (error.request) {
-        throw new Error('No response received');
-    } else {
-        throw new Error(error.message);
-    }
-}
-
-/**
- * Wrapper function for making API calls using axios.
- *
- * @param {string} method - The HTTP method to use.
+ * @param {string} method - The HTTP method to use (GET, POST, PUT, DELETE, etc.).
  * @param {string} url - The URL endpoint.
  * @param {any} [data] - The payload for POST/PUT requests.
- * @param {AxiosRequestConfig} [config] - Additional Axios config.
  */
-async function makeApiRequest(method: string, url: string, data?: any, config?: AxiosRequestConfig) {
+async function makeApiRequest(method: string, url: string, data?: any) {
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+
     try {
-        const response = await axiosInstance({
-            method,
-            url,
-            data,
-            ...config
-        });
-        return response.data;
+        const response = await fetch(`/api${url}`,
+            {
+                method: method,
+                headers: headers,
+                credentials: 'include',
+                redirect: 'follow',
+                body: data ? JSON.stringify(data) : undefined
+            });
+
+        if (!response.ok) {
+            const errorBody = await response.json();
+            throw new Error(`HTTP error ${response.status}: ${errorBody}`);
+        }
+
+        if (response.redirected) {
+            window.location.href = response.url.replace('1337', '8080');
+            return;
+        }
+
+        return await response.json();
     } catch (error) {
-        return handleError(error);
+        console.error('API Request Failed:', error);
+        throw error;
     }
 }
 
-export { makeApiRequest };
+export {makeApiRequest};

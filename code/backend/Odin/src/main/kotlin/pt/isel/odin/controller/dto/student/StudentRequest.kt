@@ -10,8 +10,8 @@ class StudentRequest(
 )
 
 fun StudentRequest.toStudent() = Student(
-    id = id,
-    username = username,
+    /*id = id,*/
     email = email,
+    username = username,
     credits = credits
 )

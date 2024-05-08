@@ -11,7 +11,7 @@ import pt.isel.odin.service.interfaces.StudentService
 @Service
 class StudentServiceImpl(private val studentRepository: StudentRepository) : StudentService {
 
-    override fun getById(id: Long): Student {
+    override fun getById(id: String): Student {
         return studentRepository.findById(id).orElseThrow { NotFoundException("No Student Found") }
     }
 
@@ -23,7 +23,7 @@ class StudentServiceImpl(private val studentRepository: StudentRepository) : Stu
         return studentRepository.save(studentRequest.toStudent())
     }
 
-    override fun delete(id: Long) {
+    override fun delete(id: String) {
         studentRepository.deleteById(id)
     }
 }

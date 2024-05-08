@@ -5,7 +5,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
@@ -25,11 +24,9 @@ class ClassAttendance(
     val id: Long? = null,
 
     @ManyToOne // (cascade = CascadeType.)
-    @JoinColumn(name = "student_id")
     val student: Student? = null,
 
     @ManyToOne
-    @JoinColumn(name = "tech_id")
     val tech: Tech? = null,
 
     @Column(nullable = false)

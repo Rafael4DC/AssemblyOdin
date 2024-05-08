@@ -33,7 +33,7 @@ class ClassAttendanceServiceImpl(
 
         return classAttendanceRepository.save(
             classAttendance.copy(
-                student = classAttendRequest.studentId?.let { Student(it) } ?: classAttendance.student,
+                student = classAttendRequest.studentEmail?.let { Student(it) } ?: classAttendance.student,
                 tech = classAttendRequest.techId?.let { Tech(it) } ?: classAttendance.tech,
                 attended = classAttendRequest.attended ?: classAttendance.attended
             )

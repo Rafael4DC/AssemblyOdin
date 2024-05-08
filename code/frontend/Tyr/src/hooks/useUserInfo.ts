@@ -7,7 +7,7 @@ const useUserInfo = (id: number) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    UserService.getById(1)
+    UserService.getSession()
       .then(data => {
         setUserInfo(data);
       })
