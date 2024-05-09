@@ -35,7 +35,7 @@ class VocServiceImpl(
             voc.copy(
                 description = vocRequest.description ?: voc.description,
                 approved = vocRequest.approved ?: voc.approved,
-                student = vocRequest.studentId?.let { Student(it) } ?: voc.student,
+                student = vocRequest.studentEmail?.let { Student(it) } ?: voc.student,
                 curricularUnit = vocRequest.curricularUnitId?.let { CurricularUnit(it) } ?: voc.curricularUnit,
                 started = vocRequest.started ?: voc.started,
                 ended = vocRequest.ended ?: voc.ended

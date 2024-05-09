@@ -13,7 +13,7 @@ interface UserService {
      *
      * @param id the user id.
      */
-    fun getById(id: Long): User
+    fun getById(id: String): User
 
     /**
      * Gets all users.
@@ -32,5 +32,5 @@ interface UserService {
      *
      * @param id the user id.
      */
-    fun delete(id: Long)
+    fun delete(id: String)
 }

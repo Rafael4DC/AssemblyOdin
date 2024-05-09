@@ -11,7 +11,7 @@ import pt.isel.odin.service.interfaces.UserService
 @Service
 class UserServiceImpl(private val userRepository: UserRepository) : UserService {
 
-    override fun getById(id: Long): User {
+    override fun getById(id: String): User {
         return userRepository.findById(id).orElseThrow { NotFoundException("No User Found") }
     }
 
@@ -23,7 +23,7 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.save(userRequest.toUser())
     }
 
-    override fun delete(id: Long) {
+    override fun delete(id: String) {
         userRepository.deleteById(id)
     }
 }

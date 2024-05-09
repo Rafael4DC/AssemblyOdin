@@ -33,7 +33,7 @@ class TechServiceImpl(
 
         return techRepository.save(
             tech.copy(
-                teacher = techRequest.teacherId?.let { User(it) } ?: tech.teacher,
+                teacher = techRequest.teacherEmail?.let { User(it) } ?: tech.teacher,
                 curricularUnit = techRequest.curricularUnitId?.let { CurricularUnit(it) } ?: tech.curricularUnit,
                 date = techRequest.date ?: tech.date,
                 summary = techRequest.summary ?: tech.summary

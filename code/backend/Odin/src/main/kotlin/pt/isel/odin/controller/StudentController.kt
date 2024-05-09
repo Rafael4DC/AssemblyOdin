@@ -25,7 +25,7 @@ class StudentController(private val studentService: StudentService) {
      * @param id the student id.
      */
     @GetMapping("/{id}")
-    fun getById(@PathVariable id: Long): Student? {
+    fun getById(@PathVariable id: String): Student? {
         return studentService.getById(id)
     }
 
@@ -63,7 +63,7 @@ class StudentController(private val studentService: StudentService) {
      * @param id the student id.
      */
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) {
+    fun delete(@PathVariable id: String) {
         studentService.delete(id)
     }
 }

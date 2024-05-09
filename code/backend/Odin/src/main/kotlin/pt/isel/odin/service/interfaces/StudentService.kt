@@ -13,7 +13,7 @@ interface StudentService {
      *
      * @param id the student id.
      */
-    fun getById(id: Long): Student
+    fun getById(id: String): Student
 
     /**
      * Gets all students.
@@ -32,5 +32,5 @@ interface StudentService {
      *
      * @param id the student id.
      */
-    fun delete(id: Long)
+    fun delete(id: String)
 }

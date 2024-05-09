@@ -8,6 +8,12 @@
     "start": "webpack serve",
     "test": "npx playright test"
   },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8080",
+      "changeOrigin": true
+    }
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {

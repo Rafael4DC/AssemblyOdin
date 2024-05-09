@@ -6,7 +6,6 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import kotlinx.datetime.LocalDate
@@ -37,11 +36,9 @@ class Voc(
     val approved: Boolean? = null,
 
     @ManyToOne
-    @JoinColumn(name = "student_id", nullable = false)
     val student: Student? = null,
 
     @ManyToOne
-    @JoinColumn(name = "curricular_unit_id", nullable = false)
     val curricularUnit: CurricularUnit? = null,
 
     @Convert(converter = LocalDateConverter::class)
