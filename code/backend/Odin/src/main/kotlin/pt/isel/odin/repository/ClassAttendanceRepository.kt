@@ -6,4 +6,6 @@ import pt.isel.odin.model.ClassAttendance
 /**
  * Repository for class attendance.
  */
-interface ClassAttendanceRepository : JpaRepository<ClassAttendance, Long>
+interface ClassAttendanceRepository : JpaRepository<ClassAttendance, Long>{
+    fun findByStudentEmail(email: String): List<ClassAttendance>
+}

@@ -6,4 +6,6 @@ import pt.isel.odin.model.CurricularUnit
 /**
  * Repository for curricular units.
  */
-interface CurricularUnitRepository : JpaRepository<CurricularUnit, Long>
+interface CurricularUnitRepository : JpaRepository<CurricularUnit, Long>{
+    fun findByName(name: String): CurricularUnit?
+}

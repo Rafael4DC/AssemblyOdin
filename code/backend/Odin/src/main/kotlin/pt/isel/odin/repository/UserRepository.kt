@@ -6,4 +6,7 @@ import pt.isel.odin.model.User
 /**
  * Repository for users.
  */
-interface UserRepository : JpaRepository<User, String>
+interface UserRepository : JpaRepository<User, String>{
+    fun findByUsername(username: String): User?
+
+}

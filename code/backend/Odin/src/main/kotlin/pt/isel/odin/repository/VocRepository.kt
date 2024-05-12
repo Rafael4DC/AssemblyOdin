@@ -6,4 +6,5 @@ import pt.isel.odin.model.Voc
 /**
  * Repository for vocs.
  */
-interface VocRepository : JpaRepository<Voc, Long>
+interface VocRepository : JpaRepository<Voc, Long>{
+}
