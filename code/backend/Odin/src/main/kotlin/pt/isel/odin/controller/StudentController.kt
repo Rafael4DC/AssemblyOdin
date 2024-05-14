@@ -16,7 +16,7 @@ import pt.isel.odin.service.interfaces.StudentService
  * Represents the controller that contains the endpoints related to the student.
  */
 @RestController
-@RequestMapping("/students")
+@RequestMapping("/api/students")
 class StudentController(private val studentService: StudentService) {
 
     /**

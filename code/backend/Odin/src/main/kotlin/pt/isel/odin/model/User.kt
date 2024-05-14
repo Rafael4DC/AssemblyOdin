@@ -2,6 +2,8 @@ package pt.isel.odin.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Inheritance
 import jakarta.persistence.InheritanceType
@@ -21,12 +23,11 @@ import jakarta.persistence.Table
 @Table(name = "users")
 open class User(
 
-/*
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open val id: Long? = null,
-*/
-    @Id
-    @Column(nullable = false)
+
+    @Column(nullable = false, unique = true)
     open val email: String? = null,
 
     @Column(nullable = false)

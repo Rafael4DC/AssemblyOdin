@@ -23,7 +23,7 @@ const useUsers = () => {
         setError(null);
         try {
             let result;
-            if (user.id) {
+            if (user.email) {
                 result = await UserService.update(user);
             } else {
                 result = await UserService.save(user);

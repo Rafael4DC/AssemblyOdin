@@ -7,13 +7,16 @@ import pt.isel.odin.model.CurricularUnit
 import pt.isel.odin.model.Student
 import pt.isel.odin.model.Voc
 import pt.isel.odin.model.copy
+import pt.isel.odin.repository.StudentRepository
 import pt.isel.odin.repository.VocRepository
 import pt.isel.odin.service.exception.NotFoundException
+import pt.isel.odin.service.interfaces.StudentService
 import pt.isel.odin.service.interfaces.VocService
 
 @Service
 class VocServiceImpl(
-    private val vocRepository: VocRepository
+    private val vocRepository: VocRepository,
+    private val userService: UserServiceImpl
 ) : VocService {
 
     override fun getById(id: Long): Voc {
@@ -35,7 +38,7 @@ class VocServiceImpl(
             voc.copy(
                 description = vocRequest.description ?: voc.description,
                 approved = vocRequest.approved ?: voc.approved,
-                student = vocRequest.studentEmail?.let { Student(it) } ?: voc.student,
+                student = vocRequest.studentId?.let { Student(it) } ?: voc.student,
                 curricularUnit = vocRequest.curricularUnitId?.let { CurricularUnit(it) } ?: voc.curricularUnit,
                 started = vocRequest.started ?: voc.started,
                 ended = vocRequest.ended ?: voc.ended
@@ -45,5 +48,10 @@ class VocServiceImpl(
 
     override fun delete(id: Long) {
         vocRepository.deleteById(id)
+    }
+
+    override fun getByStudent(email: String): List<Voc> {
+        val student = userService.getByEmail(email) ?: throw NotFoundException("No Student Found")
+        return vocRepository.findByStudentId(student.id!!)
     }
 }

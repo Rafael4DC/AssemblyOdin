@@ -1,6 +1,7 @@
 package pt.isel.odin.service.implementations
 
 import org.springframework.stereotype.Service
+import pt.isel.odin.controller.dto.isStudent
 import pt.isel.odin.controller.dto.tech.TechRequest
 import pt.isel.odin.controller.dto.tech.toTech
 import pt.isel.odin.model.CurricularUnit
@@ -13,7 +14,8 @@ import pt.isel.odin.service.interfaces.TechService
 
 @Service
 class TechServiceImpl(
-    private val techRepository: TechRepository
+    private val techRepository: TechRepository,
+    private val userService: UserServiceImpl
 ) : TechService {
 
     override fun getById(id: Long): Tech {
@@ -33,7 +35,7 @@ class TechServiceImpl(
 
         return techRepository.save(
             tech.copy(
-                teacher = techRequest.teacherEmail?.let { User(it) } ?: tech.teacher,
+                teacher = techRequest.teacherId?.let { User(it) } ?: tech.teacher,
                 curricularUnit = techRequest.curricularUnitId?.let { CurricularUnit(it) } ?: tech.curricularUnit,
                 date = techRequest.date ?: tech.date,
                 summary = techRequest.summary ?: tech.summary
@@ -43,5 +45,13 @@ class TechServiceImpl(
 
     override fun delete(id: Long) {
         techRepository.deleteById(id)
+    }
+
+    override fun getByUser(email: String): List<Tech> {
+        val user = userService.getByEmail(email) ?: throw NotFoundException("No User Found")
+        return if (isStudent(email))
+            techRepository.getByStudentId(user.id!!)
+        else
+            techRepository.getByUserId(user.id!!)
     }
 }

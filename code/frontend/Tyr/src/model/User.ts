@@ -1,14 +1,16 @@
 export interface User {
-  id?: number;
-  username?: string;
-  role?: string;
-  email?: string;
-  credits?: number;
+    id?: number;
+    email?: string;
+    username?: string;
+    role?: string;
+    credits?: number;
+
+    attendance?: boolean;
 }
 
 
 export enum RoleOptions {
-  Admin = 'Admin',
-  Teacher = 'Teacher',
-  Student = 'Student'
+    Admin = 'Admin',
+    Teacher = 'Teacher',
+    Student = 'Student'
 }

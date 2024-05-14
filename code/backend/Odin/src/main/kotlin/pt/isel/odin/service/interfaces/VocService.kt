@@ -40,4 +40,12 @@ interface VocService {
      * @param id the voc id.
      */
     fun delete(id: Long)
+
+
+    /**
+     * Gets all vocs by User.
+     *
+     * @param email the User.
+     */
+    fun getByStudent(email: String): List<Voc>
 }

@@ -1,5 +1,6 @@
 import {Student} from "./Student";
 import {CurricularUnit} from "./CurricularUnit";
+import {Date} from "./Date";
 
 export interface Voc {
     id?: number,
@@ -9,6 +10,4 @@ export interface Voc {
     curricularUnit?: CurricularUnit,
     started?: Date,
     ended?: Date,
-    studentId?: number,
-    curricularUnitId?: number
 }

@@ -48,8 +48,8 @@ function CurricularUnitManager() {
   const getUniqueWeekdays = (curricularUnit: CurricularUnit) => {
     const dateSet = new Set(
         curricularUnit.classes.map(cls => {
-        const date = new Date(cls.date);
-        return date.toLocaleString('en-US', { weekday: 'long' });
+        const date = cls.date.value$kotlinx_datetime;
+        return "Not implemented yet";
       })
     );
     return Array.from(dateSet).join(', ');
@@ -59,7 +59,7 @@ function CurricularUnitManager() {
     <div>
       <h3>Tec Courses Manager</h3>
       <Form.Select
-        aria-label="Filter courses"
+        aria-label="Filter techs"
         className="mb-3"
         value={filter}
         onChange={(e) => setFilter(e.target.value as FilterOptions)}

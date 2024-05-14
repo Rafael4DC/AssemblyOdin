@@ -9,14 +9,16 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.odin.controller.dto.tech.TechRequest
+import pt.isel.odin.controller.dto.toEmail
 import pt.isel.odin.model.Tech
 import pt.isel.odin.service.interfaces.TechService
+import java.security.Principal
 
 /**
  * Represents the controller that contains the endpoints related to the tech.
  */
 @RestController
-@RequestMapping("/techs")
+@RequestMapping("/api/techs")
 class TechController(private val techService: TechService) {
 
     /**
@@ -65,5 +67,15 @@ class TechController(private val techService: TechService) {
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) {
         techService.delete(id)
+    }
+
+    /**
+     * Gets all techs by student email.
+     *
+     *
+     */
+    @GetMapping("/user")
+    fun getByUser(authentication: Principal): List<Tech> {
+        return techService.getByUser(authentication.toEmail())
     }
 }

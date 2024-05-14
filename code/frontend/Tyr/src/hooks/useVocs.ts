@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { VocService } from '../services/VocService';
-import {VocClass} from "../model/VocClass";
+import {Voc} from "../model/Voc";
 
 const useVocs = () => {
-    const [vocs, setVocs] = useState<VocClass[] | null>(null);
+    const [vocs, setVocs] = useState<Voc[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const useVocs = () => {
     return {
         vocs,
         error,
-        handleSaveVocClass: async (vocClass: VocClass) => {
+        handleSaveVocClass: async (vocClass: Voc) => {
             setError(null);
             try {
                 if (vocClass.id) {

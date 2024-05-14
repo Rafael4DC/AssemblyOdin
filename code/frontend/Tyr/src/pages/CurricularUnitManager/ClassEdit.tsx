@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Form, ListGroup, Modal } from 'react-bootstrap';
 import { Tech } from '../../model/Tech';
+import {Date} from "../../model/Date";
 
 interface ClassEditModalProps {
   show: boolean;
@@ -36,10 +37,10 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedClass(prevClass => ({
+    setEditedClass(prevState => prevState/*prevClass => ({
       ...prevClass,
-      date: new Date(e.target.value) // Assuming date is a Date object in editedClass
-    }));
+      date: {value$kotlinx_datetime = e.target.value} // Assuming date is a Date object in editedClass
+    })*/);
   };
 
   const saveClass = () => {
@@ -85,14 +86,14 @@ const ClassEditModal: React.FC<ClassEditModalProps> = ({
           <Form.Label>Date</Form.Label>
           <Form.Control
             type="text"
-            value={editedClass.date.toISOString().substring(0, 10)}
+            value={editedClass.date.value$kotlinx_datetime}
             onChange={handleDateChange}
           />
         </Form.Group>
         <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
           {editedClass.students.map((student) => (
             <Form.Group key={student.id} className="mb-3 d-flex align-items-center">
-              <Form.Label className="mb-0 me-2">{student.name}</Form.Label>
+              <Form.Label className="mb-0 me-2">{student.username}</Form.Label>
               <Form.Check
                 type="checkbox"
                 id={`attendance-${student.id}`}

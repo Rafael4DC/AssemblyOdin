@@ -4,11 +4,19 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.stereotype.Service
+import pt.isel.odin.controller.dto.isStudent
+import pt.isel.odin.controller.dto.student.StudentRequest
 import pt.isel.odin.controller.dto.user.UserRequest
+import pt.isel.odin.model.Student
+import pt.isel.odin.service.interfaces.StudentService
 import pt.isel.odin.service.interfaces.UserService
 
 @Service
-class OAuth2UserService(private val userService: UserService) : OidcUserService() {
+class OAuth2UserService(
+    private val userService: UserService,
+    private val studentService: StudentService
+
+) : OidcUserService() {
 
     override fun loadUser(userRequest: OidcUserRequest): OidcUser {
         val oAuth2User = super.loadUser(userRequest)
@@ -16,7 +24,12 @@ class OAuth2UserService(private val userService: UserService) : OidcUserService(
         val email = oAuth2User.getAttribute<String>("email") ?: throw IllegalArgumentException("Email not found")
         val name = oAuth2User.getAttribute<String>("name") ?: throw IllegalArgumentException("Name not found")
 
-        userService.save(UserRequest(email, name))
+        if (userService.getByEmail(email) != null) return oAuth2User
+
+        if (isStudent(email))
+            studentService.save(StudentRequest(email, name))
+        else
+            userService.save(UserRequest(email = email, username = name))
 
         return oAuth2User
     }

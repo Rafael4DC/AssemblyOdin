@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.odin.controller.dto.toEmail
+import pt.isel.odin.controller.dto.toUser
 import pt.isel.odin.controller.dto.user.UserRequest
 import pt.isel.odin.model.User
 import pt.isel.odin.service.interfaces.UserService
@@ -28,10 +30,7 @@ class UserController(private val userService: UserService) {
      */
     @GetMapping("/session")
     fun getSession(authentication: Principal): User? {
-        return (authentication as OAuth2AuthenticationToken).let {
-            val attributes = it.principal.attributes
-            return@let userService.getById(attributes["email"].toString())
-        }
+        return  userService.getByEmail(authentication.toEmail())
     }
 
     /**

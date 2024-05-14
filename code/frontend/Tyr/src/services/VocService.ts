@@ -22,4 +22,8 @@ export class VocService {
     static async delete(id: number): Promise<void> {
         return makeApiRequest('delete', `/vocs/${id}`);
     }
+
+    static async getVocsByUser(): Promise<Voc[]> {
+        return makeApiRequest('get', '/vocs/student');
+    }
 }

@@ -1,5 +1,3 @@
-
-
 export namespace WebUris {
     export const HOME = '/';
     export const PROFILE = '/profile';

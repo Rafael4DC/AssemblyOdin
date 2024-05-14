@@ -47,7 +47,7 @@ const DetailView: React.FC<DetailViewProps> = ({ course, onSave }) => {
         {course.classes.map((cls, index) => (
           <tr key={index}>
             <td>{cls.teacher.username}</td>
-            <td>{cls.date.toLocaleDateString()}</td>
+            <td>{cls.date.value$kotlinx_datetime}</td>
             <td>
               <Button variant="outline-primary" onClick={() => handleEditClassClick(cls)}>Edit</Button>
             </td>

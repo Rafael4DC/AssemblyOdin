@@ -2,60 +2,15 @@ import useUserInfo from '../../hooks/useUserInfo';
 import TecTable from '../../components/Profile/TecTable';
 import VocTable from '../../components/Profile/VocTable';
 import * as React from 'react';
-import { Col, Container, Image, Row } from 'react-bootstrap';
-import { VocClass } from '../../model/VocClass';
-import { Tech } from '../../model/Tech';
-
-const tecCourses: Tech[] = [
-  {
-
-    id: 1,
-    teacher: {username: 'Tomas Santos'},
-    date: new Date('10/10/2002'),
-    summary: 'LOREM IPSUM',
-    course: {name: 'Code VI'},
-    personal_attendance: false,
-    students: [],
-  },
-  {
-    id: 2,
-    teacher: {username:'Manuel Santos'},
-    date: new Date('10/10/2002'),
-    summary: 'LOREM IPSUM',
-    course: {name:'Design'},
-    personal_attendance: true,
-    students: [],
-  },
-];
-
-const vocCourses: VocClass[] = [
-  {
-    description: 'Code VI Practical',
-    date: new Date('11/10/2002'),
-    length: 60,
-    approved: true,
-    student: {id:0},
-    course: {  },
-  },
-  {
-    description: 'Code I Practical',
-    date: new Date('11/10/2024'),
-    length: 120,
-    approved: true,
-    student: {id:0},
-    course: {  },
-  },
-];
-
-const userId = 1;
+import {Col, Container, Image, Row} from 'react-bootstrap';
+import {Spinner} from "../../utils/Spinner";
+import {AlertError} from "../../utils/AlertError";
 
 function Profile() {
-  const { userInfo, error } = useUserInfo(userId);
+  const { userInfo, userTechs, userVocs, error } = useUserInfo();
 
-  if (userInfo == null) return <div className="text-center my-5">
-    <div className="spinner-border" role="status"></div>
-  </div>;
-  if (error) return <div className="alert alert-danger" role="alert">Error: {error.message}</div>;
+  if (userInfo == null || userTechs == null) return <Spinner/>
+  if (error) return <AlertError error={error} />;
 
   return (
     <Container fluid className="p-5 text-center">
@@ -72,10 +27,10 @@ function Profile() {
         </Row>
       <Row>
         <Col className="mb-3">
-          <TecTable courses={tecCourses}/>
+          <TecTable techs={userTechs}/>
         </Col>
         <Col className="mb-3">
-          <VocTable courses={vocCourses}/>
+          <VocTable courses={userVocs}/>
         </Col>
       </Row>
     </Container>

@@ -16,7 +16,7 @@ import pt.isel.odin.service.interfaces.ClassAttendanceService
  * Represents the controller that contains the endpoints related to the class attendances.
  */
 @RestController
-@RequestMapping("/classattendances")
+@RequestMapping("/api/classattendances")
 class ClassAttendanceController(private val classAttendanceService: ClassAttendanceService) {
 
     /**

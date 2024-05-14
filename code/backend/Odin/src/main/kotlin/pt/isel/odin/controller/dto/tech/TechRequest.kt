@@ -7,7 +7,7 @@ import pt.isel.odin.model.User
 
 data class TechRequest(
     val id: Long?,
-    val teacherEmail: String?,
+    val teacherId: Long?,
     val curricularUnitId: Long?,
     val date: LocalDate?,
     val summary: String?
@@ -16,7 +16,7 @@ data class TechRequest(
 fun TechRequest.toTech(): Tech {
     return Tech(
         id = this.id,
-        teacher = User(this.teacherEmail),
+        teacher = User(this.teacherId),
         curricularUnit = CurricularUnit(this.curricularUnitId),
         date = this.date,
         summary = this.summary

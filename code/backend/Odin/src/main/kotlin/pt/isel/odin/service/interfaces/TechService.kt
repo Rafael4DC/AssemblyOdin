@@ -40,4 +40,11 @@ interface TechService {
      * @param id the tech id.
      */
     fun delete(id: Long)
+
+    /**
+     * Gets all techs by User email.
+     *
+     * @param email the User email.
+     */
+    fun getByUser(email: String): List<Tech>
 }

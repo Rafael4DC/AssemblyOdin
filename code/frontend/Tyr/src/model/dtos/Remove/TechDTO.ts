@@ -1,5 +1,5 @@
 import { Tech } from '../../Tech';
-import { DateDTO, DateDTOToDate } from './DateDTO';
+import { Date } from '../../Date';
 import { UserDTOtoUser } from './UserDTO';
 import { CurricularUnitDTOToCourse } from './CurricularUnitDTO';
 
@@ -16,7 +16,7 @@ export interface TechDTO {
     name: string;
     description: string;
   };
-  date: DateDTO;
+  date: Date;
   summary: string;
 }
 
@@ -25,10 +25,10 @@ export function TechDTOToTecClass(techDTO: TechDTO): Tech {
   return {
     id: techDTO.id,
     teacher: UserDTOtoUser(techDTO.teacher),
-    course: CurricularUnitDTOToCourse(techDTO.curricularUnit),
-    date: DateDTOToDate(techDTO.date),
+    curricularUnit: CurricularUnitDTOToCourse(techDTO.curricularUnit),
+    date: techDTO.date,
     summary: techDTO.summary,
-    personal_attendance: false,
+    attendance: false,
     students: []
   };
 }

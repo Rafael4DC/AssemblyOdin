@@ -10,12 +10,14 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import pt.isel.odin.config.spring.service.OAuth2UserService
+import pt.isel.odin.service.interfaces.StudentService
 import pt.isel.odin.service.interfaces.UserService
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     private val userService: UserService,
+    private val studentService: StudentService,
     private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler
 ) {
 
@@ -38,7 +40,7 @@ class SecurityConfig(
             }
             .oauth2Login { oauth2 ->
                 oauth2.userInfoEndpoint { userInfo ->
-                    userInfo.oidcUserService(OAuth2UserService(userService))
+                    userInfo.oidcUserService(OAuth2UserService(userService, studentService))
                 }
                 oauth2.successHandler(oAuth2LoginSuccessHandler)
             }

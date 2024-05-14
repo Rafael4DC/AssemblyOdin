@@ -15,6 +15,10 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.findById(id).orElseThrow { NotFoundException("No User Found") }
     }
 
+    override fun getByEmail(email: String): User? {
+        return userRepository.findByEmail(email)
+    }
+
     override fun getAll(): List<User> {
         return userRepository.findAll()
     }

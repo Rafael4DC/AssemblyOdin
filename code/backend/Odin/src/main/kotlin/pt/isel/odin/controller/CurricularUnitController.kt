@@ -16,7 +16,7 @@ import pt.isel.odin.service.interfaces.CurricularUnitService
  * Represents the controller that contains the endpoints related to the curricular units.
  */
 @RestController
-@RequestMapping("/curricularunits")
+@RequestMapping("/api/curricularunits")
 class CurricularUnitController(private val curricularUnitService: CurricularUnitService) {
 
     /**

@@ -1,11 +1,9 @@
-import {StudentDTO} from "./dtos/user/StudentDTO";
-import {TechDTO} from "./dtos/user/TechDTO";
+import {Student} from "./Student";
+import {Tech} from "./Tech";
 
 export interface ClassAttendance {
-    id: number;
-    student: StudentDTO;
-    tech: TechDTO;
-    attended: boolean;
-    studentId: number;
-    techId: number;
+    id?: number;
+    student?: Student;
+    tech?: Tech;
+    attended?: boolean;
 }

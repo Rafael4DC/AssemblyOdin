@@ -1,15 +1,14 @@
-import { Student } from './Student';
 import { User } from './User';
 import { CurricularUnit } from './CurricularUnit';
+import {Date} from "./Date";
 
 export interface Tech {
   id?: number;
   teacher?: User;
-  course?: CurricularUnit;
+  curricularUnit?: CurricularUnit;
   date?: Date;
   summary?: string;
-  personal_attendance?: boolean ;
-  students?: Student[];
-  teacherId?: number;
-  CurricularUnitId?: number;
+
+  attendance?: boolean;
+  students?: User[];
 }

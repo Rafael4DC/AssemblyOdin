@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
-import { VocClass } from '../../model/VocClass';
-
-
-
-
+import {Voc} from "../../model/Voc";
 
 enum FilterOptions {
   Happened = 'Happened',
@@ -24,20 +20,20 @@ const scrollableTableStyle: React.CSSProperties = {
 };
 
 interface VocTableProps {
-  courses: VocClass[];
+  courses: Voc[];
 }
 
 const VocTable : React.FC<VocTableProps> = ({courses}) => {
   const [filter, setFilter] = useState(FilterOptions.Happened);
 
-  const handleEditClick = (course: VocClass) => {
+  const handleEditClick = (course: Voc) => {
     console.log('Edit course:', course);
   };
 
-  const renderCourseRow = (course: VocClass) => (
-    <tr key={course.description + course.date} style={{ height: fixedRowHeight }}>
+  const renderCourseRow = (course: Voc) => (
+    <tr key={course.description + course.started} style={{ height: fixedRowHeight }}>
       <td>{course.description}</td>
-      <td>{course.date.toLocaleDateString()}</td>
+      <td>{course.started.value$kotlinx_datetime}</td>
       <td>{course.approved ? '✓' : '—'}</td>
     </tr>
   );

@@ -16,6 +16,13 @@ interface UserService {
     fun getById(id: String): User
 
     /**
+     * Gets a user by its email.
+     *
+     * @param email the user email.
+     */
+    fun getByEmail(email: String): User?
+
+    /**
      * Gets all users.
      */
     fun getAll(): List<User>

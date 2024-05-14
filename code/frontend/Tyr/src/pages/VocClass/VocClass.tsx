@@ -1,17 +1,17 @@
 import * as React from "react";
 import { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
-import { VocClass } from '../../model/VocClass';
 import useVocs from "../../hooks/useVocs";
+import {Voc} from "../../model/Voc";
 
 const CreateVocClass = () => {
-  const [vocData, setVocData] = useState<VocClass>({
+  const [vocData, setVocData] = useState<Voc>({
     description: "",
-    date: new Date(), // Use a valid default date, such as the current date
-    length: 0,
+    //date: new Date(), // Use a valid default date, such as the current date
+    //length: 0,
     approved: false,
     student: { id: 0 },
-    course: { id: 0 },
+    //course: { id: 0 },
   });
 
   const {vocs, error, handleSaveVocClass, handleDeleteVocClass} = useVocs();
@@ -36,7 +36,7 @@ const CreateVocClass = () => {
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setVocData((prevVocData) => ({
       ...prevVocData,
-      course: { ...prevVocData.course, id: Number(e.target.value) },
+      course: { ...prevVocData, id: Number(e.target.value) },
     }));
   };
 
@@ -66,8 +66,8 @@ const CreateVocClass = () => {
           <Form.Control
             type="date"
             required
-            value={vocData.date instanceof Date ? vocData.date.toISOString().substring(0, 10) : ""}
-            onChange={(e) => setVocData({ ...vocData, date: new Date(e.target.value) })}
+            value={vocData.started instanceof Date ? vocData.started.value$kotlinx_datetime : ""}
+            onChange={(e) => setVocData(prevState => prevState/*{ ...vocData, date: new Date(e.target.value) }*/)}
           />
         </Form.Group>
 
@@ -76,8 +76,8 @@ const CreateVocClass = () => {
           <Form.Control
             type="number"
             required
-            value={vocData.length}
-            onChange={(e) => setVocData({ ...vocData, length:  Number(e.target.value) })}
+            value={vocData.started.value$kotlinx_datetime}
+            onChange={(e) => setVocData(prevState => prevState/*{ ...vocData, length:  Number(e.target.value) }*/)}
           />
         </Form.Group>
 
@@ -98,7 +98,7 @@ const CreateVocClass = () => {
           <Form.Label>Curricular Unit</Form.Label>
           <Form.Select
             required
-            value={vocData.course.id.toString()} // Ensure the value is a string
+            value={vocData.id} // Ensure the value is a string
             onChange={handleCourseChange} // Use the correct handler
           >
             {curricularUnits.map(unit => (

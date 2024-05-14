@@ -140,7 +140,7 @@ const TeacherClassManager: React.FC = () => {
               <Form.Group controlId={`student-attendance-${student.id}`} key={student.id}>
                 <Form.Check
                   type="checkbox"
-                  label={student.name}
+                  label={student.username}
                   checked={student.attendance}
                   onChange={(e) => handleAttendanceChange(student.id, e.target.checked)}
                 />

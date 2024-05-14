@@ -8,15 +8,17 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.odin.controller.dto.toEmail
 import pt.isel.odin.controller.dto.voc.VocRequest
 import pt.isel.odin.model.Voc
 import pt.isel.odin.service.interfaces.VocService
+import java.security.Principal
 
 /**
  * Represents the controller that contains the endpoints related to the voc.
  */
 @RestController
-@RequestMapping("/vocs")
+@RequestMapping("/api/vocs")
 class VocController(private val vocService: VocService) {
 
     /**
@@ -65,5 +67,14 @@ class VocController(private val vocService: VocService) {
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) {
         vocService.delete(id)
+    }
+
+    /**
+     * Gets all vocs by User.
+     *
+     */
+    @GetMapping("/student")
+    fun getByStudent(authentication: Principal): List<Voc> {
+        return vocService.getByStudent(authentication.toEmail())
     }
 }

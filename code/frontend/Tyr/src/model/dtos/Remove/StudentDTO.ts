@@ -10,10 +10,10 @@ export interface StudentDTO {
 export function StudentDTOtoStudent(studentDTO: StudentDTO): Student {
   return {
     id: studentDTO.id,
-    name: studentDTO.username,
+    username: studentDTO.username,
     email: studentDTO.email,
     credits: studentDTO.credits,
-    attendance: false
+    //attendance: false
   };
 }
 

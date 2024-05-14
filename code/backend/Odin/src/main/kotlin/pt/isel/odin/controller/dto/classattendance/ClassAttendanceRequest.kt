@@ -6,7 +6,7 @@ import pt.isel.odin.model.Tech
 
 data class ClassAttendanceRequest(
     val id: Long?,
-    val studentEmail: String?,
+    val studentId: Long?,
     val techId: Long?,
     val attended: Boolean?
 )
@@ -14,7 +14,7 @@ data class ClassAttendanceRequest(
 fun ClassAttendanceRequest.toClassAttendance(): ClassAttendance {
     return ClassAttendance(
         id = this.id,
-        student = Student(this.studentEmail),
+        student = Student(this.studentId),
         tech = Tech(this.techId),
         attended = this.attended
     )

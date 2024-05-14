@@ -9,7 +9,7 @@ data class VocRequest(
     val id: Long?,
     val description: String?,
     val approved: Boolean?,
-    val studentEmail: String?,
+    val studentId: Long?,
     val curricularUnitId: Long?,
     val started: LocalDate?,
     val ended: LocalDate?
@@ -20,7 +20,7 @@ fun VocRequest.toVoc(): Voc {
         id = this.id,
         description = this.description,
         approved = this.approved,
-        student = Student(this.studentEmail),
+        student = Student(this.studentId),
         curricularUnit = CurricularUnit(this.curricularUnitId),
         started = this.started,
         ended = this.ended

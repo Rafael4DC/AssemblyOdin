@@ -12,25 +12,25 @@ const CurricularUnits: CurricularUnit[] = [
             {
                 id: 101,
                 teacher: {username: 'Tomás Santos'},
-                date: new Date('10/10/2024'),
+                //date: new Date('10/10/2024'),
                 summary: 'Covered basic syntax and script execution.',
-                course: null,
+                curricularUnit: null,
                 students: [
-                    { id: 1, name: 'Manuel Tobias', attendance: null },
-                    { id: 2, name: 'Jakelino Zé', attendance: null },
-                    { id: 3, name: 'MadsaTobias', attendance: null },
-                    { id: 4, name: 'Jakafddasfdelino Zé', attendance: null },
+                    {email:"ManuelTobias@gmail.com", username: 'Manuel Tobias'},
+                    {email:"JakelinoZé@gmail.com", username: 'Jakelino Zé'},
+                    {email:"MadsaTobias@gmail.com", username: 'MadsaTobias'},
+                    {email:"JakafddasfdelinoZé@gmail.com", username: 'Jakafddasfdelino Zé'},
                 ],
             },
             {
                 id: 102,
                 teacher: {username:'Tomás Santos'},
-                date: new Date('15/10/2024'),
+                //date: new Date('15/10/2024'),
                 summary: 'Covered basic syntax and script execution.',
-                course: null,
+                curricularUnit: null,
                 students: [
-                    { id: 1, name: 'Manuel Tobias', attendance: null },
-                    { id: 2, name: 'Jakelino Zé', attendance: null },
+                    {email:"ManuelTobias@gmail.com", username: 'Manuel Tobias'},
+                    {email:"JakelinoZé@gmail.com", username: 'Jakelino Zé'},
                 ],
             },
         ],
@@ -43,12 +43,12 @@ const CurricularUnits: CurricularUnit[] = [
             {
                 id: 201,
                 teacher: {username:'Ana Silva'},
-                date: new Date('11/10/2024'),
+                //date: new Date('11/10/2024'),
                 summary: 'Covered basic syntax and script execution.',
-                course: null,
+                curricularUnit: null,
                 students: [
-                    { id: 3, name: 'Ormonda Luis', attendance: null },
-                    { id: 4, name: 'Alina Costa', attendance: null },
+                    {email:"OrmondaLuis@gmail.com", username: 'Ormonda Luis'},
+                    {email:"AlinaCosta@gmail.com", username: 'Alina Costa'}
                 ],
             },
         ],
@@ -63,7 +63,6 @@ const useCurricularUnits = () => {
         CurricularUnitService.getAll()
             .then(data => {
                 setCurricularUnits(CurricularUnits);
-                //this is using mock, because when this was made, this version of the api didnt support this operation
             })
             .catch(err => {
                 setError(err);

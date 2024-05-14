@@ -3,7 +3,6 @@ import { StudentDTO } from './StudentDTO';
 import { Tech } from '../../Tech';
 import { UserDTOtoUser } from './UserDTO';
 import { CurricularUnitDTOToCourse } from './CurricularUnitDTO';
-import { DateDTOToDate } from './DateDTO';
 
 export interface ClassAttendanceDTO {
   id: number;
@@ -16,16 +15,16 @@ export function ClassAttendanceDTOToTecClass(dto: ClassAttendanceDTO): Tech {
   return {
     id: dto.tech.id,
     teacher: UserDTOtoUser(dto.tech.teacher),
-    course: CurricularUnitDTOToCourse(dto.tech.curricularUnit),
-    date: DateDTOToDate(dto.tech.date),
+    curricularUnit: CurricularUnitDTOToCourse(dto.tech.curricularUnit),
+    date: dto.tech.date,
     summary: dto.tech.summary,
-    personal_attendance: dto.attended,
+    attendance: dto.attended,
     students: [{
       id: dto.student.id,
-      name: dto.student.username,
+      username: dto.student.username,
       email: dto.student.email,
       credits: dto.student.credits,
-      attendance: dto.attended
+      //attendance: dto.attended
     }]
   };
 }
