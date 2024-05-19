@@ -8,7 +8,7 @@ import pt.isel.odin.model.Voc
  * Repository for vocs.
  */
 @Repository
-interface VocRepository : JpaRepository<Voc, Long>{
+interface VocRepository : JpaRepository<Voc, Long> {
 
     fun findByStudentId(studentId: Long): List<Voc>
 }

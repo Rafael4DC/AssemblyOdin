@@ -1,0 +1,238 @@
+{
+  "categories": [
+    {
+      "name": "Virtual Media Design",
+      "subcategories": [
+        {
+          "name": "Graphic",
+          "modules": [
+            {
+              "name": "Blender Basics",
+              "tier": 1
+            },
+            {
+              "name": "Dynamic Graphics",
+              "tier": 2
+            },
+            {
+              "name": "WEB Graphics",
+              "tier": 3
+            },
+            {
+              "name": "3D Printing",
+              "tier": 4
+            },
+            {
+              "name": "Prototype",
+              "tier": 5
+            },
+            {
+              "name": "Graphic Tablet Work",
+              "tier": 6
+            },
+            {
+              "name": "DALL-E Midjourney",
+              "tier": 7
+            }
+          ]
+        },
+        {
+          "name": "Animation",
+          "modules": [
+            {
+              "name": "Unity Animation",
+              "tier": 1
+            },
+            {
+              "name": "Cascadeur AI Animation",
+              "tier": 2
+            },
+            {
+              "name": "Dynamic Game Coding",
+              "tier": 3
+            },
+            {
+              "name": "Twine Game Story",
+              "tier": 4
+            },
+            {
+              "name": "Band Lab MIDI Creator",
+              "tier": 5
+            }
+          ]
+        },
+        {
+          "name": "Video",
+          "modules": [
+            {
+              "name": "DaVinci Editing",
+              "tier": 1
+            },
+            {
+              "name": "Unreal Megascans",
+              "tier": 2
+            },
+            {
+              "name": "Virtual Video Production",
+              "tier": 3
+            },
+            {
+              "name": "Metahuman Meta-Animation",
+              "tier": 4
+            },
+            {
+              "name": "Interactive Worlds",
+              "tier": 5
+            },
+            {
+              "name": "HTML5 Media Publishing",
+              "tier": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Robotic",
+      "subcategories": [
+        {
+          "name": "Controller",
+          "modules": [
+            {
+              "name": "EV3 Build Presets",
+              "tier": 1
+            },
+            {
+              "name": "EV3 Python",
+              "tier": 1
+            },
+            {
+              "name": "FP Basics",
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "name": "Engineer",
+          "modules": [
+            {
+              "name": "Arduino",
+              "tier": 1
+            },
+            {
+              "name": "Micro:Bit",
+              "tier": 1
+            },
+            {
+              "name": "Micro:Bit Python",
+              "tier": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Code",
+      "subcategories": [
+        {
+          "name": "Database",
+          "modules": [
+            {
+              "name": "Basics",
+              "tier": 1
+            },
+            {
+              "name": "Basics",
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "name": "HTML",
+          "modules": [
+            {
+              "name": "Frontend",
+              "tier": 1
+            },
+            {
+              "name": "Frontend Game Dev",
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "name": "Minecraft",
+          "modules": [
+            {
+              "name": "Eda Blocks (Python)",
+              "tier": 1
+            },
+            {
+              "name": "Eda (Python)",
+              "tier": 2
+            },
+            {
+              "name": "Game Dev (Gameplay)",
+              "tier": 3
+            },
+            {
+              "name": "Game Dev (Basics)",
+              "tier": 4
+            },
+            {
+              "name": "Game Dev (Board)",
+              "tier": 5
+            },
+            {
+              "name": "Promad Game Dev",
+              "tier": 6
+            },
+            {
+              "name": "Makey Makey",
+              "tier": 7
+            }
+          ]
+        },
+        {
+          "name": "Python",
+          "modules": [
+            {
+              "name": "Intro Prog",
+              "tier": 1
+            },
+            {
+              "name": "Game Dev (Gameplay)",
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "name": "C#",
+          "modules": [
+            {
+              "name": "Intro Prog",
+              "tier": 1
+            },
+            {
+              "name": "OOP",
+              "tier": 2
+            },
+            {
+              "name": "DB",
+              "tier": 3
+            },
+            {
+              "name": "ADO",
+              "tier": 4
+            },
+            {
+              "name": "HTML",
+              "tier": 5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

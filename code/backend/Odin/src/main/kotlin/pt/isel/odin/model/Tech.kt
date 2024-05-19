@@ -1,22 +1,20 @@
 package pt.isel.odin.model
 
 import jakarta.persistence.Column
-import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import kotlinx.datetime.LocalDate
-import pt.isel.odin.utils.LocalDateConverter
+import java.time.LocalDateTime
 
 /**
  * Represents the Teoric lectures (TEC) in the system.
  *
  * @property id the TEC id
  * @property teacher the teacher that is responsible for the TEC
- * @property curricularUnit the course that the TEC is about
+ * @property module the course that the TEC is about
  * @property date the date of the TEC
  * @property summary the summary of the TEC
  */
@@ -31,10 +29,9 @@ class Tech(
     val teacher: User? = null,
 
     @ManyToOne
-    val curricularUnit: CurricularUnit? = null,
+    val module: Module? = null,
 
-    @Convert(converter = LocalDateConverter::class)
-    val date: LocalDate? = null,
+    val date: LocalDateTime? = null,
 
     @Column(nullable = false)
     val summary: String? = null
@@ -43,7 +40,7 @@ class Tech(
 fun Tech.copy(
     id: Long? = this.id,
     teacher: User? = this.teacher,
-    curricularUnit: CurricularUnit? = this.curricularUnit,
-    date: LocalDate? = this.date,
+    curricularUnit: Module? = this.module,
+    date: LocalDateTime? = this.date,
     summary: String? = this.summary
 ) = Tech(id, teacher, curricularUnit, date, summary)

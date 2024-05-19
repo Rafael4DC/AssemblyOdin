@@ -1,18 +1,18 @@
 package pt.isel.odin.controller.dto.voc
 
-import kotlinx.datetime.LocalDate
-import pt.isel.odin.model.CurricularUnit
+import pt.isel.odin.model.Module
 import pt.isel.odin.model.Student
 import pt.isel.odin.model.Voc
+import java.time.LocalDateTime
 
 data class VocRequest(
     val id: Long?,
     val description: String?,
     val approved: Boolean?,
     val studentId: Long?,
-    val curricularUnitId: Long?,
-    val started: LocalDate?,
-    val ended: LocalDate?
+    val moduleId: Long?,
+    val started: LocalDateTime?,
+    val ended: LocalDateTime?
 )
 
 fun VocRequest.toVoc(): Voc {
@@ -21,7 +21,7 @@ fun VocRequest.toVoc(): Voc {
         description = this.description,
         approved = this.approved,
         student = Student(this.studentId),
-        curricularUnit = CurricularUnit(this.curricularUnitId),
+        module = Module(this.moduleId),
         started = this.started,
         ended = this.ended
     )

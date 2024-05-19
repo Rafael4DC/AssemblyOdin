@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.odin.controller.dto.tech.TechRequest
+import pt.isel.odin.controller.dto.tech.TechAttendanceResponse
 import pt.isel.odin.controller.dto.toEmail
 import pt.isel.odin.model.Tech
 import pt.isel.odin.service.interfaces.TechService
@@ -45,8 +45,8 @@ class TechController(private val techService: TechService) {
      * @param techRequest the tech info to save without id.
      */
     @PostMapping("/save")
-    fun save(@RequestBody techRequest: TechRequest): Tech {
-        return techService.save(techRequest)
+    fun save(@RequestBody techRequest: Tech, authentication: Principal): Tech {
+        return techService.save(techRequest, authentication.toEmail())
     }
 
     /**
@@ -55,7 +55,7 @@ class TechController(private val techService: TechService) {
      * @param techRequest the tech info to update with id.
      */
     @PutMapping("/update")
-    fun update(@RequestBody techRequest: TechRequest): Tech {
+    fun update(@RequestBody techRequest: Tech): Tech {
         return techService.update(techRequest)
     }
 
@@ -72,10 +72,20 @@ class TechController(private val techService: TechService) {
     /**
      * Gets all techs by student email.
      *
-     *
+     * @param authentication the User.
      */
     @GetMapping("/user")
     fun getByUser(authentication: Principal): List<Tech> {
         return techService.getByUser(authentication.toEmail())
+    }
+
+    /**
+     * Gets all techs and students by User email.
+     *
+     * @param authentication the User.
+     */
+    @GetMapping("/attendance")
+    fun getMyTechsAttendance(authentication: Principal): List<TechAttendanceResponse> {
+        return techService.getMyTechsAttendance(authentication.toEmail())
     }
 }

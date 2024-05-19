@@ -1,15 +1,13 @@
 package pt.isel.odin.model
 
 import jakarta.persistence.Column
-import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import kotlinx.datetime.LocalDate
-import pt.isel.odin.utils.LocalDateConverter
+import java.time.LocalDateTime
 
 /**
  * Represents the Pratical classes (VOC) in the system.
@@ -17,7 +15,7 @@ import pt.isel.odin.utils.LocalDateConverter
  * @property id the VOC id
  * @property description the description of the VOC
  * @property student the student that is responsible for the VOC
- * @property curricularUnit the course that the VOC is about
+ * @property module the course that the VOC is about
  * @property started the date of the VOC
  * @property ended the length of the VOC
  * @property approved if the VOC was approved
@@ -39,13 +37,11 @@ class Voc(
     val student: Student? = null,
 
     @ManyToOne
-    val curricularUnit: CurricularUnit? = null,
+    val module: Module? = null,
 
-    @Convert(converter = LocalDateConverter::class)
-    val started: LocalDate? = null,
+    val started: LocalDateTime? = null,
 
-    @Convert(converter = LocalDateConverter::class)
-    val ended: LocalDate? = null
+    val ended: LocalDateTime? = null
 )
 
 fun Voc.copy(
@@ -53,7 +49,7 @@ fun Voc.copy(
     description: String? = this.description,
     approved: Boolean? = this.approved,
     student: Student? = this.student,
-    curricularUnit: CurricularUnit? = this.curricularUnit,
-    started: LocalDate? = this.started,
-    ended: LocalDate? = this.ended
+    curricularUnit: Module? = this.module,
+    started: LocalDateTime? = this.started,
+    ended: LocalDateTime? = this.ended
 ) = Voc(id, description, approved, student, curricularUnit, started, ended)

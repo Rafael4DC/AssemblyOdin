@@ -15,6 +15,10 @@ class StudentServiceImpl(private val studentRepository: StudentRepository) : Stu
         return studentRepository.findById(id).orElseThrow { NotFoundException("No Student Found") }
     }
 
+    override fun getByEmail(email: String): Student? {
+        return studentRepository.findByEmail(email)
+    }
+
     override fun getAll(): List<Student> {
         return studentRepository.findAll()
     }

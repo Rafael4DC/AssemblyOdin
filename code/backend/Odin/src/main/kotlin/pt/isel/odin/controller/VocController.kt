@@ -45,8 +45,8 @@ class VocController(private val vocService: VocService) {
      * @param vocRequest the voc info to save.
      */
     @PostMapping("/save")
-    fun save(@RequestBody vocRequest: VocRequest): Voc {
-        return vocService.save(vocRequest)
+    fun save(@RequestBody vocRequest: Voc, authentication: Principal): Voc {
+        return vocService.save(vocRequest, authentication.toEmail())
     }
 
     /**

@@ -1,7 +1,10 @@
-import { makeApiRequest } from '../axios/apiRequest';
+import {makeApiRequest} from '../axios/apiRequest';
 import {Tech} from "../model/Tech";
+import {TechsAttendance} from "../hooks/useClassManager";
 
-
+/**
+ * Service to manage techs
+ */
 export class TechService {
 
     static basePath = '/techs';
@@ -28,5 +31,9 @@ export class TechService {
 
     static async getTechsByUser(): Promise<Tech[]> {
         return makeApiRequest('get', `${(TechService.basePath)}/user`);
+    }
+
+    static async getMyTechsAttendance(): Promise<TechsAttendance[]> {
+        return makeApiRequest('get', `${(TechService.basePath)}/attendance`);
     }
 }

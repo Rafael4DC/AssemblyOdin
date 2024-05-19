@@ -15,6 +15,10 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
-  "ignorePatterns": ["webpack.config.js"]
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "ignorePatterns": [
+    "webpack.config.js"
+  ]
 }

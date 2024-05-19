@@ -2,21 +2,18 @@ package pt.isel.odin.service.implementations
 
 import org.springframework.stereotype.Service
 import pt.isel.odin.controller.dto.voc.VocRequest
-import pt.isel.odin.controller.dto.voc.toVoc
-import pt.isel.odin.model.CurricularUnit
+import pt.isel.odin.model.Module
 import pt.isel.odin.model.Student
 import pt.isel.odin.model.Voc
 import pt.isel.odin.model.copy
-import pt.isel.odin.repository.StudentRepository
 import pt.isel.odin.repository.VocRepository
 import pt.isel.odin.service.exception.NotFoundException
-import pt.isel.odin.service.interfaces.StudentService
 import pt.isel.odin.service.interfaces.VocService
 
 @Service
 class VocServiceImpl(
     private val vocRepository: VocRepository,
-    private val userService: UserServiceImpl
+    private val studentService: StudentServiceImpl
 ) : VocService {
 
     override fun getById(id: Long): Voc {
@@ -27,8 +24,11 @@ class VocServiceImpl(
         return vocRepository.findAll()
     }
 
-    override fun save(vocRequest: VocRequest): Voc {
-        return vocRepository.save(vocRequest.toVoc())
+    override fun save(vocRequest: Voc, email: String): Voc {
+        val voc = vocRequest.copy(
+            student = vocRequest.student ?: studentService.getByEmail(email)
+        )
+        return vocRepository.save(voc)
     }
 
     override fun update(vocRequest: VocRequest): Voc {
@@ -39,7 +39,7 @@ class VocServiceImpl(
                 description = vocRequest.description ?: voc.description,
                 approved = vocRequest.approved ?: voc.approved,
                 student = vocRequest.studentId?.let { Student(it) } ?: voc.student,
-                curricularUnit = vocRequest.curricularUnitId?.let { CurricularUnit(it) } ?: voc.curricularUnit,
+                curricularUnit = vocRequest.moduleId?.let { Module(it) } ?: voc.module,
                 started = vocRequest.started ?: voc.started,
                 ended = vocRequest.ended ?: voc.ended
             )
@@ -51,7 +51,7 @@ class VocServiceImpl(
     }
 
     override fun getByStudent(email: String): List<Voc> {
-        val student = userService.getByEmail(email) ?: throw NotFoundException("No Student Found")
+        val student = studentService.getByEmail(email) ?: throw NotFoundException("No Student Found")
         return vocRepository.findByStudentId(student.id!!)
     }
 }

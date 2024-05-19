@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service
 import pt.isel.odin.controller.dto.isStudent
 import pt.isel.odin.controller.dto.student.StudentRequest
 import pt.isel.odin.controller.dto.user.UserRequest
-import pt.isel.odin.model.Student
 import pt.isel.odin.service.interfaces.StudentService
 import pt.isel.odin.service.interfaces.UserService
 
@@ -26,10 +25,11 @@ class OAuth2UserService(
 
         if (userService.getByEmail(email) != null) return oAuth2User
 
-        if (isStudent(email))
-            studentService.save(StudentRequest(email, name))
-        else
+        if (isStudent(email)) {
+            studentService.save(StudentRequest(email = email, username = name))
+        } else {
             userService.save(UserRequest(email = email, username = name))
+        }
 
         return oAuth2User
     }

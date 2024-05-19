@@ -31,6 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDateTimeVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.postgresql:postgresql")
 

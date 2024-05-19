@@ -1,48 +1,63 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import "./Dashboard.css";
 import {Button} from "react-bootstrap";
+import {WebUris} from "../utils/WebUris";
+import HOME = WebUris.HOME;
+import PROFILE = WebUris.PROFILE;
+import CATEGORIES = WebUris.CATEGORIES;
+import TEACHER_CLASS_MANAGER = WebUris.MANAGE_CLASSES;
+import VOC_CLASS = WebUris.VOC_CLASS;
+import CREATE_TECH = WebUris.CREATE_TECH;
+import MANAGE_USERS = WebUris.MANAGE_USERS;
+import CURRICULAR_UNIT_MANAGER = WebUris.CURRICULAR_UNIT_MANAGER;
 
+/**
+ * Dashboard component
+ */
 const Dashboard: React.FC = () => {
-  const [activeLink, setActiveLink] = React.useState<string>('');
+    const [activeLink, setActiveLink] = React.useState<string>('');
 
-  // This logic is awfull, fix later its late and im tired TODO()
-  const linkClass = (path: string) =>
-    activeLink === path ? "link clickedLink" : "link";
+    // This logic is awfull, fix later its late and im tired TODO()
+    const linkClass = (path: string) =>
+        activeLink === path ? "link clickedLink" : "link";
 
-  return (
-    <div className="text-center">
-      <h1><Link to="/" className={linkClass('/')} onClick={() => setActiveLink('/')}>Assembly</Link></h1>
-      <ul className="list-unstyled">
+    return (
+        <div className="text-center">
+            <h1><Link to={HOME} className={linkClass(HOME)} onClick={() => setActiveLink('/')}>Assembly</Link></h1>
+            <ul className="list-unstyled">
 
-        <li><Link to="/profile" className={linkClass('/profile')}
-                  onClick={() => setActiveLink('/profile')}>Profile</Link></li>
-        <li><Link to="/CU" className={linkClass('/CU')} onClick={() => setActiveLink('/CU')}>Curricular Units</Link>
-        </li>
+                <li><Link to={PROFILE} className={linkClass(PROFILE)}
+                          onClick={() => setActiveLink(PROFILE)}>Profile</Link></li>
+                <li><Link to={CATEGORIES} className={linkClass(CATEGORIES)} onClick={() => setActiveLink(CATEGORIES)}>Curricular
+                    Units</Link></li>
+                <li><Link to={VOC_CLASS} className={linkClass(VOC_CLASS)} onClick={() => setActiveLink(VOC_CLASS)}>Create
+                    a
+                    Voc Class</Link></li>
 
-        <h3>Teachers</h3>
-        <li><Link to="/TeacherClassManager" className={linkClass('/TeacherClassManager')}
-                  onClick={() => setActiveLink('/TeacherClassManager')}>Manage Classes</Link></li>
-        <li><Link to="/VocClass" className={linkClass('/VocClass')} onClick={() => setActiveLink('/VocClass')}>Create a
-          Voc Class</Link></li>
+                <h3>Teachers</h3>
+                <li><Link to={TEACHER_CLASS_MANAGER} className={linkClass(TEACHER_CLASS_MANAGER)}
+                          onClick={() => setActiveLink(TEACHER_CLASS_MANAGER)}>Manage Classes</Link></li>
+                <li><Link to={CREATE_TECH} className={linkClass(CREATE_TECH)}
+                          onClick={() => setActiveLink(CREATE_TECH)}>Create Tech</Link></li>
 
-        <h3>Admins</h3>
-        <li><Link to="/ManageUsers" className={linkClass('/ManageUsers')} onClick={() => setActiveLink('/ManageUsers')}>Manage
-          Users</Link></li>
-        <li><Link to="/CurricularUnitManager" className={linkClass('/CurricularUnitManager')}
-                  onClick={() => setActiveLink('/CurricularUnitManager')}>Curricular Unit Manager</Link></li>
 
-        <li><Link to="/404" className={linkClass('/404')} onClick={() => setActiveLink('/404')}>404</Link></li>
+                <h3>Admins</h3>
+                <li><Link to={MANAGE_USERS} className={linkClass(MANAGE_USERS)}
+                          onClick={() => setActiveLink(MANAGE_USERS)}>Manage
+                    Users</Link></li>
+                <li><Link to={CURRICULAR_UNIT_MANAGER} className={linkClass(CURRICULAR_UNIT_MANAGER)}
+                          onClick={() => setActiveLink(CURRICULAR_UNIT_MANAGER)}>Curricular Unit Manager</Link></li>
 
-        <li><Button
-            variant="contained"
-            onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/office365"}
-        >
-          Sign In
-        </Button></li>
-      </ul>
-    </div>
-  );
+                <li><Button
+                    variant="contained"
+                    onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/office365"}
+                >
+                    Sign In
+                </Button></li>
+            </ul>
+        </div>
+    );
 };
 
 export default Dashboard;

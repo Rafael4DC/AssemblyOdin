@@ -24,8 +24,9 @@ interface VocService {
      * Saves a voc.
      *
      * @param vocRequest the voc info to save.
+     * @param email the User.
      */
-    fun save(vocRequest: VocRequest): Voc
+    fun save(vocRequest: Voc, email: String): Voc
 
     /**
      * Updates a voc.
@@ -40,7 +41,6 @@ interface VocService {
      * @param id the voc id.
      */
     fun delete(id: Long)
-
 
     /**
      * Gets all vocs by User.

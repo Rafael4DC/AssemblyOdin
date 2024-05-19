@@ -33,7 +33,7 @@ open class User(
     @Column(nullable = false)
     open val username: String? = null
 
-/*    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) // Corrected
-    open val role: Role*/
+    /*    @ManyToOne
+        @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) // Corrected
+        open val role: Role*/
 )

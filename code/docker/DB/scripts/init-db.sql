@@ -1,1 +1,2 @@
-CREATE DATABASE "SpringDataJPA";
+CREATE
+DATABASE "SpringDataJPA";

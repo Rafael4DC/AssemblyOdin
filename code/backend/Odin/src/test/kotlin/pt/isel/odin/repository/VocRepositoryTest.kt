@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
+// @DataJpaTest // Clears Affectations after the tests
 @SpringBootTest // Affects the Database
-//@DataJpaTest // Clears Affectations after the tests
-class VocRepositoryTest{
+class VocRepositoryTest {
 
     @Autowired
     lateinit var vocRepository: VocRepository
 
     @Test
-    fun `Find User Repository`(){
+    fun `Find User Repository`() {
         val vocs = vocRepository.findByStudentId(29)
         println(vocs)
     }

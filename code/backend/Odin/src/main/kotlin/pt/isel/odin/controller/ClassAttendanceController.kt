@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.odin.controller.dto.classattendance.ClassAttendanceRequest
 import pt.isel.odin.model.ClassAttendance
 import pt.isel.odin.service.interfaces.ClassAttendanceService
 
@@ -43,7 +42,7 @@ class ClassAttendanceController(private val classAttendanceService: ClassAttenda
      * @param classAttendResquest the class attendance info to save.
      */
     @PostMapping("/save")
-    fun save(@RequestBody classAttendResquest: ClassAttendanceRequest): ClassAttendance {
+    fun save(@RequestBody classAttendResquest: ClassAttendance): ClassAttendance {
         return classAttendanceService.save(classAttendResquest)
     }
 
@@ -53,7 +52,7 @@ class ClassAttendanceController(private val classAttendanceService: ClassAttenda
      * @param classAttendRequest the class attendance info to update.
      */
     @PutMapping("/update")
-    fun update(@RequestBody classAttendRequest: ClassAttendanceRequest): ClassAttendance {
+    fun update(@RequestBody classAttendRequest: ClassAttendance): ClassAttendance {
         return classAttendanceService.update(classAttendRequest)
     }
 

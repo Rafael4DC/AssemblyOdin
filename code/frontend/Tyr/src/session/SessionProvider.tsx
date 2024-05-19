@@ -1,12 +1,13 @@
 import {Session, SessionManager} from "./Session";
 import * as React from "react";
-import {useState} from "react";
-import {createContext} from "react";
+import {createContext, useState} from "react";
 
 export const SessionContext = createContext<SessionManager>({
-    sessionData: null,
-    set: () => {},
-    clear: () => {}
+        sessionData: null,
+        set: () => {
+        },
+        clear: () => {
+        }
     }
 );
 

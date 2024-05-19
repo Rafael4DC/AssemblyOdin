@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react';
-import { TechService } from '../services/TechService';
-import { Tech } from "../model/Tech";
+import {useEffect, useState} from 'react';
+import {TechService} from '../services/TechService';
+import {Tech} from "../model/Tech";
 
+/**
+ * Hook to get the tech classes
+ *
+ * @returns the tech classes, error and handles to save and delete a tech class
+ */
 const useTechs = () => {
     const [techs, setTechs] = useState<Tech[] | null>(null);
     const [error, setError] = useState<Error | null>(null);

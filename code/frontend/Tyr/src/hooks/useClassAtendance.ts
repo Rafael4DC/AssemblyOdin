@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react';
-import { ClassAttendanceService } from '../services/ClassAttendanceService';
+import {useEffect, useState} from 'react';
+import {ClassAttendanceService} from '../services/ClassAttendanceService';
 import {ClassAttendance} from "../model/ClassAtendance";
 
+/**
+ * Hook to get the class attendances
+ *
+ * @returns the class attendances, error and handles to save and delete a class attendance
+ */
 const useClassAttendances = () => {
     const [classAttendances, setClassAttendances] = useState<ClassAttendance[] | null>(null);
     const [error, setError] = useState<Error | null>(null);

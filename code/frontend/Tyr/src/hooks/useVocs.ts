@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react';
-import { VocService } from '../services/VocService';
+import {useEffect, useState} from 'react';
+import {VocService} from '../services/VocService';
 import {Voc} from "../model/Voc";
 
+/**
+ * Hook to get the voc classes
+ *
+ * @returns the voc classes, error and handles to save and delete a voc class
+ */
 const useVocs = () => {
     const [vocs, setVocs] = useState<Voc[] | null>(null);
     const [error, setError] = useState<Error | null>(null);

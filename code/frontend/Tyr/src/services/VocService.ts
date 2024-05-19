@@ -1,29 +1,34 @@
-import { makeApiRequest } from '../axios/apiRequest';
+import {makeApiRequest} from '../axios/apiRequest';
 import {Voc} from "../model/Voc";
 
+/**
+ * Service to manage vocs
+ */
 export class VocService {
 
+    static basePath = '/vocs';
+
     static async getById(id: number): Promise<Voc> {
-        return makeApiRequest('get', `/vocs/${id}`);
+        return makeApiRequest('get', `${(VocService.basePath)}/${id}`);
     }
 
     static async getAll(): Promise<Voc[]> {
-        return makeApiRequest('get', '/vocs');
+        return makeApiRequest('get', VocService.basePath);
     }
 
     static async save(vocRequest: Voc): Promise<Voc> {
-        return makeApiRequest('post', '/vocs/save', vocRequest);
+        return makeApiRequest('post', `${(VocService.basePath)}/save`, vocRequest);
     }
 
     static async update(vocRequest: Voc): Promise<Voc> {
-        return makeApiRequest('put', '/vocs/update', vocRequest);
+        return makeApiRequest('put', `${(VocService.basePath)}/update`, vocRequest);
     }
 
     static async delete(id: number): Promise<void> {
-        return makeApiRequest('delete', `/vocs/${id}`);
+        return makeApiRequest('delete', `${(VocService.basePath)}/${id}`);
     }
 
     static async getVocsByUser(): Promise<Voc[]> {
-        return makeApiRequest('get', '/vocs/student');
+        return makeApiRequest('get', `${(VocService.basePath)}/student`);
     }
 }

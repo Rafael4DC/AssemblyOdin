@@ -11,16 +11,20 @@ import pt.isel.odin.model.Tech
 @Repository
 interface TechRepository : JpaRepository<Tech, Long> {
 
-    @Query(nativeQuery = true,
+    @Query(
+        nativeQuery = true,
         value =
-        """select t.id, t.teacher_id, t.curricular_unit_id, t.date, t.summary 
+        """select t.id, t.teacher_id, t.module_id, t.date, t.summary 
                 from tech t right join class_attendance c on t.id = c.tech_id
-                where c.student_id = :id""")
+                where c.student_id = :id"""
+    )
     fun getByStudentId(id: Long): List<Tech>
 
-    @Query(nativeQuery = true,
+    @Query(
+        nativeQuery = true,
         value =
-        """select t.id, t.teacher_id, t.curricular_unit_id, t.date, t.summary 
-                from tech t where t.teacher_id = :id""")
+        """select t.id, t.teacher_id, t.module_id, t.date, t.summary 
+                from tech t where t.teacher_id = :id"""
+    )
     fun getByUserId(id: Long): List<Tech>
 }

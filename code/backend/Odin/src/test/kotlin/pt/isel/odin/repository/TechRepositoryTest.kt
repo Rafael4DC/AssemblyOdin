@@ -4,15 +4,15 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
+// @DataJpaTest // Clears Affectations after the tests
 @SpringBootTest // Affects the Database
-//@DataJpaTest // Clears Affectations after the tests
-class TechRepositoryTest{
+class TechRepositoryTest {
 
     @Autowired
     lateinit var techRepository: TechRepository
 
     @Test
-    fun `Get All Techs`(){
+    fun `Get All Techs`() {
         val techs = techRepository.findAll()
         println(techs)
     }

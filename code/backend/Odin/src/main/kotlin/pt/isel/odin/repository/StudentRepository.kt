@@ -8,6 +8,6 @@ import pt.isel.odin.model.Student
  * Repository for students.
  */
 @Repository
-interface StudentRepository : JpaRepository<Student, String>{
+interface StudentRepository : JpaRepository<Student, String> {
     fun findByEmail(email: String): Student?
 }

@@ -16,6 +16,13 @@ interface StudentService {
     fun getById(id: String): Student
 
     /**
+     * Gets a student by its email.
+     *
+     * @param email the student email.
+     */
+    fun getByEmail(email: String): Student?
+
+    /**
      * Gets all students.
      */
     fun getAll(): List<Student>
