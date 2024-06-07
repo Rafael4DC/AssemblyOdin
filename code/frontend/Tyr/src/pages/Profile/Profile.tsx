@@ -5,6 +5,7 @@ import * as React from 'react';
 import {Col, Container, Image, Row} from 'react-bootstrap';
 import {Spinner} from "../../utils/Spinner";
 import {AlertError} from "../../utils/AlertError";
+import {capitalizeFirstLetter} from "../../utils/Utils";
 
 /**
  * Page to display user profile
@@ -22,7 +23,7 @@ function Profile() {
                     <Image src="https://bootdey.com/img/Content/avatar/avatar7.png" roundedCircle width="150"/>
                     <div className="mt-3">
                         <h4>{userInfo.username}</h4>
-                        <p className="text-secondary mb-1">{userInfo.role}</p>
+                        <p className="text-secondary mb-1">{capitalizeFirstLetter(userInfo.role)}</p>
                         <p className="text-muted mb-1">{userInfo.email}</p>
                         <p className="text-muted font-size-sm">Pontos: {userInfo.credits}</p>
                     </div>

@@ -4,11 +4,11 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
 import org.springframework.stereotype.Service
-import pt.isel.odin.controller.dto.isStudent
-import pt.isel.odin.controller.dto.student.StudentRequest
-import pt.isel.odin.controller.dto.user.UserRequest
-import pt.isel.odin.service.interfaces.StudentService
-import pt.isel.odin.service.interfaces.UserService
+import pt.isel.odin.http.utils.isStudent
+import pt.isel.odin.http.controllers.student.models.StudentRequest
+import pt.isel.odin.http.controllers.user.models.UserRequest
+import pt.isel.odin.service.student.StudentService
+import pt.isel.odin.service.user.UserService
 
 @Service
 class OAuth2UserService(

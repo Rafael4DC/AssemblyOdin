@@ -1,5 +1,12 @@
 package pt.isel.odin.model
 
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
+
 /**
  * Represents a course type in the system.
  *
@@ -12,9 +19,15 @@ package pt.isel.odin.model
 class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
 
     @Column(unique = true, nullable = false)
-    val name: String
+    val name: String? = null
 )
-*/
+
+fun Role.copy(
+    id: Long? = this.id,
+    name: String? = this.name
+) = Role(id, name)
+
+fun String?.toRole() = Role(name = this!!.uppercase())*/

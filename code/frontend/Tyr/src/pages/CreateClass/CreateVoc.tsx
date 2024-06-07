@@ -7,6 +7,8 @@ import useCategories from "../../hooks/useCategories";
 import {useNavigate} from "react-router-dom";
 import {WebUris} from "../../utils/WebUris";
 import PROFILE = WebUris.PROFILE;
+import useUserInfo from "../../hooks/useUserInfo";
+import useStudents from "../../hooks/useStudents";
 
 /**
  * Page to create a voc class
@@ -14,6 +16,9 @@ import PROFILE = WebUris.PROFILE;
 const CreateVocClass = () => {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const {userInfo} = useUserInfo();
+    const role = userInfo?.role;
+
     const [vocData, setVocData] = useState<Voc>({
         description: "",
         started: "",
@@ -24,6 +29,7 @@ const CreateVocClass = () => {
 
     const {handleSaveVocClass, error} = useVocs();
     const {categories} = useCategories();
+    const {students} = useStudents();
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
@@ -40,10 +46,17 @@ const CreateVocClass = () => {
         }));
     };
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: "started" | "ended") => {
         setVocData((prevVocData) => ({
             ...prevVocData,
-            date: e.target.value ? new Date(e.target.value) : new Date(),
+            [key]: e.target.value,
+        }));
+    };
+
+    const handleStudentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setVocData((prevVocData) => ({
+            ...prevVocData,
+            student: {id: Number(e.target.value)},
         }));
     };
 
@@ -66,9 +79,8 @@ const CreateVocClass = () => {
                     <Form.Control
                         type="datetime-local"
                         required
-                        value={vocData.started.toLocaleString()}
-                        onChange={(e) =>
-                            setVocData((prevVocData) => ({...prevVocData, started: e.target.value}))}
+                        value={vocData.started}
+                        onChange={(e) => handleDateChange(e, 'started')}
                     />
                 </Form.Group>
 
@@ -77,9 +89,8 @@ const CreateVocClass = () => {
                     <Form.Control
                         type="datetime-local"
                         required
-                        value={vocData.ended.toLocaleString()}
-                        onChange={(e) =>
-                            setVocData((prevVocData) => ({...prevVocData, ended: e.target.value}))}
+                        value={vocData.ended}
+                        onChange={(e) => handleDateChange(e, 'ended')}
                     />
                 </Form.Group>
 
@@ -97,14 +108,32 @@ const CreateVocClass = () => {
                     </Form.Select>
                 </Form.Group>
 
-                <Form.Group className="mb-3">
-                    <Form.Check
-                        type="checkbox"
-                        label="Approved"
-                        checked={vocData.approved}
-                        onChange={(e) => setVocData({...vocData, approved: e.target.checked})}
-                    />
-                </Form.Group>
+                {role === 'TEACHER' && (
+                    <>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Student</Form.Label>
+                            <Form.Select
+                                required
+                                value={vocData.student?.id?.toString() || ''}
+                                onChange={handleStudentChange}
+                            >
+                                <option>Choose a Student</option>
+                                {students && students.map(student => (
+                                    <option key={student.id} value={student.id}>{student.username}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Check
+                                type="checkbox"
+                                label="Approved"
+                                checked={vocData.approved}
+                                onChange={(e) => setVocData({...vocData, approved: e.target.checked})}
+                            />
+                        </Form.Group>
+                    </>
+                )}
 
                 <Button variant="primary" type="submit" disabled={isSubmitting}>
                     {isSubmitting ? 'Submitting...' : 'Create VOC Class'}

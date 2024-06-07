@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Inheritance
 import jakarta.persistence.InheritanceType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
 /**
@@ -31,9 +33,16 @@ open class User(
     open val email: String? = null,
 
     @Column(nullable = false)
-    open val username: String? = null
+    open val username: String? = null,
 
-    /*    @ManyToOne
-        @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) // Corrected
-        open val role: Role*/
+    //@ManyToOne
+    //@JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) // Corrected
+    open val role: String? = null
 )
+
+fun String?.toRole() = this?.uppercase() ?: ""
+
+fun String?.isStudent() = this.toRole() == "STUDENT"
+fun String?.isTeacher() = this.toRole() == "TEACHER"
+fun String?.isAdmin() = this.toRole() == "ADMIN"
+

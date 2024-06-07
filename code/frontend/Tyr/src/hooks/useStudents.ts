@@ -1,20 +1,23 @@
 import {useEffect, useState} from 'react';
 import {TechService} from '../services/TechService';
 import {Tech} from "../model/Tech";
+import {UserService} from "../services/UserService";
+import {Student} from "../model/Student";
+import {StudentService} from "../services/StudentService";
 
 /**
  * Hook to get the tech classes
  *
  * @returns the tech classes, error and handles to save and delete a tech class
  */
-const useTechs = () => {
-    const [techs, setTechs] = useState<Tech[] | null>(null);
+const useStudents = () => {
+    const [students, setStudents] = useState<Student[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        TechService.getAll()
+        StudentService.getAll()
             .then(data => {
-                setTechs(data);
+                setStudents(data);
             })
             .catch(err => {
                 setError(err);
@@ -22,30 +25,11 @@ const useTechs = () => {
     }, []);
 
 
+
     return {
-        techs,
-        error,
-        handleSaveTech: async (tech: Tech) => {
-            setError(null);
-            try {
-                if (tech.id) {
-                    return await TechService.update(tech);
-                } else {
-                    return await TechService.save(tech);
-                }
-            } catch (err) {
-                setError(err);
-            }
-        },
-        handleDeleteTech: async (id: number) => {
-            setError(null);
-            try {
-                await TechService.delete(id);
-            } catch (err) {
-                setError(err);
-            }
-        }
+        students,
+        error
     };
 };
 
-export default useTechs;
+export default useStudents;

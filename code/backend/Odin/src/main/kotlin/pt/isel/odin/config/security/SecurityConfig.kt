@@ -10,8 +10,8 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import pt.isel.odin.config.spring.service.OAuth2UserService
-import pt.isel.odin.service.interfaces.StudentService
-import pt.isel.odin.service.interfaces.UserService
+import pt.isel.odin.service.student.StudentService
+import pt.isel.odin.service.user.UserService
 
 @Configuration
 @EnableWebSecurity

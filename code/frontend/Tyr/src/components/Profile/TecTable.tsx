@@ -3,20 +3,7 @@ import {useState} from 'react';
 import {Button, Table} from 'react-bootstrap';
 import TextModal from '../Shared/TextModal';
 import {Tech} from '../../model/Tech';
-import {toDateTimeStr} from "../../utils/Utils";
-
-/**
- * Filter options for the tech classes
- *
- * @param Happened - filter for the happened classes
- * @param ToHappen - filter for the to happen classes
- * @param Upcoming - filter for the upcoming classes
- */
-export enum FilterOptions {
-    Happened = 'Happened',
-    ToHappen = 'To Happen',
-    Upcoming = 'Upcoming (Next Week)'
-}
+import {filterCourses, FilterOptions, toDateTimeStr} from "../../utils/Utils";
 
 export const maxRows = 5;
 export const fixedRowHeight = '60px';
@@ -40,11 +27,12 @@ interface TecTableProps {
  * Table to show the tech classes
  */
 const TecTable: React.FC<TecTableProps> = ({techs}) => {
-    const [filter, setFilter] = useState(FilterOptions.Happened);
+    const [filter, setFilter] = useState(FilterOptions.Upcoming);
     const [modalShow, setModalShow] = useState(false);
     const [currentSummary, setCurrentSummary] = useState('');
 
-    debugger;
+    const filteredTechs = filterCourses(techs, filter, 'date');
+
     const renderCourseRow = (tech: Tech) => (
         <tr key={tech.module.name + tech.date} style={{height: fixedRowHeight}}>
             <td>{tech.module.name}</td>
@@ -62,7 +50,6 @@ const TecTable: React.FC<TecTableProps> = ({techs}) => {
         </tr>
     );
 
-    debugger;
     return (
         <div>
             <h3>Tec Courses</h3>
@@ -89,7 +76,7 @@ const TecTable: React.FC<TecTableProps> = ({techs}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {techs.map(renderCourseRow)}
+                    {filteredTechs.map(renderCourseRow)}
                     </tbody>
                 </Table>
             </div>
@@ -102,5 +89,6 @@ const TecTable: React.FC<TecTableProps> = ({techs}) => {
         </div>
     );
 }
+
 
 export default TecTable;

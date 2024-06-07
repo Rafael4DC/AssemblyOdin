@@ -57,6 +57,7 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
             <td>{voc.module?.name}</td>
             <td>{toDateTimeStr(voc.started)}</td>
             <td>{getDuration(voc.started, voc.ended)}</td>
+            <td>{voc.approved ? '✓' : '—'}</td>
             <td>
                 <Button
                     variant="primary"
@@ -73,7 +74,7 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
 
     return (
         <div>
-            <h3>Voc Classes Manager</h3>
+        <h3>Voc Classes Manager</h3>
             <div style={{maxHeight: '250px', overflowY: 'auto'}}>
                 <Table striped bordered hover responsive>
                     <thead>
@@ -82,6 +83,7 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
                         <th>Module</th>
                         <th>Start Time</th>
                         <th>Length</th>
+                        <th>Approved</th>
                         <th>Action</th>
                     </tr>
                     </thead>

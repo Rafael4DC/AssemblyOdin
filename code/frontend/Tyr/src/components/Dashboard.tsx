@@ -11,50 +11,83 @@ import VOC_CLASS = WebUris.VOC_CLASS;
 import CREATE_TECH = WebUris.CREATE_TECH;
 import MANAGE_USERS = WebUris.MANAGE_USERS;
 import CURRICULAR_UNIT_MANAGER = WebUris.CURRICULAR_UNIT_MANAGER;
+import useUserInfo from "../hooks/useUserInfo";
 
 /**
  * Dashboard component
  */
 const Dashboard: React.FC = () => {
     const [activeLink, setActiveLink] = React.useState<string>('');
+    const {userInfo} = useUserInfo();
+    const role = userInfo?.role;
 
-    // This logic is awfull, fix later its late and im tired TODO()
     const linkClass = (path: string) =>
         activeLink === path ? "link clickedLink" : "link";
 
     return (
         <div className="text-center">
-            <h1><Link to={HOME} className={linkClass(HOME)} onClick={() => setActiveLink('/')}>Assembly</Link></h1>
+            <h1>
+                <Link to={HOME} className={linkClass(HOME)} onClick={() => setActiveLink(HOME)}>
+                    Assembly
+                </Link>
+            </h1>
             <ul className="list-unstyled">
+                <li>
+                    <Link to={PROFILE} className={linkClass(PROFILE)} onClick={() => setActiveLink(PROFILE)}>
+                        Profile
+                    </Link>
+                </li>
+                <li>
+                    <Link to={CATEGORIES} className={linkClass(CATEGORIES)} onClick={() => setActiveLink(CATEGORIES)}>
+                        Curricular Units
+                    </Link>
+                </li>
+                {/*{role == 'STUDENT' && (*/}
+                    <li>
+                        <Link to={VOC_CLASS} className={linkClass(VOC_CLASS)} onClick={() => setActiveLink(VOC_CLASS)}>
+                            Create a Voc Class
+                        </Link>
+                    </li>
+                {/*)}*/}
+                {role == 'TEACHER' && (
+                    <>
+                        <h3>Teachers</h3>
+                        <li>
+                            <Link to={TEACHER_CLASS_MANAGER} className={linkClass(TEACHER_CLASS_MANAGER)} onClick={() => setActiveLink(TEACHER_CLASS_MANAGER)}>
+                                Manage Classes
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={CREATE_TECH} className={linkClass(CREATE_TECH)} onClick={() => setActiveLink(CREATE_TECH)}>
+                                Create Tech
+                            </Link>
+                        </li>
+                    </>
+                )}
+                {role == 'ADMIN' && (
+                    <>
+                        <h3>Admins</h3>
+                        <li>
+                            <Link to={MANAGE_USERS} className={linkClass(MANAGE_USERS)} onClick={() => setActiveLink(MANAGE_USERS)}>
+                                Manage Users
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={CURRICULAR_UNIT_MANAGER} className={linkClass(CURRICULAR_UNIT_MANAGER)} onClick={() => setActiveLink(CURRICULAR_UNIT_MANAGER)}>
+                                Curricular Unit Manager
+                            </Link>
+                        </li>
+                    </>
+                )}
 
-                <li><Link to={PROFILE} className={linkClass(PROFILE)}
-                          onClick={() => setActiveLink(PROFILE)}>Profile</Link></li>
-                <li><Link to={CATEGORIES} className={linkClass(CATEGORIES)} onClick={() => setActiveLink(CATEGORIES)}>Curricular
-                    Units</Link></li>
-                <li><Link to={VOC_CLASS} className={linkClass(VOC_CLASS)} onClick={() => setActiveLink(VOC_CLASS)}>Create
-                    a
-                    Voc Class</Link></li>
-
-                <h3>Teachers</h3>
-                <li><Link to={TEACHER_CLASS_MANAGER} className={linkClass(TEACHER_CLASS_MANAGER)}
-                          onClick={() => setActiveLink(TEACHER_CLASS_MANAGER)}>Manage Classes</Link></li>
-                <li><Link to={CREATE_TECH} className={linkClass(CREATE_TECH)}
-                          onClick={() => setActiveLink(CREATE_TECH)}>Create Tech</Link></li>
-
-
-                <h3>Admins</h3>
-                <li><Link to={MANAGE_USERS} className={linkClass(MANAGE_USERS)}
-                          onClick={() => setActiveLink(MANAGE_USERS)}>Manage
-                    Users</Link></li>
-                <li><Link to={CURRICULAR_UNIT_MANAGER} className={linkClass(CURRICULAR_UNIT_MANAGER)}
-                          onClick={() => setActiveLink(CURRICULAR_UNIT_MANAGER)}>Curricular Unit Manager</Link></li>
-
-                <li><Button
-                    variant="contained"
-                    onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/office365"}
-                >
-                    Sign In
-                </Button></li>
+                {userInfo == null && (<li>
+                    <Button
+                        variant="contained"
+                        onClick={() => window.location.href = "http://localhost:8080/oauth2/authorization/office365"}
+                    >
+                        Sign In
+                    </Button>
+                </li>)}
             </ul>
         </div>
     );

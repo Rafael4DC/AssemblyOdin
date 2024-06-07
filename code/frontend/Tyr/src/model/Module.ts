@@ -1,3 +1,5 @@
+import {SubCategory} from "./SubCategory";
+
 /**
  * Module model
  *
@@ -10,5 +12,6 @@ export interface Module {
     id?: number;
     name?: string;
     description?: string;
+    subCategory?: SubCategory;
     tier?: number;
 }

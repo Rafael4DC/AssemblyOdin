@@ -1,4 +1,5 @@
 import {Module} from "./Module";
+import {Category} from "./Category";
 
 /**
  * SubCategory model
@@ -12,5 +13,6 @@ export interface SubCategory {
     id?: number;
     name?: string;
     description?: string;
+    category?: Category;
     modules?: Module[];
 }

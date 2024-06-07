@@ -20,7 +20,7 @@ class Student(
     id: Long? = null,
     email: String? = null,
     username: String? = null,
-    /*role: Role,*/
+    /*role: Role? = null,*/
 
     @Column(nullable = false)
     val credits: Int? = null

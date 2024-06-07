@@ -1,6 +1,10 @@
-import {useEffect, useState} from 'react';
-import {CategoryService} from "../services/CategoryService";
-import {Category} from "../model/Category";
+import { useEffect, useState } from 'react';
+import { CategoryService } from "../services/CategoryService";
+import { SubCategoryService } from "../services/SubCategoryService";
+import { ModuleService } from "../services/ModuleService";
+import { Category } from "../model/Category";
+import { SubCategory } from "../model/SubCategory";
+import { Module } from "../model/Module";
 
 /**
  * Hook to get the categories
@@ -28,10 +32,12 @@ const useCategories = () => {
             setError(null);
             try {
                 if (category.id) {
-                    return await CategoryService.update(category);
+                    await CategoryService.update(category);
                 } else {
-                    return await CategoryService.save(category);
+                    await CategoryService.save(category);
                 }
+                const updatedCategories = await CategoryService.getAll();
+                setCategories(updatedCategories);
             } catch (err) {
                 setError(err);
             }
@@ -40,6 +46,57 @@ const useCategories = () => {
             setError(null);
             try {
                 await CategoryService.delete(id);
+                const updatedCategories = await CategoryService.getAll();
+                setCategories(updatedCategories);
+            } catch (err) {
+                setError(err);
+            }
+        },
+        handleSaveSubCategory: async (subCategory: SubCategory) => {
+            setError(null);
+            debugger;
+            try {
+                if (subCategory.id) {
+                    await SubCategoryService.update(subCategory);
+                } else {
+                    await SubCategoryService.save(subCategory);
+                }
+                const updatedCategories = await CategoryService.getAll();
+                setCategories(updatedCategories);
+            } catch (err) {
+                setError(err);
+            }
+        },
+        handleDeleteSubCategory: async (subCategoryId: number) => {
+            setError(null);
+            try {
+                await SubCategoryService.delete(subCategoryId);
+                const updatedCategories = await CategoryService.getAll();
+                setCategories(updatedCategories);
+            } catch (err) {
+                setError(err);
+            }
+        },
+        handleSaveModule: async (module: Module) => {
+            setError(null);
+            try {
+                if (module.id) {
+                    await ModuleService.update(module);
+                } else {
+                    await ModuleService.save(module);
+                }
+                const updatedCategories = await CategoryService.getAll();
+                setCategories(updatedCategories);
+            } catch (err) {
+                setError(err);
+            }
+        },
+        handleDeleteModule: async (moduleId: number) => {
+            setError(null);
+            try {
+                await ModuleService.delete(moduleId);
+                const updatedCategories = await CategoryService.getAll();
+                setCategories(updatedCategories);
             } catch (err) {
                 setError(err);
             }

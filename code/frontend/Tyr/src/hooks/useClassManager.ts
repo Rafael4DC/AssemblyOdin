@@ -44,7 +44,7 @@ export const useClassManager = () => {
             .then(data => setTechClasses(data))
             .catch(err => console.error(err));
 
-        VocService.getVocsByUser()
+        VocService.getAll()
             .then(data => setVocClasses(data))
             .catch(err => console.error(err));
     }, []);

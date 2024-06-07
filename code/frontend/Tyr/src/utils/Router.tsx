@@ -20,6 +20,7 @@ import FOCUSED = WebUris.FOCUSED;
 import NOTFOUND = WebUris.NAN;
 import CURRICULAR_UNIT_MANAGER = WebUris.CURRICULAR_UNIT_MANAGER;
 import CREATE_TECH = WebUris.CREATE_TECH;
+import CategoriesManager from "../pages/CategoriesManager/CategoriesManager";
 
 /**
  * Router component
@@ -34,7 +35,7 @@ export function Router() {
             <Route path={VOC_CLASS} element={<VocClass/>}/>
             <Route path={CREATE_TECH} element={<CreateTech/>}/>
             <Route path={MANAGE_USERS} element={<ManageUsers/>}/>
-            <Route path={CURRICULAR_UNIT_MANAGER} element={<CurricularUnitManager/>}/>
+            <Route path={CURRICULAR_UNIT_MANAGER} element={<CategoriesManager/>}/>
             <Route path={FOCUSED} element={<CurricularUnitManagerFocused/>}/>
             <Route path={NOTFOUND} element={<NAN/>}/>
         </Routes>

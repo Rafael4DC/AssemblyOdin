@@ -2,8 +2,8 @@ import * as React from 'react';
 import {useState} from 'react';
 import {Table} from 'react-bootstrap';
 import {Voc} from "../../model/Voc";
-import {getDuration} from "../../utils/Utils";
-import {FilterOptions, fixedRowHeight, scrollableTableStyle} from "./TecTable";
+import {filterCourses, FilterOptions, getDuration} from "../../utils/Utils";
+import {fixedRowHeight, scrollableTableStyle} from "./TecTable";
 
 /**
  * Props for the VocTable component
@@ -18,7 +18,9 @@ interface VocTableProps {
  * Table to show the voc courses
  */
 const VocTable: React.FC<VocTableProps> = ({courses}) => {
-    const [filter, setFilter] = useState(FilterOptions.Happened);
+    const [filter, setFilter] = useState(FilterOptions.Upcoming);
+
+    const filteredCourses = filterCourses(courses, filter, 'started');
 
     const renderCourseRow = (course: Voc) => (
         <tr key={course.description + course.started} style={{height: fixedRowHeight}}>
@@ -52,12 +54,11 @@ const VocTable: React.FC<VocTableProps> = ({courses}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {courses.map(renderCourseRow)}
+                    {filteredCourses.map(renderCourseRow)}
                     </tbody>
                 </Table>
             </div>
         </div>
     );
 }
-
 export default VocTable;
