@@ -70,6 +70,6 @@ class LogService(private val mongoTemplate: MongoTemplate) {
 
     private fun calculatePoints(duration: Duration): Int {
         // Placeholder for your point calculation logic
-        return duration.toMinutes().toInt()/30
+        return duration.toMinutes().toInt() / 30
     }
 }

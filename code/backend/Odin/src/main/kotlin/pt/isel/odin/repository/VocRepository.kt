@@ -5,10 +5,10 @@ import org.springframework.stereotype.Repository
 import pt.isel.odin.model.Voc
 
 /**
- * Repository for vocs.
+ * Repository for Vocs.
  */
 @Repository
 interface VocRepository : JpaRepository<Voc, Long> {
 
-    fun findByStudentId(studentId: Long): List<Voc>
+    fun findByUserId(studentId: Long): List<Voc>
 }

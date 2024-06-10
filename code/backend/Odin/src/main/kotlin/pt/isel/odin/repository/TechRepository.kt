@@ -6,19 +6,19 @@ import org.springframework.stereotype.Repository
 import pt.isel.odin.model.Tech
 
 /**
- * Repository for techs.
+ * Repository for Techs.
  */
 @Repository
 interface TechRepository : JpaRepository<Tech, Long> {
 
-    @Query(
+/*    @Query(
         nativeQuery = true,
         value =
         """select t.id, t.teacher_id, t.module_id, t.date, t.summary 
                 from tech t right join class_attendance c on t.id = c.tech_id
                 where c.student_id = :id"""
     )
-    fun getByStudentId(id: Long): List<Tech>
+    fun getByStudentId(id: Long): List<Tech>*/
 
     @Query(
         nativeQuery = true,

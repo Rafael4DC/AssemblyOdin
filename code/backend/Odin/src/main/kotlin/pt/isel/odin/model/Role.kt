@@ -13,7 +13,6 @@ import jakarta.persistence.Table
  * @property id the course type id
  * @property name the course type name
  */
-/*
 @Entity
 @Table(name = "role")
 class Role(
@@ -23,11 +22,11 @@ class Role(
 
     @Column(unique = true, nullable = false)
     val name: String? = null
-)
+) {
+    fun copy(
+        id: Long? = this.id,
+        name: String? = this.name
+    ) = Role(id, name)
+}
 
-fun Role.copy(
-    id: Long? = this.id,
-    name: String? = this.name
-) = Role(id, name)
-
-fun String?.toRole() = Role(name = this!!.uppercase())*/
+fun Long?.toRole() = Role(id = this!!.toLong())

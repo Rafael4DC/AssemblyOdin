@@ -1,6 +1,7 @@
 package pt.isel.odin.http.utils
 
 import org.springframework.http.ResponseEntity
+import pt.isel.odin.service.user.error.GetUserError
 import java.net.URI
 
 class Problem(
@@ -183,38 +184,45 @@ class Problem(
             /**
              * User
              */
+            GetUserError.NotFoundUser to userNotFound,
             /*UserErrors.UserAlreadyExists to userAlreadyExists,
             UserErrors.InsecurePassword to insecurePassword,
             UserErrors.UserNotFound to userNotFound,
 
-            *//**
+            */
+            /**
              * Token
-             *//*
-            TokenErros.UserOrPasswordAreInvalid to userOrPasswordAreInvalid,
+             */
+            /*
+                        TokenErros.UserOrPasswordAreInvalid to userOrPasswordAreInvalid,
 
-            *//**
+                        */
+            /**
              * Game
-             *//*
-            GameErrors.InvalidGameRules to invalidGameRules,
-            GameErrors.PlayerWaitingNotFound to playerWaitingNotFound,
-            GameErrors.SameUser to sameUser,
-            GameErrors.GameAlreadyExists to gameAlreadyExists,
-            GameErrors.UserNotFound to userNotFound,
-            GameErrors.UserIdInvalid to userIdInvalid,
-            GameErrors.GameRulesIdInvalid to gameRulesIdInvalid,
-            GameErrors.GameIdInvalid to gameIdInvalid,
-            GameErrors.GameNotFound to gameNotFound,
-            GameErrors.Unauthorized to unauthorized,
-            GameErrors.NotYourTurn to notYourTurn,
-            GameErrors.GameEnded to gameEnded,
+             */
+            /*
+                        GameErrors.InvalidGameRules to invalidGameRules,
+                        GameErrors.PlayerWaitingNotFound to playerWaitingNotFound,
+                        GameErrors.SameUser to sameUser,
+                        GameErrors.GameAlreadyExists to gameAlreadyExists,
+                        GameErrors.UserNotFound to userNotFound,
+                        GameErrors.UserIdInvalid to userIdInvalid,
+                        GameErrors.GameRulesIdInvalid to gameRulesIdInvalid,
+                        GameErrors.GameIdInvalid to gameIdInvalid,
+                        GameErrors.GameNotFound to gameNotFound,
+                        GameErrors.Unauthorized to unauthorized,
+                        GameErrors.NotYourTurn to notYourTurn,
+                        GameErrors.GameEnded to gameEnded,
 
-            *//**
+                        */
+            /**
              * Lobby
-             *//*
-            LobbyErrors.LobbyNotFound to lobbyNotFound,
-            LobbyErrors.LobbyIdInvalid to lobbyIdInvalid,
-            LobbyErrors.UserIdInvalid to userIdInvalid,
-            LobbyErrors.Unauthorized to unauthorized*/
+             */
+            /*
+                        LobbyErrors.LobbyNotFound to lobbyNotFound,
+                        LobbyErrors.LobbyIdInvalid to lobbyIdInvalid,
+                        LobbyErrors.UserIdInvalid to userIdInvalid,
+                        LobbyErrors.Unauthorized to unauthorized*/
         )
     }
 }

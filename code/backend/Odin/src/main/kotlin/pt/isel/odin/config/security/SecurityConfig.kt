@@ -3,6 +3,7 @@ package pt.isel.odin.config.security
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -10,14 +11,13 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import pt.isel.odin.config.spring.service.OAuth2UserService
-import pt.isel.odin.service.student.StudentService
 import pt.isel.odin.service.user.UserService
 
 @Configuration
 @EnableWebSecurity
+@Profile("default")
 class SecurityConfig(
     private val userService: UserService,
-    private val studentService: StudentService,
     private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler
 ) {
 
@@ -36,11 +36,11 @@ class SecurityConfig(
             }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers("/").permitAll()
-                auth.anyRequest().authenticated()
+                auth.anyRequest().permitAll()//.authenticated()
             }
             .oauth2Login { oauth2 ->
                 oauth2.userInfoEndpoint { userInfo ->
-                    userInfo.oidcUserService(OAuth2UserService(userService, studentService))
+                    userInfo.oidcUserService(OAuth2UserService(userService))
                 }
                 oauth2.successHandler(oAuth2LoginSuccessHandler)
             }

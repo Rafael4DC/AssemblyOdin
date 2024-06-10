@@ -2,12 +2,13 @@ package pt.isel.odin.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import pt.isel.odin.model.User
+import pt.isel.odin.model.user.User
+import java.util.*
 
 /**
- * Repository for users.
+ * Repository for Users.
  */
 @Repository
-interface UserRepository : JpaRepository<User, String> {
-    fun findByEmail(email: String): User?
+interface UserRepository : JpaRepository<User, Long> {
+    fun findByEmail(email: String): Optional<User>
 }

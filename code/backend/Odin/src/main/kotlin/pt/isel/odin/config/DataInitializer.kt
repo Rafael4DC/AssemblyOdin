@@ -5,29 +5,31 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.odin.model.Category
+import pt.isel.odin.model.Department
+import pt.isel.odin.model.FieldStudy
 import pt.isel.odin.model.Module
-import pt.isel.odin.model.SubCategory
-import pt.isel.odin.repository.CategoryRepository
+import pt.isel.odin.repository.DepartmentRepository
+import pt.isel.odin.repository.FieldStudyRepository
 import pt.isel.odin.repository.ModuleRepository
-import pt.isel.odin.repository.SubCategoryRepository
 import java.io.File
 
 @Configuration
+@Profile("default")
 class DataInitializer {
 
     @Bean
     fun initData(
-        categoryRepository: CategoryRepository,
-        subCategoryRepository: SubCategoryRepository,
-        moduleRepository: ModuleRepository
+        departmentRepository: DepartmentRepository,
+        fieldStudyRepository: FieldStudyRepository,
+        moduleRepository: ModuleRepository,
     ): CommandLineRunner {
         return CommandLineRunner {
-            if (categoryRepository.count() == 0L) {
+            if (departmentRepository.count() == 0L) {
                 populateData(
-                    categoryRepository,
-                    subCategoryRepository,
+                    departmentRepository,
+                    fieldStudyRepository,
                     moduleRepository
                 )
             } else {
@@ -38,8 +40,8 @@ class DataInitializer {
 
     @Transactional
     fun populateData(
-        categoryRepository: CategoryRepository,
-        subCategoryRepository: SubCategoryRepository,
+        departmentRepository: DepartmentRepository,
+        fieldStudyRepository: FieldStudyRepository,
         moduleRepository: ModuleRepository
     ) {
         val mapper = jacksonObjectMapper()
@@ -47,15 +49,15 @@ class DataInitializer {
             mapper.readValue(File("C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin/src/main/kotlin/pt/isel/odin/utils/CurricularUnitsData.json"))
 
         // Save categories and subcategories
-        data.categories.forEach { categoryData ->
-            val category = categoryRepository.save(Category(name = categoryData.name))
-            categoryData.subcategories.forEach { subCategoryData ->
-                val subCategory =
-                    subCategoryRepository.save(SubCategory(category = category, name = subCategoryData.name))
+        data.departments.forEach { categoryData ->
+            val department = departmentRepository.save(Department(name = categoryData.name))
+            categoryData.fieldsStudy.forEach { subCategoryData ->
+                val fieldStudy =
+                    fieldStudyRepository.save(FieldStudy(department = department, name = subCategoryData.name))
                 subCategoryData.modules.forEach { moduleData ->
                     moduleRepository.save(
                         Module(
-                            subCategory = subCategory,
+                            fieldStudy = fieldStudy,
                             name = moduleData.name,
                             tier = moduleData.tier
                         )
@@ -67,15 +69,15 @@ class DataInitializer {
 }
 
 data class InitialData(
-    val categories: List<CategoryData>
+    val departments: List<DepartmentData>
 )
 
-data class CategoryData(
+data class DepartmentData(
     val name: String,
-    val subcategories: List<SubCategoryData>
+    val fieldsStudy: List<FieldStudyData>
 )
 
-data class SubCategoryData(
+data class FieldStudyData(
     val name: String,
     val modules: List<ModuleData>
 )

@@ -1,9 +1,9 @@
 package pt.isel.odin.service.user
 
-import pt.isel.odin.model.User
+import pt.isel.odin.model.user.User
 import pt.isel.odin.service.user.error.DeleteUserError
-import pt.isel.odin.service.user.error.SaveUserError
 import pt.isel.odin.service.user.error.GetUserError
+import pt.isel.odin.service.user.error.SaveUpdateUserError
 import pt.isel.odin.utils.Either
 
 /**
@@ -15,20 +15,20 @@ import pt.isel.odin.utils.Either
 typealias GetUserResult = Either<GetUserError, User>
 
 /**
- * Represents the result of a user creation operation.
+ * Represents the result of a user get all operations.
  *
- * @see SaveUserError
+ * @see GetUserError
  * @see User
  */
-typealias CreationUserResult = Either<SaveUserError, User>
+typealias GetAllUsersResult = Either<GetUserError, List<User>>
 
 /**
- * Represents the result of a user update operation.
+ * Represents the result of a user creation operation.
  *
- * @see SaveUserError
+ * @see SaveUpdateUserError
  * @see User
  */
-typealias UpdateUserResult = Either<SaveUserError, User>
+typealias CreationUserResult = Either<SaveUpdateUserError, User>
 
 /**
  * Represents the result of a user delete operation.

@@ -15,5 +15,6 @@ class MongoConfig : AbstractMongoClientConfiguration() {
     }
 
     @Bean
-    override fun mongoClient() = MongoClients.create("mongodb+srv://DragoTeste:DragoTeste@testecluster.51fod3y.mongodb.net/?retryWrites=true&w=majority&appName=TesteCluster")
+    override fun mongoClient() =
+        MongoClients.create("mongodb+srv://DragoTeste:DragoTeste@testecluster.51fod3y.mongodb.net/?retryWrites=true&w=majority&appName=TesteCluster")
 }

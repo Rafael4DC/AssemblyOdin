@@ -1,70 +1,109 @@
 package pt.isel.odin.service.tech
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import pt.isel.odin.http.controllers.tech.models.TechAttendanceResponse
+import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
+import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
+import pt.isel.odin.model.Module
 import pt.isel.odin.model.Tech
-import pt.isel.odin.model.copy
-import pt.isel.odin.model.isStudent
+import pt.isel.odin.model.user.User
+import pt.isel.odin.repository.ModuleRepository
 import pt.isel.odin.repository.TechRepository
-import pt.isel.odin.service.classattendance.ClassAttendanceService
-import pt.isel.odin.service.NotFoundException
-import pt.isel.odin.service.user.UserService
+import pt.isel.odin.repository.UserRepository
+import pt.isel.odin.service.tech.error.DeleteTechError
+import pt.isel.odin.service.tech.error.GetTechError
+import pt.isel.odin.service.tech.error.SaveUpdateTechError
+import pt.isel.odin.utils.failure
+import pt.isel.odin.utils.success
+import java.time.LocalDateTime
 
 @Service
 class TechService(
     private val techRepository: TechRepository,
-    private val userService: UserService,
-    private val classAttendanceService: ClassAttendanceService
+    private val userRepository: UserRepository,
+    private val moduleRepository: ModuleRepository
 ) {
 
-    fun getById(id: Long): Tech {
-        return techRepository.findById(id).orElseThrow { NotFoundException("No Tech Found") }
+    fun getById(id: Long): GetTechResult =
+        techRepository.findById(id)
+            .map<GetTechResult> { tech -> success(tech) }
+            .orElse(failure(GetTechError.NotFoundTech))
+
+    fun getAll(): GetAllTechsResult = success(techRepository.findAll())
+
+    @Transactional
+    fun save(saveTechInputModel: SaveTechInputModel, email: String): CreationTechResult {
+        val user = getUser(saveTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
+        val module = getModule(saveTechInputModel.module) ?: return failure(SaveUpdateTechError.NotFoundModule)
+
+        val studentsInSec = userRepository.findAllById(saveTechInputModel.missTech)
+
+        return success(techRepository.save(saveTechInputModel.toTech(user, module, studentsInSec)))
     }
 
-    fun getAll(): List<Tech> {
-        return techRepository.findAll()
+    @Transactional
+    fun update(updateTechInputModel: UpdateTechInputModel, email: String): CreationTechResult {
+        val user = getUser(updateTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
+        val module = getModule(updateTechInputModel.module) ?: return failure(SaveUpdateTechError.NotFoundModule)
+
+        val studentsInSec = userRepository.findAllById(updateTechInputModel.missTech)
+
+        return techRepository.findById(updateTechInputModel.id)
+            .map<CreationTechResult> { tech ->
+                success(
+                    techRepository.save(
+                        tech.copy(
+                            teacher = user,
+                            module = module,
+                            date = LocalDateTime.parse(updateTechInputModel.date),
+                            summary = updateTechInputModel.summary,
+                            missTech = studentsInSec
+                        )
+                    )
+                )
+            }.orElse(failure(SaveUpdateTechError.NotFoundTech))
     }
 
-    fun save(techRequest: Tech, email: String): Tech {
-        val tech = techRequest.copy(
-            teacher = techRequest.teacher ?: userService.getByEmail(email)
-        )
-        return techRepository.save(tech)
-    }
-
-    fun update(techRequest: Tech): Tech {
-        val tech = getById(techRequest.id!!)
-
-        return techRepository.save(
-            tech.copy(
-                teacher = techRequest.teacher ?: tech.teacher,
-                curricularUnit = techRequest.module ?: tech.module,
-                date = techRequest.date ?: tech.date,
-                summary = techRequest.summary ?: tech.summary
-            )
-        )
-    }
-
-    fun delete(id: Long) {
-        techRepository.deleteById(id)
-    }
+    @Transactional
+    fun delete(id: Long): DeleteTechResult =
+        techRepository.findById(id)
+            .map<DeleteTechResult> { tech ->
+                techRepository.delete(tech)
+                success(tech)
+            }.orElse(failure(DeleteTechError.NotFoundTech))
 
     fun getByUser(email: String): List<Tech> {
-        val user = userService.getByEmail(email) ?: throw NotFoundException("No User Found")
-        return if (user.role.isStudent()) {
+        /*val user = userService.getByEmail(email) ?: throw NotFoundException("No User Found")
+        return if (user.role?.name == "STUDENT") {
             techRepository.getByStudentId(user.id!!)
         } else {
             techRepository.getByUserId(user.id!!)
-        }
+        }*/
+        return emptyList()
     }
 
-    fun getMyTechsAttendance(email: String): List<TechAttendanceResponse> {
+    /*fun getMyTechsAttendance(email: String): List<TechAttendanceResponse> {
         val techs = getByUser(email)
         return techs.map { tech ->
             TechAttendanceResponse(
                 tech,
-                classAttendanceService.getByTechId(tech.id!!)
+                missTechService.getById(tech.id!!)
             )
         }
+    }*/
+
+    private fun getUser(userId: Long?, email: String): User? {
+        val user = if (userId == null)
+            userRepository.findByEmail(email)
+        else
+            userRepository.findById(userId)
+        return if (user.isEmpty) null
+        else user.get()
+    }
+
+    private fun getModule(moduleId: Long): Module? {
+        val module = moduleRepository.findById(moduleId)
+        return if (module.isEmpty) null
+        else module.get()
     }
 }
