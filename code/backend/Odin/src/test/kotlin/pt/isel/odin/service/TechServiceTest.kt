@@ -14,12 +14,14 @@ import pt.isel.odin.model.Department
 import pt.isel.odin.model.FieldStudy
 import pt.isel.odin.model.Module
 import pt.isel.odin.model.Role
+import pt.isel.odin.model.Section
 import pt.isel.odin.model.Tech
 import pt.isel.odin.model.user.User
 import pt.isel.odin.repository.DepartmentRepository
 import pt.isel.odin.repository.FieldStudyRepository
 import pt.isel.odin.repository.ModuleRepository
 import pt.isel.odin.repository.RoleRepository
+import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.TechRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.tech.TechService
@@ -28,6 +30,7 @@ import pt.isel.odin.service.tech.error.GetTechError
 import pt.isel.odin.service.tech.error.SaveUpdateTechError
 import pt.isel.odin.utils.Failure
 import pt.isel.odin.utils.Success
+import pt.isel.odin.utils.TestData
 import java.time.LocalDateTime
 
 @SpringBootTest
@@ -46,7 +49,7 @@ class TechServiceTest {
     private lateinit var userRepository: UserRepository
 
     @Autowired
-    private lateinit var moduleRepository: ModuleRepository
+    private lateinit var sectionRepository: SectionRepository
 
     @Autowired
     private lateinit var roleRepository: RoleRepository
@@ -57,6 +60,10 @@ class TechServiceTest {
     @Autowired
     private lateinit var fieldStudyRepository: FieldStudyRepository
 
+    @Autowired
+    private lateinit var moduleRepository: ModuleRepository
+    
+
     @Test
     fun `Get tech by ID`() {
         // given: a saved Tech instance
@@ -64,13 +71,7 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
-        val tech = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary")
+        val tech = Tech(teacher = user, section = createSection(), date = LocalDateTime.now(), summary = "Tech Summary")
         techRepository.save(tech)
 
         // when: retrieving the tech by ID
@@ -98,14 +99,9 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
-        val tech1 = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary 1")
-        val tech2 = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary 2")
+        val section = createSection()
+        val tech1 = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary 1")
+        val tech2 = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary 2")
         techRepository.save(tech1)
         techRepository.save(tech2)
 
@@ -124,15 +120,10 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val saveTechInputModel = SaveTechInputModel(
             teacher = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Tech Summary",
             missTech = mutableListOf(user.id!!)
@@ -146,7 +137,7 @@ class TechServiceTest {
         val tech = Tech(
             id = (result as Success).value.id!!,
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.parse(saveTechInputModel.date),
             summary = saveTechInputModel.summary,
             missTech = mutableListOf(user)
@@ -161,15 +152,10 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val saveTechInputModel = SaveTechInputModel(
             teacher = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Tech Summary",
         )
@@ -182,7 +168,7 @@ class TechServiceTest {
         val tech = Tech(
             id = (result as Success).value.id!!,
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.parse(saveTechInputModel.date),
             summary = saveTechInputModel.summary,
             missTech = mutableListOf()
@@ -193,15 +179,10 @@ class TechServiceTest {
     @Test
     fun `Save tech with non-existent user`() {
         // given: a SaveTechInputModel with a non-existent user
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val saveTechInputModel = SaveTechInputModel(
             teacher = 9999,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Tech Summary",
             missTech = emptyList()
@@ -224,7 +205,7 @@ class TechServiceTest {
         userRepository.save(user)
         val saveTechInputModel = SaveTechInputModel(
             teacher = user.id!!,
-            module = 9999,
+            section = 9999,
             date = LocalDateTime.now().toString(),
             summary = "Tech Summary",
             missTech = emptyList()
@@ -235,7 +216,7 @@ class TechServiceTest {
 
         // then: validate the failure due to non-existent module
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateTechError.NotFoundModule, (result as Failure).value)
+        assertEquals(SaveUpdateTechError.NotFoundSection, (result as Failure).value)
     }
 
     @Test
@@ -245,18 +226,13 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
-        val existingTech = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary")
+        val section = createSection()
+        val existingTech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
         val tech = techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = tech.id!!,
             teacher = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
@@ -264,7 +240,7 @@ class TechServiceTest {
         val updatedTech = existingTech.copy(
             id = tech.id!!,
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.parse(updateTechInputModel.date),
             summary = updateTechInputModel.summary
         )
@@ -284,15 +260,10 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val existingTech = Tech(
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.now(),
             summary = "Tech Summary",
             missTech = mutableListOf(user)
@@ -301,7 +272,7 @@ class TechServiceTest {
         val updateTechInputModel = UpdateTechInputModel(
             id = tech.id!!,
             teacher = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
@@ -309,7 +280,7 @@ class TechServiceTest {
         val updatedTech = existingTech.copy(
             id = tech.id!!,
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.parse(updateTechInputModel.date),
             summary = updateTechInputModel.summary,
             missTech = mutableListOf()
@@ -330,15 +301,10 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val existingTech = Tech(
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.now(),
             summary = "Tech Summary",
             missTech = mutableListOf()
@@ -347,7 +313,7 @@ class TechServiceTest {
         val updateTechInputModel = UpdateTechInputModel(
             id = tech.id!!,
             teacher = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Updated Tech Summary",
             missTech = listOf(user.id!!)
@@ -355,7 +321,7 @@ class TechServiceTest {
         val updatedTech = existingTech.copy(
             id = tech.id!!,
             teacher = user,
-            module = module,
+            section = section,
             date = LocalDateTime.parse(updateTechInputModel.date),
             summary = updateTechInputModel.summary,
             missTech = mutableListOf(user)
@@ -376,16 +342,11 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val updateTechInputModel = UpdateTechInputModel(
             id = 1,
             teacher = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
@@ -406,18 +367,13 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
-        val existingTech = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary")
+        val section = createSection()
+        val existingTech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
         techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = existingTech.id!!,
             teacher = 9999,
-            module = module.id!!,
+            section = section.id!!,
             date = LocalDateTime.now().toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
@@ -438,18 +394,13 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
-        val existingTech = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary")
+        val section = createSection()
+        val existingTech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
         techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = existingTech.id!!,
             teacher = user.id!!,
-            module = 9999,
+            section = 9999,
             date = LocalDateTime.now().toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
@@ -460,7 +411,7 @@ class TechServiceTest {
 
         // then: validate the failure due to non-existent module
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateTechError.NotFoundModule, (result as Failure).value)
+        assertEquals(SaveUpdateTechError.NotFoundSection, (result as Failure).value)
     }
 
     @Test
@@ -470,13 +421,8 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
-        val tech = Tech(teacher = user, module = module, date = LocalDateTime.now(), summary = "Tech Summary")
+        val section = createSection()
+        val tech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
         techRepository.save(tech)
 
         // when: deleting the tech
@@ -499,5 +445,12 @@ class TechServiceTest {
         // then: validate the failure due to non-existent tech
         assertTrue(result is Failure)
         assertEquals(DeleteTechError.NotFoundTech, (result as Failure).value)
+    }
+
+    fun createSection(): Section {
+        val savedDepartment = departmentRepository.save(TestData.department1)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy1.copy(department = savedDepartment))
+        val savedModule = moduleRepository.save(TestData.module1.copy(fieldStudy = savedFieldStudy))
+        return sectionRepository.save(TestData.section1.copy(module = savedModule))
     }
 }

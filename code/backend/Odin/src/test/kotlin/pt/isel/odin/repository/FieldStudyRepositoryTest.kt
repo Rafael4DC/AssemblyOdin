@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.odin.model.Department
 import pt.isel.odin.model.FieldStudy
+import pt.isel.odin.utils.TestData
 
 @DataJpaTest
 @Transactional
@@ -23,25 +23,23 @@ class FieldStudyRepositoryTest {
     @Test
     fun `Save FieldStudy`() {
         // given: a Department instance and a FieldStudy instance
-        val department = Department(name = "Science")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department1)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy1.name, department = savedDepartment)
 
         // when: saving the fieldStudy
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
 
         // then: validate the save operation
         assertNotNull(savedFieldStudy.id)
-        assertEquals("Physics", savedFieldStudy.name)
+        assertEquals(TestData.fieldStudy1.name, savedFieldStudy.name)
         assertEquals(savedDepartment.id, savedFieldStudy.department.id)
     }
 
     @Test
     fun `Find FieldStudy by ID`() {
         // given: a saved Department instance and a saved FieldStudy instance
-        val department = Department(name = "Arts")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "History", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department2)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy2.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
 
         // when: retrieving the fieldStudy by ID
@@ -49,14 +47,14 @@ class FieldStudyRepositoryTest {
 
         // then: validate the retrieval operation
         assertNotNull(retrievedFieldStudy)
-        assertEquals("History", retrievedFieldStudy?.name)
+        assertEquals(TestData.fieldStudy2.name, retrievedFieldStudy?.name)
         assertEquals(savedDepartment.id, retrievedFieldStudy?.department?.id)
     }
 
     @Test
     fun `Find FieldStudy by non-existent ID`() {
         // given: a non-existent ID
-        val nonExistentId = 999L
+        val nonExistentId = TestData.nonExistentId
 
         // when: retrieving the fieldStudy by non-existent ID
         val retrievedFieldStudy = fieldStudyRepository.findById(nonExistentId).orElse(null)
@@ -68,7 +66,7 @@ class FieldStudyRepositoryTest {
     @Test
     fun `Find FieldStudy by negative ID`() {
         // given: a negative ID
-        val negativeId = -1L
+        val negativeId = TestData.negativeId
 
         // when: retrieving the fieldStudy by negative ID
         val retrievedFieldStudy = fieldStudyRepository.findById(negativeId).orElse(null)
@@ -80,10 +78,9 @@ class FieldStudyRepositoryTest {
     @Test
     fun `Find all FieldStudies`() {
         // given: multiple saved FieldStudy instances
-        val department = Department(name = "Social Sciences")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy1 = FieldStudy(name = "Sociology", department = savedDepartment)
-        val fieldStudy2 = FieldStudy(name = "Anthropology", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department3)
+        val fieldStudy1 = FieldStudy(name = TestData.fieldStudy3.name, department = savedDepartment)
+        val fieldStudy2 = FieldStudy(name = TestData.fieldStudy4.name, department = savedDepartment)
         fieldStudyRepository.save(fieldStudy1)
         fieldStudyRepository.save(fieldStudy2)
 
@@ -97,9 +94,8 @@ class FieldStudyRepositoryTest {
     @Test
     fun `Update FieldStudy`() {
         // given: a saved Department instance and a saved FieldStudy instance
-        val department = Department(name = "Humanities")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Philosophy", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department4)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy5.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
 
         // when: updating the fieldStudy's name
@@ -112,9 +108,8 @@ class FieldStudyRepositoryTest {
     @Test
     fun `Delete FieldStudy`() {
         // given: a saved Department instance and a saved FieldStudy instance
-        val department = Department(name = "Law")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Criminal Law", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department5)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy5.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
 
         // when: deleting the fieldStudy
@@ -125,4 +120,3 @@ class FieldStudyRepositoryTest {
         assertNull(deletedFieldStudy)
     }
 }
-

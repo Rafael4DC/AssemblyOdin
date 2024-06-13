@@ -104,6 +104,21 @@ class DepartmentServiceTest {
     }
 
     @Test
+    fun `Save department with invalid name`() {
+        // given: a SaveDepartmentInputModel with an existing name
+        val saveDepartmentInputModel = SaveDepartmentInputModel(name = "")
+
+        // when: saving the department with duplicate name
+        val result = departmentService.save(saveDepartmentInputModel)
+
+        // then: validate the failure due to duplicate name
+        assertTrue(result is Failure)
+        assertEquals(SaveUpdateDepartmentError.IncorrectNameDepartment, (result as Failure).value)
+    }
+
+
+
+    @Test
     fun `Update department`() {
         // given: a valid UpdateDepartmentInputModel and existing department
         val existingDepartment = Department(name = "Science")
@@ -138,6 +153,19 @@ class DepartmentServiceTest {
         // then: validate the failure due to non-existent department
         assertTrue(result is Failure)
         assertEquals(SaveUpdateDepartmentError.NotFoundDepartment, (result as Failure).value)
+    }
+
+    @Test
+    fun `Update department with invalid name`() {
+        // given: an UpdateDepartmentInputModel for a non-existent department
+        val updateDepartmentInputModel = UpdateDepartmentInputModel(id = 1, name = "")
+
+        // when: updating the non-existent department
+        val result = departmentService.update(updateDepartmentInputModel)
+
+        // then: validate the failure due to non-existent department
+        assertTrue(result is Failure)
+        assertEquals(SaveUpdateDepartmentError.IncorrectNameDepartment, (result as Failure).value)
     }
 
     @Test

@@ -8,7 +8,7 @@ data class UpdateTechInputModel(
 
     val teacher: Long,
 
-    val module: Long,
+    val section: Long,
 
     val date: String,
 

@@ -5,8 +5,8 @@ package pt.isel.odin.service.user.error
  */
 sealed class SaveUpdateUserError {
     data object NotFoundUser : SaveUpdateUserError()
-    data object EmailIncorrectUser : SaveUpdateUserError()
+    data object IncorrectEmailUser : SaveUpdateUserError()
     data object EmailAlreadyExistsUser : SaveUpdateUserError()
-    data object NameIncorrectUser : SaveUpdateUserError()
+    data object IncorrectNameUser : SaveUpdateUserError()
     data object RoleIncorrectUser : SaveUpdateUserError()
 }

@@ -14,5 +14,7 @@ data class UpdateSectionInputModel(
     @Size(min = 1, max = 500, message = "Summary must have between 1 and 500 characters")
     val summary: String,
 
+    val module: Long,
+
     val students: List<Long> = emptyList()
 )

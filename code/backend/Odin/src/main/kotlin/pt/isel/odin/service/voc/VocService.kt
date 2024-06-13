@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.voc.models.SaveVocInputModel
 import pt.isel.odin.http.controllers.voc.models.UpdateVocInputModel
-import pt.isel.odin.model.Module
+import pt.isel.odin.model.Section
 import pt.isel.odin.model.user.User
-import pt.isel.odin.repository.ModuleRepository
+import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.repository.VocRepository
 import pt.isel.odin.service.voc.error.DeleteVocError
@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 class VocService(
     private val vocRepository: VocRepository,
     private val userRepository: UserRepository,
-    private val moduleRepository: ModuleRepository,
+    private val sectionRepository: SectionRepository,
 ) {
 
     fun getById(id: Long): GetVocResult =
@@ -33,15 +33,15 @@ class VocService(
     @Transactional
     fun save(saveVocInputModel: SaveVocInputModel, email: String): CreationVocResult {
         val user = getUser(saveVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
-        val module = getModule(saveVocInputModel.module) ?: return failure(SaveUpdateVocError.NotFoundModule)
+        val section = getSection(saveVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
 
-        return success(vocRepository.save(saveVocInputModel.toVoc(user, module)))
+        return success(vocRepository.save(saveVocInputModel.toVoc(user, section)))
     }
 
     @Transactional
     fun update(updateVocInputModel: UpdateVocInputModel, email: String): CreationVocResult {
         val user = getUser(updateVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
-        val module = getModule(updateVocInputModel.module) ?: return failure(SaveUpdateVocError.NotFoundModule)
+        val section = getSection(updateVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
 
         return vocRepository.findById(updateVocInputModel.id)
             .map<CreationVocResult> { voc ->
@@ -50,7 +50,7 @@ class VocService(
                         voc.copy(
                             approved = updateVocInputModel.approved,
                             user = user,
-                            module = module,
+                            section = section,
                             started = LocalDateTime.parse(updateVocInputModel.started),
                             ended = LocalDateTime.parse(updateVocInputModel.ended)
                         )
@@ -81,9 +81,9 @@ class VocService(
         else user.get()
     }
 
-    private fun getModule(moduleId: Long): Module? {
-        val module = moduleRepository.findById(moduleId)
-        return if (module.isEmpty) null
-        else module.get()
+    private fun getSection(sectionId: Long): Section? {
+        val section = sectionRepository.findById(sectionId)
+        return if (section.isEmpty) null
+        else section.get()
     }
 }

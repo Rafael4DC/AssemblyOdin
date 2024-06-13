@@ -136,7 +136,7 @@ class UserServiceTest {
 
         // then: validate the save operation
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateUserError.NameIncorrectUser, (result as Failure).value)
+        assertEquals(SaveUpdateUserError.IncorrectNameUser, (result as Failure).value)
     }
 
     @Test
@@ -149,7 +149,7 @@ class UserServiceTest {
 
         // then: validate the save operation
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateUserError.EmailIncorrectUser, (result as Failure).value)
+        assertEquals(SaveUpdateUserError.IncorrectEmailUser, (result as Failure).value)
     }
 
     @Test
@@ -243,7 +243,7 @@ class UserServiceTest {
 
         // then: validate the save operation
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateUserError.NameIncorrectUser, (result as Failure).value)
+        assertEquals(SaveUpdateUserError.IncorrectNameUser, (result as Failure).value)
     }
 
     @Test
@@ -256,7 +256,7 @@ class UserServiceTest {
 
         // then: validate the save operation
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateUserError.EmailIncorrectUser, (result as Failure).value)
+        assertEquals(SaveUpdateUserError.IncorrectEmailUser, (result as Failure).value)
     }
 
     @Test

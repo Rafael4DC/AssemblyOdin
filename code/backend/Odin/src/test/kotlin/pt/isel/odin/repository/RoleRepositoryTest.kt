@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.transaction.annotation.Transactional
 import pt.isel.odin.model.Role
+import pt.isel.odin.utils.TestData
 
 @DataJpaTest
 @Transactional
@@ -21,14 +22,14 @@ class RoleRepositoryTest {
     @Test
     fun `Save Role`() {
         // given: a Role instance
-        val role = Role(name = "Admin")
+        val role = TestData.role1
 
         // when: saving the role
         val savedRole = roleRepository.save(role)
 
         // then: validate the save operation
         assertNotNull(savedRole.id)
-        assertEquals("Admin", savedRole.name)
+        assertEquals(TestData.role1.name, savedRole.name)
     }
 
     @Test
@@ -48,9 +49,9 @@ class RoleRepositoryTest {
     @Test
     fun `Save Role with duplicate name`() {
         // given: a Role instance with a duplicate name
-        val role1 = Role(name = "User")
+        val role1 = TestData.role2
         roleRepository.save(role1)
-        val role2 = Role(name = "User")
+        val role2 = Role(name = TestData.role2.name)
 
         // when: saving the role with duplicate name
         val exception = assertThrows<DataIntegrityViolationException> {
@@ -64,7 +65,7 @@ class RoleRepositoryTest {
     @Test
     fun `Find Role by ID`() {
         // given: a saved Role instance
-        val role = Role(name = "Manager")
+        val role = TestData.role3
         val savedRole = roleRepository.save(role)
 
         // when: retrieving the role by ID
@@ -72,13 +73,13 @@ class RoleRepositoryTest {
 
         // then: validate the retrieval operation
         assertNotNull(retrievedRole)
-        assertEquals("Manager", retrievedRole?.name)
+        assertEquals(TestData.role3.name, retrievedRole?.name)
     }
 
     @Test
     fun `Find Role by non-existent ID`() {
         // given: a non-existent ID
-        val nonExistentId = 999L
+        val nonExistentId = TestData.nonExistentId
 
         // when: retrieving the role by non-existent ID
         val retrievedRole = roleRepository.findById(nonExistentId).orElse(null)
@@ -90,7 +91,7 @@ class RoleRepositoryTest {
     @Test
     fun `Find Role by negative ID`() {
         // given: a negative ID
-        val negativeId = -1L
+        val negativeId = TestData.negativeId
 
         // when: retrieving the role by negative ID
         val retrievedRole = roleRepository.findById(negativeId).orElse(null)
@@ -102,8 +103,8 @@ class RoleRepositoryTest {
     @Test
     fun `Find all Roles`() {
         // given: multiple saved Role instances
-        val role1 = Role(name = "Developer")
-        val role2 = Role(name = "Tester")
+        val role1 = TestData.role4
+        val role2 = TestData.role5
         roleRepository.save(role1)
         roleRepository.save(role2)
 
@@ -117,7 +118,7 @@ class RoleRepositoryTest {
     @Test
     fun `Update Role`() {
         // given: a saved Role instance
-        val role = Role(name = "Support")
+        val role = TestData.role6
         val savedRole = roleRepository.save(role)
 
         // when: updating the role's name
@@ -130,7 +131,7 @@ class RoleRepositoryTest {
     @Test
     fun `Delete Role`() {
         // given: a saved Role instance
-        val role = Role(name = "Operations")
+        val role = TestData.role7
         val savedRole = roleRepository.save(role)
 
         // when: deleting the role
@@ -141,4 +142,3 @@ class RoleRepositoryTest {
         assertNull(deletedRole)
     }
 }
-

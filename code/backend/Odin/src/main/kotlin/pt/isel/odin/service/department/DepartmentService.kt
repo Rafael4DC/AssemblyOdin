@@ -27,12 +27,18 @@ class DepartmentService(private val departmentRepository: DepartmentRepository) 
         if (departmentRepository.findByName(saveDepartInputModel.name).isPresent)
             return failure(SaveUpdateDepartmentError.AlreadyExistsDepartment)
 
+        if (saveDepartInputModel.name.isBlank())
+            return failure(SaveUpdateDepartmentError.IncorrectNameDepartment)
+
         return success(departmentRepository.save(saveDepartInputModel.toDepartment()))
     }
 
     @Transactional
-    fun update(updateDepartInputModel: UpdateDepartmentInputModel): CreationDepartmentResult =
-        departmentRepository.findById(updateDepartInputModel.id)
+    fun update(updateDepartInputModel: UpdateDepartmentInputModel): CreationDepartmentResult {
+        if (updateDepartInputModel.name.isBlank())
+            return failure(SaveUpdateDepartmentError.IncorrectNameDepartment)
+
+        return departmentRepository.findById(updateDepartInputModel.id)
             .map<CreationDepartmentResult> { depart ->
                 success(
                     departmentRepository.save(
@@ -42,7 +48,7 @@ class DepartmentService(private val departmentRepository: DepartmentRepository) 
                     )
                 )
             }.orElse(failure(SaveUpdateDepartmentError.NotFoundDepartment))
-
+    }
 
     @Transactional
     fun delete(id: Long): DeleteDepartmentResult =

@@ -4,10 +4,10 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
-import pt.isel.odin.model.Module
+import pt.isel.odin.model.Section
 import pt.isel.odin.model.Tech
 import pt.isel.odin.model.user.User
-import pt.isel.odin.repository.ModuleRepository
+import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.TechRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.tech.error.DeleteTechError
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 class TechService(
     private val techRepository: TechRepository,
     private val userRepository: UserRepository,
-    private val moduleRepository: ModuleRepository
+    private val sectionRepository: SectionRepository
 ) {
 
     fun getById(id: Long): GetTechResult =
@@ -34,17 +34,17 @@ class TechService(
     @Transactional
     fun save(saveTechInputModel: SaveTechInputModel, email: String): CreationTechResult {
         val user = getUser(saveTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
-        val module = getModule(saveTechInputModel.module) ?: return failure(SaveUpdateTechError.NotFoundModule)
+        val section = getSection(saveTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
 
         val studentsInSec = userRepository.findAllById(saveTechInputModel.missTech)
 
-        return success(techRepository.save(saveTechInputModel.toTech(user, module, studentsInSec)))
+        return success(techRepository.save(saveTechInputModel.toTech(user, section, studentsInSec)))
     }
 
     @Transactional
     fun update(updateTechInputModel: UpdateTechInputModel, email: String): CreationTechResult {
         val user = getUser(updateTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
-        val module = getModule(updateTechInputModel.module) ?: return failure(SaveUpdateTechError.NotFoundModule)
+        val section = getSection(updateTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
 
         val studentsInSec = userRepository.findAllById(updateTechInputModel.missTech)
 
@@ -54,7 +54,7 @@ class TechService(
                     techRepository.save(
                         tech.copy(
                             teacher = user,
-                            module = module,
+                            section = section,
                             date = LocalDateTime.parse(updateTechInputModel.date),
                             summary = updateTechInputModel.summary,
                             missTech = studentsInSec
@@ -101,9 +101,9 @@ class TechService(
         else user.get()
     }
 
-    private fun getModule(moduleId: Long): Module? {
-        val module = moduleRepository.findById(moduleId)
-        return if (module.isEmpty) null
-        else module.get()
+    private fun getSection(sectionId: Long): Section? {
+        val section = sectionRepository.findById(sectionId)
+        return if (section.isEmpty) null
+        else section.get()
     }
 }

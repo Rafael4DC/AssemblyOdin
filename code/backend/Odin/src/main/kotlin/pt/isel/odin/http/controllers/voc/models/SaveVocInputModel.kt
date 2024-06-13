@@ -3,6 +3,7 @@ package pt.isel.odin.http.controllers.voc.models
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import pt.isel.odin.model.Module
+import pt.isel.odin.model.Section
 import pt.isel.odin.model.Voc
 import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
@@ -16,7 +17,7 @@ data class SaveVocInputModel(
 
     val user: Long? = null,
 
-    val module: Long,
+    val section: Long,
 
     val started: String,
 
@@ -24,13 +25,13 @@ data class SaveVocInputModel(
 ) {
     fun toVoc(
         user: User,
-        module: Module
+        section: Section
     ) =
         Voc(
             description = description,
             approved = approved,
             user = user,
-            module = module,
+            section = section,
             started = LocalDateTime.parse(started),
             ended = LocalDateTime.parse(ended)
         )

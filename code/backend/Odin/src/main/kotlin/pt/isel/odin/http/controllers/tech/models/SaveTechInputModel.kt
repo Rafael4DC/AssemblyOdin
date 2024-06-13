@@ -2,7 +2,7 @@ package pt.isel.odin.http.controllers.tech.models
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
-import pt.isel.odin.model.Module
+import pt.isel.odin.model.Section
 import pt.isel.odin.model.Tech
 import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 data class SaveTechInputModel(
     val teacher: Long,
 
-    val module: Long,
+    val section: Long,
 
     val date: String,
 
@@ -22,12 +22,12 @@ data class SaveTechInputModel(
 ) {
     fun toTech(
         teacher: User,
-        module: Module,
+        section: Section,
         missTech: MutableList<User>
     ) =
         Tech(
             teacher = teacher,
-            module = module,
+            section = section,
             date = LocalDateTime.parse(date),
             summary = summary,
             missTech = missTech

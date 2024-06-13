@@ -21,7 +21,7 @@ class Department(
     @Column(nullable = false)
     val name: String,
 
-    @OneToMany(mappedBy = "department", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     val fieldsStudy: List<FieldStudy> = emptyList()
 ) {

@@ -7,5 +7,5 @@ sealed class SaveUpdateTechError {
     data object NotFoundFieldStudy : SaveUpdateTechError()
     data object NotFoundTech : SaveUpdateTechError()
     data object NotFoundUser : SaveUpdateTechError()
-    data object NotFoundModule : SaveUpdateTechError()
+    data object NotFoundSection : SaveUpdateTechError()
 }

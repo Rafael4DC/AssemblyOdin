@@ -135,8 +135,8 @@ class UserService(
      * @return null if there are no errors, otherwise a [CreationUserResult] with the error.
      */
     private fun validateUserInput(username: String, email: String): CreationUserResult? {
-        if (!userDomain.isUsernameValid(username)) return failure(SaveUpdateUserError.NameIncorrectUser)
-        if (!userDomain.isEmailValid(email)) return failure(SaveUpdateUserError.EmailIncorrectUser)
+        if (!userDomain.isUsernameValid(username)) return failure(SaveUpdateUserError.IncorrectNameUser)
+        if (!userDomain.isEmailValid(email)) return failure(SaveUpdateUserError.IncorrectEmailUser)
         return null
     }
 }

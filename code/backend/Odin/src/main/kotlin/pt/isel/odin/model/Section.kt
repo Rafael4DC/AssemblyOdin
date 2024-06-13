@@ -1,11 +1,14 @@
 package pt.isel.odin.model
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToMany
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import pt.isel.odin.model.user.User
 
@@ -22,6 +25,10 @@ class Section(
     @Column(nullable = false)
     val summary: String,
 
+    @ManyToOne
+    @JoinColumn(name = "module_id")
+    var module: Module? = null,
+
     @ManyToMany
     val students: MutableList<User> = mutableListOf()
 ) {
@@ -29,8 +36,9 @@ class Section(
         id: Long? = this.id,
         name: String = this.name,
         summary: String = this.summary,
+        module: Module? = this.module,
         students: MutableList<User> = this.students
-    ) = Section(id, name, summary, students)
+    ) = Section(id, name, summary, module, students)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

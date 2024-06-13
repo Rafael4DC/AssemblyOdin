@@ -16,7 +16,7 @@ import java.time.LocalDateTime
  *
  * @property id the TEC id
  * @property teacher the teacher that is responsible for the TEC
- * @property module the course that the TEC is about
+ * @property section the course that the TEC is about
  * @property date the date of the TEC
  * @property summary the summary of the TEC
  */
@@ -31,7 +31,7 @@ class Tech(
     val teacher: User,
 
     @ManyToOne
-    val module: Module,
+    val section: Section,
 
     val date: LocalDateTime,
 
@@ -44,18 +44,18 @@ class Tech(
     fun copy(
         id: Long? = this.id,
         teacher: User = this.teacher,
-        module: Module = this.module,
+        section: Section = this.section,
         date: LocalDateTime = this.date,
         summary: String = this.summary,
         missTech: MutableList<User> = this.missTech
-    ) = Tech(id, teacher, module, date, summary, missTech)
+    ) = Tech(id, teacher, section, date, summary, missTech)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Tech) return false
         return id == other.id &&
                 teacher == other.teacher &&
-                module == other.module &&
+                section == other.section &&
                 date == other.date &&
                 summary == other.summary &&
                 missTech == other.missTech
@@ -64,7 +64,7 @@ class Tech(
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + teacher.hashCode()
-        result = 31 * result + module.hashCode()
+        result = 31 * result + section.hashCode()
         result = 31 * result + date.hashCode()
         result = 31 * result + summary.hashCode()
         result = 31 * result + missTech.hashCode()

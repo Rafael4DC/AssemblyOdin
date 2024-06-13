@@ -5,5 +5,4 @@ package pt.isel.odin.service.user.error
  */
 sealed class DeleteUserError {
     data object NotFoundUser : DeleteUserError()
-    data object IdIncorrectUser : DeleteUserError()
 }

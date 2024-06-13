@@ -16,7 +16,7 @@ import java.time.LocalDateTime
  * @property id the VOC id
  * @property description the description of the VOC
  * @property user the student that is responsible for the VOC
- * @property module the course that the VOC is about
+ * @property section the course that the VOC is about
  * @property started the date of the VOC
  * @property ended the length of the VOC
  * @property approved if the VOC was approved
@@ -38,7 +38,7 @@ class Voc(
     val user: User,
 
     @ManyToOne
-    val module: Module,
+    val section: Section,
 
     val started: LocalDateTime,
 
@@ -49,10 +49,10 @@ class Voc(
         description: String = this.description,
         approved: Boolean = this.approved,
         user: User = this.user,
-        module: Module = this.module,
+        section: Section = this.section,
         started: LocalDateTime = this.started,
         ended: LocalDateTime = this.ended
-    ) = Voc(id, description, approved, user, module, started, ended)
+    ) = Voc(id, description, approved, user, section, started, ended)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -61,7 +61,7 @@ class Voc(
                 description == other.description &&
                 approved == other.approved &&
                 user == other.user &&
-                module == other.module &&
+                section == other.section &&
                 started == other.started &&
                 ended == other.ended
     }
@@ -71,7 +71,7 @@ class Voc(
         result = 31 * result + description.hashCode()
         result = 31 * result + approved.hashCode()
         result = 31 * result + user.hashCode()
-        result = 31 * result + module.hashCode()
+        result = 31 * result + section.hashCode()
         result = 31 * result + started.hashCode()
         result = 31 * result + ended.hashCode()
         return result

@@ -5,6 +5,4 @@ package pt.isel.odin.service.user.error
  */
 sealed class GetUserError {
     data object NotFoundUser : GetUserError()
-    data object IdIncorrectUser : GetUserError()
-    data object EmailIncorrectUser : GetUserError()
 }

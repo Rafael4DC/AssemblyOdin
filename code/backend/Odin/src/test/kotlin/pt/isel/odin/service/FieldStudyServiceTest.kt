@@ -131,6 +131,24 @@ class FieldStudyServiceTest {
     }
 
     @Test
+    fun `Save field study with duplicate nam1`() {
+        // given: a SaveFieldStudyInputModel with an existing name
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val saveFieldStudyInputModel = SaveFieldStudyInputModel(name = "Physics", department = department.id!!)
+        val existingFieldStudy = FieldStudy(name = saveFieldStudyInputModel.name, department = department)
+        fieldStudyRepository.save(existingFieldStudy)
+
+        // when: saving the field study with duplicate name
+        val result = fieldStudyService.save(saveFieldStudyInputModel)
+
+        // then: validate the failure due to duplicate name
+        assertTrue(result is Failure)
+        assertEquals(SaveUpdateFieldStudyError.AlreadyExistsFieldStudy, (result as Failure).value)
+    }
+
+
+    @Test
     fun `Update field study`() {
         // given: a valid UpdateFieldStudyInputModel and existing field study
         val department = Department(name = "Science")

@@ -10,9 +10,15 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import pt.isel.odin.http.controllers.section.models.SaveSectionInputModel
 import pt.isel.odin.http.controllers.section.models.UpdateSectionInputModel
+import pt.isel.odin.model.Department
+import pt.isel.odin.model.FieldStudy
+import pt.isel.odin.model.Module
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
 import pt.isel.odin.model.user.User
+import pt.isel.odin.repository.DepartmentRepository
+import pt.isel.odin.repository.FieldStudyRepository
+import pt.isel.odin.repository.ModuleRepository
 import pt.isel.odin.repository.RoleRepository
 import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.UserRepository
@@ -41,6 +47,15 @@ class SectionServiceTest {
     @Autowired
     private lateinit var roleRepository: RoleRepository
 
+    @Autowired
+    private lateinit var departmentRepository: DepartmentRepository
+
+    @Autowired
+    private lateinit var fieldStudyRepository: FieldStudyRepository
+
+    @Autowired
+    private lateinit var moduleRepository: ModuleRepository
+
     @Test
     fun `Get section by ID`() {
         // given: a saved Section instance
@@ -48,7 +63,14 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val section = Section(name = "Section A", summary = "Summary A", students = mutableListOf(user))
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
+        val section =
+            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
         sectionRepository.save(section)
 
         // when: retrieving the section by ID
@@ -76,8 +98,16 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val section1 = Section(name = "Section A", summary = "Summary A", students = mutableListOf(user))
-        val section2 = Section(name = "Section B", summary = "Summary B", students = mutableListOf(user))
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
+        val section1 =
+            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
+        val section2 =
+            Section(name = "Section B", summary = "Summary B", module = module, students = mutableListOf(user))
         sectionRepository.save(section1)
         sectionRepository.save(section2)
 
@@ -96,8 +126,19 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
         val saveSectionInputModel =
-            SaveSectionInputModel(name = "Section A", summary = "Summary A", students = listOf(user.id!!))
+            SaveSectionInputModel(
+                name = "Section A",
+                summary = "Summary A",
+                module = module.id!!,
+                students = listOf(user.id!!)
+            )
 
         // when: saving the section
         val result = sectionService.save(saveSectionInputModel)
@@ -108,7 +149,8 @@ class SectionServiceTest {
             id = (result as Success).value.id!!,
             name = saveSectionInputModel.name,
             summary = saveSectionInputModel.summary,
-            students = mutableListOf(user)
+            students = mutableListOf(user),
+            module = module
         )
         assertEquals(section, result.value)
     }
@@ -120,7 +162,14 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val saveSectionInputModel = SaveSectionInputModel(name = "Section A", summary = "Summary A")
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
+        val saveSectionInputModel =
+            SaveSectionInputModel(name = "Section A", module = module.id!!, summary = "Summary A")
 
         // when: saving the section
         val result = sectionService.save(saveSectionInputModel)
@@ -131,6 +180,7 @@ class SectionServiceTest {
             id = (result as Success).value.id!!,
             name = saveSectionInputModel.name,
             summary = saveSectionInputModel.summary,
+            module = module,
         )
         assertEquals(section, result.value)
     }
@@ -142,11 +192,23 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
         val saveSectionInputModel =
-            SaveSectionInputModel(name = "Section A", summary = "Summary A", students = listOf(user.id!!))
+            SaveSectionInputModel(
+                name = "Section A",
+                summary = "Summary A",
+                module = module.id!!,
+                students = listOf(user.id!!)
+            )
         val existingSection = Section(
             name = saveSectionInputModel.name,
             summary = saveSectionInputModel.summary,
+            module = module,
             students = mutableListOf(user)
         )
         sectionRepository.save(existingSection)
@@ -166,12 +228,20 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val existingSection = Section(name = "Section A", summary = "Summary A", students = mutableListOf(user))
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
+        val existingSection =
+            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
         val section = sectionRepository.save(existingSection)
         val updateSectionInputModel = UpdateSectionInputModel(
             id = section.id!!,
             name = "Section A Updated",
             summary = "Summary A Updated",
+            module = module.id!!,
             students = listOf(user.id!!)
         )
         val updatedSection = existingSection.copy(
@@ -195,11 +265,19 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val existingSection = Section(name = "Section A", summary = "Summary A", students = mutableListOf(user))
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
+        val existingSection =
+            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
         val section = sectionRepository.save(existingSection)
         val updateSectionInputModel = UpdateSectionInputModel(
             id = section.id!!,
             name = existingSection.name,
+            module = module.id!!,
             summary = existingSection.summary,
         )
         val updatedSection = existingSection.copy(
@@ -225,10 +303,17 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
         val updateSectionInputModel = UpdateSectionInputModel(
             id = 1,
             name = "Section A Updated",
             summary = "Summary A Updated",
+            module = module.id!!,
             students = listOf(user.id!!)
         )
 
@@ -247,7 +332,14 @@ class SectionServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val section = Section(name = "Section A", summary = "Summary A", students = mutableListOf(user))
+        val department = Department(name = "Science")
+        departmentRepository.save(department)
+        val fieldStudy = FieldStudy(name = "Physics", department = department)
+        fieldStudyRepository.save(fieldStudy)
+        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
+        moduleRepository.save(module)
+        val section =
+            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
         sectionRepository.save(section)
 
         // when: deleting the section

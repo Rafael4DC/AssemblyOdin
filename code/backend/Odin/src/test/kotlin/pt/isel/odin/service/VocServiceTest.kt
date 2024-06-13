@@ -14,12 +14,14 @@ import pt.isel.odin.model.Department
 import pt.isel.odin.model.FieldStudy
 import pt.isel.odin.model.Module
 import pt.isel.odin.model.Role
+import pt.isel.odin.model.Section
 import pt.isel.odin.model.Voc
 import pt.isel.odin.model.user.User
 import pt.isel.odin.repository.DepartmentRepository
 import pt.isel.odin.repository.FieldStudyRepository
 import pt.isel.odin.repository.ModuleRepository
 import pt.isel.odin.repository.RoleRepository
+import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.repository.VocRepository
 import pt.isel.odin.service.voc.VocService
@@ -28,6 +30,7 @@ import pt.isel.odin.service.voc.error.GetVocError
 import pt.isel.odin.service.voc.error.SaveUpdateVocError
 import pt.isel.odin.utils.Failure
 import pt.isel.odin.utils.Success
+import pt.isel.odin.utils.TestData
 import java.time.LocalDateTime
 
 @SpringBootTest
@@ -46,7 +49,7 @@ class VocServiceTest {
     private lateinit var userRepository: UserRepository
 
     @Autowired
-    private lateinit var moduleRepository: ModuleRepository
+    private lateinit var sectionRepository: SectionRepository
 
     @Autowired
     private lateinit var roleRepository: RoleRepository
@@ -57,6 +60,10 @@ class VocServiceTest {
     @Autowired
     private lateinit var fieldStudyRepository: FieldStudyRepository
 
+    @Autowired
+    private lateinit var moduleRepository: ModuleRepository
+
+
     @Test
     fun `Get voc by ID`() {
         // given: a saved Voc instance
@@ -64,15 +71,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val voc = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = true,
             started = LocalDateTime.now(),
@@ -105,15 +107,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val voc1 = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = true,
             started = LocalDateTime.now(),
@@ -121,7 +118,7 @@ class VocServiceTest {
         )
         val voc2 = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = false,
             started = LocalDateTime.now(),
@@ -145,15 +142,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val saveVocInputModel = SaveVocInputModel(
             user = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             description = "Something",
             approved = true,
             started = LocalDateTime.now().toString(),
@@ -168,7 +160,7 @@ class VocServiceTest {
         val voc = Voc(
             id = (result as Success).value.id!!,
             user = user,
-            module = module,
+            section = section,
             approved = saveVocInputModel.approved,
             started = LocalDateTime.parse(saveVocInputModel.started),
             description = "Something",
@@ -180,15 +172,10 @@ class VocServiceTest {
     @Test
     fun `Save voc with non-existent user`() {
         // given: a SaveVocInputModel with a non-existent user
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val saveVocInputModel = SaveVocInputModel(
             user = 9999,
-            module = module.id!!,
+            section = section.id!!,
             description = "Something",
             approved = true,
             started = LocalDateTime.now().toString(),
@@ -212,7 +199,7 @@ class VocServiceTest {
         userRepository.save(user)
         val saveVocInputModel = SaveVocInputModel(
             user = user.id!!,
-            module = 9999,
+            section = 9999,
             description = "Something",
             approved = true,
             started = LocalDateTime.now().toString(),
@@ -224,7 +211,7 @@ class VocServiceTest {
 
         // then: validate the failure due to non-existent module
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateVocError.NotFoundModule, (result as Failure).value)
+        assertEquals(SaveUpdateVocError.NotFoundSection, (result as Failure).value)
     }
 
     @Test
@@ -234,15 +221,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val existingVoc = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = true,
             started = LocalDateTime.now(),
@@ -252,7 +234,7 @@ class VocServiceTest {
         val updateVocInputModel = UpdateVocInputModel(
             id = voc.id!!,
             user = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             description = "Something",
             approved = false,
             started = LocalDateTime.now().toString(),
@@ -261,7 +243,7 @@ class VocServiceTest {
         val updatedVoc = existingVoc.copy(
             id = voc.id!!,
             user = user,
-            module = module,
+            section = section,
             approved = updateVocInputModel.approved,
             started = LocalDateTime.parse(updateVocInputModel.started),
             ended = LocalDateTime.parse(updateVocInputModel.ended)
@@ -282,16 +264,11 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val updateVocInputModel = UpdateVocInputModel(
             id = 1,
             user = user.id!!,
-            module = module.id!!,
+            section = section.id!!,
             description = "Something",
             approved = false,
             started = LocalDateTime.now().toString(),
@@ -313,15 +290,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val existingVoc = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = true,
             started = LocalDateTime.now(),
@@ -331,7 +303,7 @@ class VocServiceTest {
         val updateVocInputModel = UpdateVocInputModel(
             id = existingVoc.id!!,
             user = 9999,
-            module = module.id!!,
+            section = section.id!!,
             description = "Something",
             approved = false,
             started = LocalDateTime.now().toString(),
@@ -353,15 +325,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val existingVoc = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = true,
             started = LocalDateTime.now(),
@@ -371,7 +338,7 @@ class VocServiceTest {
         val updateVocInputModel = UpdateVocInputModel(
             id = existingVoc.id!!,
             user = user.id!!,
-            module = 9999,
+            section = 9999,
             description = "Something",
             approved = false,
             started = LocalDateTime.now().toString(),
@@ -383,7 +350,7 @@ class VocServiceTest {
 
         // then: validate the failure due to non-existent module
         assertTrue(result is Failure)
-        assertEquals(SaveUpdateVocError.NotFoundModule, (result as Failure).value)
+        assertEquals(SaveUpdateVocError.NotFoundSection, (result as Failure).value)
     }
 
     @Test
@@ -393,15 +360,10 @@ class VocServiceTest {
         roleRepository.save(role)
         val user = User(email = "student@example.com", username = "student", role = role)
         userRepository.save(user)
-        val department = Department(name = "Science")
-        departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = department)
-        fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
-        moduleRepository.save(module)
+        val section = createSection()
         val voc = Voc(
             user = user,
-            module = module,
+            section = section,
             description = "Something",
             approved = true,
             started = LocalDateTime.now(),
@@ -429,5 +391,12 @@ class VocServiceTest {
         // then: validate the failure due to non-existent voc
         assertTrue(result is Failure)
         assertEquals(DeleteVocError.NotFoundVoc, (result as Failure).value)
+    }
+
+    fun createSection(): Section {
+        val savedDepartment = departmentRepository.save(TestData.department1)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy1.copy(department = savedDepartment))
+        val savedModule = moduleRepository.save(TestData.module1.copy(fieldStudy = savedFieldStudy))
+        return sectionRepository.save(TestData.section1.copy(module = savedModule))
     }
 }

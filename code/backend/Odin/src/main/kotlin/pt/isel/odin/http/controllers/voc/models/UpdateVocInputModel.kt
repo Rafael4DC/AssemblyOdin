@@ -14,7 +14,7 @@ data class UpdateVocInputModel(
 
     val user: Long? = null,
 
-    val module: Long,
+    val section: Long,
 
     val started: String,
 

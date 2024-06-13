@@ -1,6 +1,7 @@
 package pt.isel.odin.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
 @Entity
@@ -18,7 +20,7 @@ class Module(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinColumn(name = "field_study_id", nullable = false)
     @JsonBackReference
     val fieldStudy: FieldStudy,
@@ -27,7 +29,10 @@ class Module(
     val name: String,
 
     @Column(nullable = true)
-    val tier: Int = 1
+    val tier: Int = 1,
+
+/*    @OneToMany(mappedBy = "module")
+    val sections: MutableList<Section> = mutableListOf()*/
 ) {
     fun copy(
         id: Long? = this.id,

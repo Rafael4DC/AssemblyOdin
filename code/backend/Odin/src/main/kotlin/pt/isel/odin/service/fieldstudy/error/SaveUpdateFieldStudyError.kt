@@ -7,4 +7,5 @@ sealed class SaveUpdateFieldStudyError {
     data object AlreadyExistsFieldStudy : SaveUpdateFieldStudyError()
     data object NotFoundDepartment : SaveUpdateFieldStudyError()
     data object NotFoundFieldStudy : SaveUpdateFieldStudyError()
+    data object IncorrectNameFieldStudy : SaveUpdateFieldStudyError()
 }

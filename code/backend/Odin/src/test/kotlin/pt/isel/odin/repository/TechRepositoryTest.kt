@@ -1,20 +1,12 @@
 package pt.isel.odin.repository
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.odin.model.Department
-import pt.isel.odin.model.FieldStudy
-import pt.isel.odin.model.Module
-import pt.isel.odin.model.Role
-import pt.isel.odin.model.Tech
-import pt.isel.odin.model.user.User
-import java.time.LocalDateTime
+import pt.isel.odin.model.Section
+import pt.isel.odin.utils.TestData
 
 @DataJpaTest
 @Transactional
@@ -27,32 +19,27 @@ class TechRepositoryTest {
     lateinit var userRepository: UserRepository
 
     @Autowired
-    lateinit var moduleRepository: ModuleRepository
+    lateinit var sectionRepository: SectionRepository
 
     @Autowired
     lateinit var roleRepository: RoleRepository
 
     @Autowired
+    lateinit var departmentRepository: DepartmentRepository
+
+    @Autowired
     lateinit var fieldStudyRepository: FieldStudyRepository
 
     @Autowired
-    lateinit var departmentRepository: DepartmentRepository
+    lateinit var moduleRepository: ModuleRepository
 
     @Test
     fun `Save Tech`() {
         // given: a Role instance, a User instance as a teacher, a Department, a FieldStudy, a Module instance, and a Tech instance
-        val role = Role(name = "Teacher")
-        val savedRole = roleRepository.save(role)
-        val teacher = User(email = "teacher@example.com", username = "teacher", role = savedRole)
-        val savedTeacher = userRepository.save(teacher)
-        val department = Department(name = "Science")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Computer Science", department = savedDepartment)
-        val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Software Engineering", fieldStudy = savedFieldStudy)
-        val savedModule = moduleRepository.save(module)
-        val tech =
-            Tech(teacher = savedTeacher, module = savedModule, date = LocalDateTime.now(), summary = "Tech summary")
+        val savedRole = roleRepository.save(TestData.role1)
+        val savedTeacher = userRepository.save(TestData.user1.copy(role = savedRole))
+        val savedSection = createSection()
+        val tech = TestData.tech1.copy(teacher = savedTeacher, section = savedSection)
 
         // when: saving the tech
         val savedTech = techRepository.save(tech)
@@ -60,29 +47,17 @@ class TechRepositoryTest {
         // then: validate the save operation
         assertNotNull(savedTech.id)
         assertEquals(savedTeacher.id, savedTech.teacher.id)
-        assertEquals(savedModule.id, savedTech.module.id)
+        assertEquals(savedSection.id, savedTech.section.id)
         assertEquals("Tech summary", savedTech.summary)
     }
 
     @Test
     fun `Find Tech by ID`() {
         // given: a saved Role instance, a saved User instance as a teacher, a saved Department, a saved FieldStudy, a saved Module instance, and a saved Tech instance
-        val role = Role(name = "Teacher")
-        val savedRole = roleRepository.save(role)
-        val teacher = User(email = "teacher@example.com", username = "teacher", role = savedRole)
-        val savedTeacher = userRepository.save(teacher)
-        val department = Department(name = "Mathematics")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Algebra", department = savedDepartment)
-        val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Abstract Algebra", fieldStudy = savedFieldStudy)
-        val savedModule = moduleRepository.save(module)
-        val tech = Tech(
-            teacher = savedTeacher,
-            module = savedModule,
-            date = LocalDateTime.now(),
-            summary = "Algebra Tech summary"
-        )
+        val savedRole = roleRepository.save(TestData.role1)
+        val savedTeacher = userRepository.save(TestData.user1.copy(role = savedRole))
+        val savedSection = createSection()
+        val tech = TestData.tech2.copy(teacher = savedTeacher, section = savedSection)
         val savedTech = techRepository.save(tech)
 
         // when: retrieving the tech by ID
@@ -91,14 +66,14 @@ class TechRepositoryTest {
         // then: validate the retrieval operation
         assertNotNull(retrievedTech)
         assertEquals(savedTeacher.id, retrievedTech?.teacher?.id)
-        assertEquals(savedModule.id, retrievedTech?.module?.id)
+        assertEquals(savedSection.id, retrievedTech?.section?.id)
         assertEquals("Algebra Tech summary", retrievedTech?.summary)
     }
 
     @Test
     fun `Find Tech by non-existent ID`() {
         // given: a non-existent ID
-        val nonExistentId = 999L
+        val nonExistentId = TestData.nonExistentId
 
         // when: retrieving the tech by non-existent ID
         val retrievedTech = techRepository.findById(nonExistentId).orElse(null)
@@ -110,7 +85,7 @@ class TechRepositoryTest {
     @Test
     fun `Find Tech by negative ID`() {
         // given: a negative ID
-        val negativeId = -1L
+        val negativeId = TestData.negativeId
 
         // when: retrieving the tech by negative ID
         val retrievedTech = techRepository.findById(negativeId).orElse(null)
@@ -122,20 +97,11 @@ class TechRepositoryTest {
     @Test
     fun `Find all Techs`() {
         // given: multiple saved Tech instances
-        val role = Role(name = "Teacher")
-        val savedRole = roleRepository.save(role)
-        val teacher = User(email = "teacher@example.com", username = "teacher", role = savedRole)
-        val savedTeacher = userRepository.save(teacher)
-        val department = Department(name = "Physics")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Quantum Physics", department = savedDepartment)
-        val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = savedFieldStudy)
-        val savedModule = moduleRepository.save(module)
-        val tech1 =
-            Tech(teacher = savedTeacher, module = savedModule, date = LocalDateTime.now(), summary = "Physics Tech 1")
-        val tech2 =
-            Tech(teacher = savedTeacher, module = savedModule, date = LocalDateTime.now(), summary = "Physics Tech 2")
+        val savedRole = roleRepository.save(TestData.role1)
+        val savedTeacher = userRepository.save(TestData.user1.copy(role = savedRole))
+        val savedSection = createSection()
+        val tech1 = TestData.tech3.copy(teacher = savedTeacher, section = savedSection)
+        val tech2 = TestData.tech4.copy(teacher = savedTeacher, section = savedSection)
         techRepository.save(tech1)
         techRepository.save(tech2)
 
@@ -149,18 +115,10 @@ class TechRepositoryTest {
     @Test
     fun `Update Tech`() {
         // given: a saved Role instance, a saved User instance as a teacher, a saved Department, a saved FieldStudy, a saved Module instance, and a saved Tech instance
-        val role = Role(name = "Teacher")
-        val savedRole = roleRepository.save(role)
-        val teacher = User(email = "teacher@example.com", username = "teacher", role = savedRole)
-        val savedTeacher = userRepository.save(teacher)
-        val department = Department(name = "Biology")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Botany", department = savedDepartment)
-        val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Plant Biology", fieldStudy = savedFieldStudy)
-        val savedModule = moduleRepository.save(module)
-        val tech =
-            Tech(teacher = savedTeacher, module = savedModule, date = LocalDateTime.now(), summary = "Botany Tech")
+        val savedRole = roleRepository.save(TestData.role1)
+        val savedTeacher = userRepository.save(TestData.user1.copy(role = savedRole))
+        val savedSection = createSection()
+        val tech = TestData.tech5.copy(teacher = savedTeacher, section = savedSection)
         val savedTech = techRepository.save(tech)
 
         // when: updating the tech's summary
@@ -173,22 +131,10 @@ class TechRepositoryTest {
     @Test
     fun `Delete Tech`() {
         // given: a saved Role instance, a saved User instance as a teacher, a saved Department, a saved FieldStudy, a saved Module instance, and a saved Tech instance
-        val role = Role(name = "Teacher")
-        val savedRole = roleRepository.save(role)
-        val teacher = User(email = "teacher@example.com", username = "teacher", role = savedRole)
-        val savedTeacher = userRepository.save(teacher)
-        val department = Department(name = "Chemistry")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Organic Chemistry", department = savedDepartment)
-        val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Organic Reactions", fieldStudy = savedFieldStudy)
-        val savedModule = moduleRepository.save(module)
-        val tech = Tech(
-            teacher = savedTeacher,
-            module = savedModule,
-            date = LocalDateTime.now(),
-            summary = "Organic Chemistry Tech"
-        )
+        val savedRole = roleRepository.save(TestData.role1)
+        val savedTeacher = userRepository.save(TestData.user1.copy(role = savedRole))
+        val savedSection = createSection()
+        val tech = TestData.tech6.copy(teacher = savedTeacher, section = savedSection)
         val savedTech = techRepository.save(tech)
 
         // when: deleting the tech
@@ -202,29 +148,13 @@ class TechRepositoryTest {
     @Test
     fun `Save Tech with missTech`() {
         // given: a Role instance, multiple User instances as missTech, a User instance as a teacher, a Department, a FieldStudy, a Module instance, and a Tech instance
-        val role = Role(name = "Student")
-        val savedRole = roleRepository.save(role)
-        val student1 = User(email = "student1@example.com", username = "student1", role = savedRole)
-        val student2 = User(email = "student2@example.com", username = "student2", role = savedRole)
-        val savedStudent1 = userRepository.save(student1)
-        val savedStudent2 = userRepository.save(student2)
-        val teacherRole = Role(name = "Teacher")
-        val savedTeacherRole = roleRepository.save(teacherRole)
-        val teacher = User(email = "teacher@example.com", username = "teacher", role = savedTeacherRole)
-        val savedTeacher = userRepository.save(teacher)
-        val department = Department(name = "History")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "World History", department = savedDepartment)
-        val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Medieval History", fieldStudy = savedFieldStudy)
-        val savedModule = moduleRepository.save(module)
-        val tech = Tech(
-            teacher = savedTeacher,
-            module = savedModule,
-            date = LocalDateTime.now(),
-            summary = "History Tech",
-            missTech = mutableListOf(savedStudent1, savedStudent2)
-        )
+        val savedRole = roleRepository.save(TestData.role2)
+        val savedStudent1 = userRepository.save(TestData.user2.copy(role = savedRole))
+        val savedStudent2 = userRepository.save(TestData.user3.copy(role = savedRole))
+        val savedTeacherRole = roleRepository.save(TestData.role1)
+        val savedTeacher = userRepository.save(TestData.user1.copy(role = savedTeacherRole))
+        val savedSection = createSection()
+        val tech = TestData.tech7.copy(teacher = savedTeacher, section = savedSection, missTech = mutableListOf(savedStudent1, savedStudent2))
 
         // when: saving the tech
         val savedTech = techRepository.save(tech)
@@ -234,5 +164,12 @@ class TechRepositoryTest {
         assertEquals(2, savedTech.missTech.size)
         assertTrue(savedTech.missTech.contains(savedStudent1))
         assertTrue(savedTech.missTech.contains(savedStudent2))
+    }
+
+    fun createSection(): Section {
+        val savedDepartment = departmentRepository.save(TestData.department1)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy1.copy(department = savedDepartment))
+        val savedModule = moduleRepository.save(TestData.module1.copy(fieldStudy = savedFieldStudy))
+        return sectionRepository.save(TestData.section1.copy(module = savedModule))
     }
 }

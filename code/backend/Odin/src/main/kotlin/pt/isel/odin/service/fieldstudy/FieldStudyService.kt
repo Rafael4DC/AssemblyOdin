@@ -33,6 +33,9 @@ class FieldStudyService(
         val department = departmentRepository.findById(saveFieldStudyInputModel.department)
         if (department.isEmpty) return failure(SaveUpdateFieldStudyError.NotFoundDepartment)
 
+        if (saveFieldStudyInputModel.name.isBlank())
+            return failure(SaveUpdateFieldStudyError.IncorrectNameFieldStudy)
+
         return success(fieldStudyRepository.save(saveFieldStudyInputModel.toFieldStudy(department.get())))
     }
 
@@ -40,6 +43,9 @@ class FieldStudyService(
     fun update(updateFieldStudyInputModel: UpdateFieldStudyInputModel): CreationFieldStudyResult {
         val department = departmentRepository.findById(updateFieldStudyInputModel.department)
         if (department.isEmpty) return failure(SaveUpdateFieldStudyError.NotFoundDepartment)
+
+        if (updateFieldStudyInputModel.name.isBlank())
+            return failure(SaveUpdateFieldStudyError.IncorrectNameFieldStudy)
 
         return fieldStudyRepository.findById(updateFieldStudyInputModel.id)
             .map<CreationFieldStudyResult> { field ->
@@ -58,7 +64,7 @@ class FieldStudyService(
     fun delete(id: Long): DeleteFieldStudyResult =
         fieldStudyRepository.findById(id)
             .map<DeleteFieldStudyResult> { field ->
-                fieldStudyRepository.delete(field)
+                val a = fieldStudyRepository.delete(field)
                 success(field)
             }.orElse(failure(DeleteFieldStudyError.NotFoundFieldStudy))
 }

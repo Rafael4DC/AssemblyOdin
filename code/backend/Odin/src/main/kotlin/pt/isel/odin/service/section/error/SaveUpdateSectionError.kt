@@ -7,4 +7,5 @@ sealed class SaveUpdateSectionError {
     data object AlreadyExistsSection : SaveUpdateSectionError()
     data object NotFoundFieldStudy : SaveUpdateSectionError()
     data object NotFoundSection : SaveUpdateSectionError()
+    data object NotFoundModule : SaveUpdateSectionError()
 }

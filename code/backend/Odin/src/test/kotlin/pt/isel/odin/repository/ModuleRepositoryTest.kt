@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 import pt.isel.odin.model.Department
 import pt.isel.odin.model.FieldStudy
 import pt.isel.odin.model.Module
+import pt.isel.odin.utils.TestData
 
 @DataJpaTest
 @Transactional
@@ -27,30 +28,28 @@ class ModuleRepositoryTest {
     @Test
     fun `Save Module`() {
         // given: a Department instance, a FieldStudy instance, and a Module instance
-        val department = Department(name = "Engineering")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Software Engineering", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department1)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy1.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Algorithms", fieldStudy = savedFieldStudy, tier = 2)
+        val module = Module(name = TestData.module1.name, fieldStudy = savedFieldStudy, tier = TestData.module1.tier)
 
         // when: saving the module
         val savedModule = moduleRepository.save(module)
 
         // then: validate the save operation
         assertNotNull(savedModule.id)
-        assertEquals("Algorithms", savedModule.name)
-        assertEquals(2, savedModule.tier)
+        assertEquals(TestData.module1.name, savedModule.name)
+        assertEquals(TestData.module1.tier, savedModule.tier)
         assertEquals(savedFieldStudy.id, savedModule.fieldStudy.id)
     }
 
     @Test
     fun `Find Module by ID`() {
         // given: a saved Department instance, a saved FieldStudy instance, and a saved Module instance
-        val department = Department(name = "Science")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Physics", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department2)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy2.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Quantum Mechanics", fieldStudy = savedFieldStudy, tier = 3)
+        val module = Module(name = TestData.module2.name, fieldStudy = savedFieldStudy, tier = TestData.module2.tier)
         val savedModule = moduleRepository.save(module)
 
         // when: retrieving the module by ID
@@ -58,15 +57,15 @@ class ModuleRepositoryTest {
 
         // then: validate the retrieval operation
         assertNotNull(retrievedModule)
-        assertEquals("Quantum Mechanics", retrievedModule?.name)
-        assertEquals(3, retrievedModule?.tier)
+        assertEquals(TestData.module2.name, retrievedModule?.name)
+        assertEquals(TestData.module2.tier, retrievedModule?.tier)
         assertEquals(savedFieldStudy.id, retrievedModule?.fieldStudy?.id)
     }
 
     @Test
     fun `Find Module by non-existent ID`() {
         // given: a non-existent ID
-        val nonExistentId = 999L
+        val nonExistentId = TestData.nonExistentId
 
         // when: retrieving the module by non-existent ID
         val retrievedModule = moduleRepository.findById(nonExistentId).orElse(null)
@@ -78,7 +77,7 @@ class ModuleRepositoryTest {
     @Test
     fun `Find Module by negative ID`() {
         // given: a negative ID
-        val negativeId = -1L
+        val negativeId = TestData.negativeId
 
         // when: retrieving the module by negative ID
         val retrievedModule = moduleRepository.findById(negativeId).orElse(null)
@@ -90,12 +89,11 @@ class ModuleRepositoryTest {
     @Test
     fun `Find all Modules`() {
         // given: multiple saved Module instances
-        val department = Department(name = "Arts")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "History", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department3)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy3.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module1 = Module(name = "Ancient History", fieldStudy = savedFieldStudy)
-        val module2 = Module(name = "Modern History", fieldStudy = savedFieldStudy)
+        val module1 = Module(name = TestData.module3.name, fieldStudy = savedFieldStudy)
+        val module2 = Module(name = TestData.module4.name, fieldStudy = savedFieldStudy)
         moduleRepository.save(module1)
         moduleRepository.save(module2)
 
@@ -109,11 +107,10 @@ class ModuleRepositoryTest {
     @Test
     fun `Update Module`() {
         // given: a saved Department instance, a saved FieldStudy instance, and a saved Module instance
-        val department = Department(name = "Business")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Management", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department4)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy4.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Marketing", fieldStudy = savedFieldStudy)
+        val module = Module(name = TestData.module5.name, fieldStudy = savedFieldStudy)
         val savedModule = moduleRepository.save(module)
 
         // when: updating the module's name and tier
@@ -127,11 +124,10 @@ class ModuleRepositoryTest {
     @Test
     fun `Delete Module`() {
         // given: a saved Department instance, a saved FieldStudy instance, and a saved Module instance
-        val department = Department(name = "Law")
-        val savedDepartment = departmentRepository.save(department)
-        val fieldStudy = FieldStudy(name = "Criminal Law", department = savedDepartment)
+        val savedDepartment = departmentRepository.save(TestData.department5)
+        val fieldStudy = FieldStudy(name = TestData.fieldStudy5.name, department = savedDepartment)
         val savedFieldStudy = fieldStudyRepository.save(fieldStudy)
-        val module = Module(name = "Forensic Science", fieldStudy = savedFieldStudy)
+        val module = Module(name = TestData.module6.name, fieldStudy = savedFieldStudy)
         val savedModule = moduleRepository.save(module)
 
         // when: deleting the module

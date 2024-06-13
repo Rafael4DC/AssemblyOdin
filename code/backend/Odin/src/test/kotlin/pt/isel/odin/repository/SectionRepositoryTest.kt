@@ -1,9 +1,6 @@
 package pt.isel.odin.repository
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -11,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
 import pt.isel.odin.model.user.User
+import pt.isel.odin.utils.TestData
 
 @DataJpaTest
 @Transactional
@@ -25,24 +23,39 @@ class SectionRepositoryTest {
     @Autowired
     lateinit var roleRepository: RoleRepository
 
+    @Autowired
+    lateinit var moduleRepository: ModuleRepository
+
+    @Autowired
+    lateinit var departmentRepository: DepartmentRepository
+
+    @Autowired
+    lateinit var fieldStudyRepository: FieldStudyRepository
+
     @Test
     fun `Save Section`() {
         // given: a Section instance
-        val section = Section(name = "Introduction", summary = "This is the introduction section.")
+        val savedDepartment = departmentRepository.save(TestData.department1)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy1.copy(department = savedDepartment))
+        moduleRepository.save(TestData.module1.copy(fieldStudy = savedFieldStudy))
+        val section = TestData.section1
 
         // when: saving the section
         val savedSection = sectionRepository.save(section)
 
         // then: validate the save operation
         assertNotNull(savedSection.id)
-        assertEquals("Introduction", savedSection.name)
-        assertEquals("This is the introduction section.", savedSection.summary)
+        assertEquals(TestData.section1.name, savedSection.name)
+        assertEquals(TestData.section1.summary, savedSection.summary)
     }
 
     @Test
     fun `Find Section by ID`() {
         // given: a saved Section instance
-        val section = Section(name = "History", summary = "This section covers history.")
+        val savedDepartment = departmentRepository.save(TestData.department2)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy2.copy(department = savedDepartment))
+        moduleRepository.save(TestData.module2.copy(fieldStudy = savedFieldStudy))
+        val section = TestData.section2
         val savedSection = sectionRepository.save(section)
 
         // when: retrieving the section by ID
@@ -50,14 +63,14 @@ class SectionRepositoryTest {
 
         // then: validate the retrieval operation
         assertNotNull(retrievedSection)
-        assertEquals("History", retrievedSection?.name)
-        assertEquals("This section covers history.", retrievedSection?.summary)
+        assertEquals(TestData.section2.name, retrievedSection?.name)
+        assertEquals(TestData.section2.summary, retrievedSection?.summary)
     }
 
     @Test
     fun `Find Section by non-existent ID`() {
         // given: a non-existent ID
-        val nonExistentId = 999L
+        val nonExistentId = TestData.nonExistentId
 
         // when: retrieving the section by non-existent ID
         val retrievedSection = sectionRepository.findById(nonExistentId).orElse(null)
@@ -69,7 +82,7 @@ class SectionRepositoryTest {
     @Test
     fun `Find Section by negative ID`() {
         // given: a negative ID
-        val negativeId = -1L
+        val negativeId = TestData.negativeId
 
         // when: retrieving the section by negative ID
         val retrievedSection = sectionRepository.findById(negativeId).orElse(null)
@@ -80,9 +93,11 @@ class SectionRepositoryTest {
 
     @Test
     fun `Find all Sections`() {
-        // given: multiple saved Section instances
-        val section1 = Section(name = "Part 1", summary = "This is part 1.")
-        val section2 = Section(name = "Part 2", summary = "This is part 2.")
+        val savedDepartment = departmentRepository.save(TestData.department3)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy3.copy(department = savedDepartment))
+        val savedModule = moduleRepository.save(TestData.module3.copy(fieldStudy = savedFieldStudy))
+        val section1 = TestData.section3.copy(module = savedModule)
+        val section2 = TestData.section3.copy(name = "Section 2", module = savedModule)
         sectionRepository.save(section1)
         sectionRepository.save(section2)
 
@@ -96,7 +111,10 @@ class SectionRepositoryTest {
     @Test
     fun `Update Section`() {
         // given: a saved Section instance
-        val section = Section(name = "Old Name", summary = "Old summary.")
+        val savedDepartment = departmentRepository.save(TestData.department4)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy4.copy(department = savedDepartment))
+        moduleRepository.save(TestData.module5.copy(fieldStudy = savedFieldStudy))
+        val section = TestData.section5
         val savedSection = sectionRepository.save(section)
 
         // when: updating the section's name and summary
@@ -110,7 +128,10 @@ class SectionRepositoryTest {
     @Test
     fun `Delete Section`() {
         // given: a saved Section instance
-        val section = Section(name = "To be deleted", summary = "This section will be deleted.")
+        val savedDepartment = departmentRepository.save(TestData.department5)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy5.copy(department = savedDepartment))
+        val savedModule = moduleRepository.save(TestData.module6.copy(fieldStudy = savedFieldStudy))
+        val section = TestData.section6
         val savedSection = sectionRepository.save(section)
 
         // when: deleting the section
@@ -124,15 +145,18 @@ class SectionRepositoryTest {
     @Test
     fun `Save Section with students`() {
         // given: a Role instance, multiple User instances, and a Section instance with students
-        val role = Role(name = "Student")
-        val savedRole = roleRepository.save(role)
-        val user1 = User(email = "student1@example.com", username = "student1", role = savedRole)
-        val user2 = User(email = "student2@example.com", username = "student2", role = savedRole)
+        val savedDepartment = departmentRepository.save(TestData.department5)
+        val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy5.copy(department = savedDepartment))
+        val savedModule = moduleRepository.save(TestData.module6.copy(fieldStudy = savedFieldStudy))
+        val savedRole = roleRepository.save(TestData.role1)
+        val user1 = User(email = TestData.user1.email, username = TestData.user1.username, role = savedRole)
+        val user2 = User(email = TestData.user2.email, username = TestData.user2.username, role = savedRole)
         val savedUser1 = userRepository.save(user1)
         val savedUser2 = userRepository.save(user2)
         val section = Section(
-            name = "Science",
-            summary = "This section covers science.",
+            name = TestData.section7.name,
+            summary = TestData.section7.summary,
+            module = TestData.module6,
             students = mutableListOf(savedUser1, savedUser2)
         )
 
