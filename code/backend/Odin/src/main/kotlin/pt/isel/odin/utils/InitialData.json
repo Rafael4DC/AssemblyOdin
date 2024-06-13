@@ -1,4 +1,15 @@
 {
+  "roles": [
+    {
+      "name": "STUDENT"
+    },
+    {
+      "name": "TEACHER"
+    },
+    {
+      "name": "ADMIN"
+    }
+  ],
   "departments": [
     {
       "name": "Virtual Media Design",

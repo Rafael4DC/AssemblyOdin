@@ -33,7 +33,7 @@ const UserManager: React.FC = () => {
     const renderUserRow = (user: User) => (
         <tr key={user.id}>
             <td>{user.username}</td>
-            {user.credits == null && <td>{user.role}</td>}
+            {user.credits == null && <td>{user.role.name}</td>}
             <td>{user.email}</td>
             {user.credits != null && <td>{user.credits}</td>}
             <td>

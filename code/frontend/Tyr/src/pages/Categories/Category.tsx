@@ -1,5 +1,5 @@
 import {Accordion, Card, Container} from 'react-bootstrap';
-import {Category} from "../../model/Category";
+import {Department} from "../../model/Department";
 import * as React from 'react';
 import useCategories from "../../hooks/useCategories";
 
@@ -14,13 +14,13 @@ const CategoriesDisplay: React.FC = () => {
         <Container>
             <h1>Categories</h1>
             <Accordion defaultActiveKey="0">
-                {categories ? categories.map((category: Category, index: number) => (
+                {categories ? categories.map((category: Department, index: number) => (
                     <Accordion.Item eventKey={index.toString()} key={category.id}>
                         <Accordion.Header>{category.name}</Accordion.Header>
                         <Accordion.Body>
                             <Card.Text>{category.description}</Card.Text>
                             <Accordion>
-                                {category.subCategories.map((subcategory, subIndex) => (
+                                {category.fieldsStudy.map((subcategory, subIndex) => (
                                     <Accordion.Item eventKey={subIndex.toString()} key={subcategory.id}>
                                         <Accordion.Header>{subcategory.name}</Accordion.Header>
                                         <Accordion.Body>

@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {Form, Table} from 'react-bootstrap';
 import DetailView from './DetailView';
 import useCategories from "../../hooks/useCategories";
-import {Category} from "../../model/Category";
+import {Department} from "../../model/Department";
 
 
 enum FilterOptions {
@@ -22,15 +22,15 @@ function CurricularUnitManager() {
     } = useCategories();
 
     const [filter, setFilter] = useState(FilterOptions.Ongoing);
-    const [selectedCourse, setSelectedCourse] = useState<Category | null>(null);
+    const [selectedCourse, setSelectedCourse] = useState<Department | null>(null);
 
-    const saveCourse = (updatedCourse: Category) => {
+    const saveCourse = (updatedCourse: Department) => {
         handleSaveCategory(updatedCourse)
         setSelectedCourse(updatedCourse);
         console.log(selectedCourse);
     };
 
-    const renderCourseRow = (curricularUnit: Category) => (
+    const renderCourseRow = (curricularUnit: Department) => (
         <tr key={curricularUnit.name} onClick={() => setSelectedCourse(curricularUnit)}>
             <td>{curricularUnit.name}</td>
             {/*<td>{getUniqueTeachers(curricularUnit)}</td>
@@ -38,12 +38,12 @@ function CurricularUnitManager() {
         </tr>
     );
 
-    const getUniqueTeachers = (curricularUnit: Category) => {
+    const getUniqueTeachers = (curricularUnit: Department) => {
         /*const teacherSet = new Set(curricularUnit.classes.map(cls => cls.teacher.username));
         return Array.from(teacherSet).join(', ');*/
     };
 
-    const getUniqueWeekdays = (curricularUnit: Category) => {
+    const getUniqueWeekdays = (curricularUnit: Department) => {
         /*const dateSet = new Set(
             curricularUnit.classes.map(cls => {
             const date = cls.date.toLocaleString();

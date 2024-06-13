@@ -1,4 +1,4 @@
-import {SubCategory} from "./SubCategory";
+import {FieldStudy} from "./FieldStudy";
 
 /**
  * Module model
@@ -12,6 +12,6 @@ export interface Module {
     id?: number;
     name?: string;
     description?: string;
-    subCategory?: SubCategory;
+    fieldStudy?: FieldStudy;
     tier?: number;
 }

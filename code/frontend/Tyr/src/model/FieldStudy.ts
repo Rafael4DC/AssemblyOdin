@@ -1,5 +1,5 @@
 import {Module} from "./Module";
-import {Category} from "./Category";
+import {Department} from "./Department";
 
 /**
  * SubCategory model
@@ -9,10 +9,10 @@ import {Category} from "./Category";
  * @param description the description of the subcategory
  * @param modules the modules of the subcategory
  */
-export interface SubCategory {
+export interface FieldStudy {
     id?: number;
     name?: string;
     description?: string;
-    category?: Category;
+    department?: Department;
     modules?: Module[];
 }

@@ -67,7 +67,7 @@ export function ModalShowAction(props: ModalShowActionProps) {
 
                         <Form.Group className="mb-3" controlId="formUserRole">
                             <Form.Label>Role</Form.Label>
-                            <Form.Select
+                            {/*<Form.Select
                                 value={selectedUser.role}
                                 onChange={(e) => setSelectedUser({
                                     ...selectedUser,
@@ -77,7 +77,7 @@ export function ModalShowAction(props: ModalShowActionProps) {
                                 {Object.values(RoleOptions).map(role => (
                                     <option key={role} value={role}>{role}</option>
                                 ))}
-                            </Form.Select>
+                            </Form.Select>*/}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="formUserEmail">

@@ -27,7 +27,7 @@ const useUserInfo = () => {
             });
     }, []);
 
-    useEffect(() => {
+    /*useEffect(() => {
         TechService.getTechsByUser()
             .then(data => {
                 setUserTechs(data);
@@ -45,7 +45,7 @@ const useUserInfo = () => {
             .catch(err => {
                 setError(err);
             });
-    }, []);
+    }, []);*/
 
     return {userInfo, userTechs, userVocs, error};
 };

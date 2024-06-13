@@ -36,7 +36,7 @@ class SecurityConfig(
             }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers("/").permitAll()
-                auth.anyRequest().permitAll()//.authenticated()
+                auth.anyRequest().authenticated()
             }
             .oauth2Login { oauth2 ->
                 oauth2.userInfoEndpoint { userInfo ->

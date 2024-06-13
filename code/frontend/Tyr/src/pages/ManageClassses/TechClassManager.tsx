@@ -24,7 +24,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
         loading,
         handleEditClassClick,
         handleSaveClass,
-        handleAttendanceChange,
+        /*handleAttendanceChange,*/
         handleSummaryChange,
         handleDateChange,
         setShowEditModal,
@@ -34,7 +34,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
     const renderClassRow = (cls: TechsAttendance) => (
         <tr key={cls.tech.id}>
             <td>{toDateTimeStr(cls.tech.date)}</td>
-            <td>{cls.tech.module.name}</td>
+            <td>{cls.tech.section.name}</td>
             <td>{cls.tech.summary}</td>
             <td>
                 <Button variant="outline-primary" onClick={(e) => {
@@ -72,7 +72,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
                 showEditModal={showEditModal}
                 setShowEditModal={setShowEditModal}
                 selectedClass={selectedClass}
-                handleAttendanceChange={handleAttendanceChange}
+                /*handleAttendanceChange={handleAttendanceChange}*/
                 handleSummaryChange={handleSummaryChange}
                 handleDateChange={handleDateChange}
                 handleSaveClass={handleSaveClass}

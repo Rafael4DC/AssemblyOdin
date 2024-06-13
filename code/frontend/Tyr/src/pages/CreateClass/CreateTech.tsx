@@ -11,8 +11,8 @@ import MANAGE_CLASSES = WebUris.MANAGE_CLASSES;
 /**
  * Page to create a tech class
  */
-const CreateTechClass: React.FC = () => {
-    const navigate = useNavigate();
+const CreateTechClass: () => void = () => {
+/*    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [modules, setModules] = useState<Module[]>([]);
     const [techData, setTechData] = useState({
@@ -97,7 +97,7 @@ const CreateTechClass: React.FC = () => {
                         onChange={handleModuleChange}
                     >
                         <option value="">Choose The Module</option>
-                        {modules.map(module => (
+                        {modules.map(section => (
                             <option key={module.id} value={module.id}>{module.name}</option>
                         ))}
                     </Form.Select>
@@ -108,7 +108,7 @@ const CreateTechClass: React.FC = () => {
                 </Button>
             </Form>
         </Container>
-    );
+    );*/
 };
 
 export default CreateTechClass;

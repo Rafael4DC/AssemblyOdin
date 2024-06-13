@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import {UserService} from '../services/UserService';
 import {User} from "../model/User";
-import {StudentService} from "../services/StudentService";
 
 
 /**
@@ -30,9 +29,7 @@ const useUsers = () => {
         setError(null);
         try {
             setIsSubmitting(true);
-            const result = user.credits == null
-                ? await UserService.save(user)
-                : await StudentService.save(user);
+            const result = await UserService.save(user)
 
             setUsers(prevUsers => {
                 const updatedUsers = prevUsers ? [...prevUsers] : [];

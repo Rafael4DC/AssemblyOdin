@@ -1,6 +1,6 @@
 import {User} from './User';
 import {Module} from './Module';
-import {ClassAttendance} from "./ClassAtendance";
+import {Section} from "./Section";
 
 /**
  * Tech model
@@ -17,10 +17,10 @@ import {ClassAttendance} from "./ClassAtendance";
 export interface Tech {
     id?: number;
     teacher?: User;
-    module?: Module;
+    section?: Section;
     date?: string;
     summary?: string;
+    missTech?: User[];
 
     attendance?: boolean;
-    attendedStudents?: ClassAttendance[];
 }

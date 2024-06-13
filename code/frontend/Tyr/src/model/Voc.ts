@@ -1,5 +1,6 @@
-import {Student} from "./Student";
 import {Module} from './Module';
+import {User} from "./User";
+import {Section} from "./Section";
 
 /**
  * Voc model
@@ -8,7 +9,7 @@ import {Module} from './Module';
  * @param description the description of the voc
  * @param approved if the voc is approved
  * @param student the student
- * @param module the module
+ * @param section the section
  * @param started the start date of the voc
  * @param ended the end date of the voc
  */
@@ -16,8 +17,8 @@ export interface Voc {
     id?: number,
     description?: string,
     approved?: boolean,
-    student?: Student,
-    module?: Module,
+    user?: User,
+    section?: Section,
     started?: string,
     ended?: string,
 }

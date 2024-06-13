@@ -34,8 +34,8 @@ const TecTable: React.FC<TecTableProps> = ({techs}) => {
     const filteredTechs = filterCourses(techs, filter, 'date');
 
     const renderCourseRow = (tech: Tech) => (
-        <tr key={tech.module.name + tech.date} style={{height: fixedRowHeight}}>
-            <td>{tech.module.name}</td>
+        <tr key={tech.section.name + tech.date} style={{height: fixedRowHeight}}>
+            <td>{tech.section.name}</td>
             <td>{tech.teacher.username}</td>
             <td>{toDateTimeStr(tech.date)}</td>
             <td>{tech.attendance ? '✓' : '—'}</td>

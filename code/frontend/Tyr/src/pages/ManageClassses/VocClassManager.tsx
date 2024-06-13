@@ -54,7 +54,7 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
     const renderVocRow = (voc: Voc) => (
         <tr key={voc.id}>
             <td>{voc.description}</td>
-            <td>{voc.module?.name}</td>
+            <td>{voc.section?.name}</td>
             <td>{toDateTimeStr(voc.started)}</td>
             <td>{getDuration(voc.started, voc.ended)}</td>
             <td>{voc.approved ? '✓' : '—'}</td>

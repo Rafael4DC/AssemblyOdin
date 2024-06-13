@@ -66,7 +66,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = (
         return null;
     }
 
-    const handleAttendanceChange = (studentId: number, attended: boolean) => {
+/*    const handleAttendanceChange = (studentId: number, attended: boolean) => {
         setEditedClass((prevClass) => {
             if (prevClass) {
                 return {
@@ -78,7 +78,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = (
             }
             return null;
         });
-    };
+    };*/
 
     return (
         <Modal show={show} onHide={onHide} centered>
@@ -102,7 +102,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = (
                         onChange={handleDateChange}
                     />
                 </Form.Group>
-                <div style={{maxHeight: '150px', overflowY: 'auto'}}>
+                {/*<div style={{maxHeight: '150px', overflowY: 'auto'}}>
                     {editedClass.attendedStudents.map((student) => (
                         <Form.Group key={student.id} className="mb-3 d-flex align-items-center">
                             <Form.Label className="mb-0 me-2">{student.student.username}</Form.Label>
@@ -115,7 +115,7 @@ const ClassEditModal: React.FC<ClassEditModalProps> = (
                             />
                         </Form.Group>
                     ))}
-                </div>
+                </div>*/}
                 <ListGroup variant="flush">
                     <ListGroup.Item>
                         <Button variant="danger" onClick={onDelete}>Delete Class</Button>

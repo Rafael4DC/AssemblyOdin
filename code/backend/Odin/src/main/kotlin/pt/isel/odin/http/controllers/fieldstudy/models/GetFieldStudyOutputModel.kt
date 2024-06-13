@@ -6,12 +6,12 @@ import pt.isel.odin.model.FieldStudy
 data class GetFieldStudyOutputModel(
     val id: Long,
     val name: String,
-    /*val modules: List<GetModuleOutputModel>*/
+    val modules: List<GetModuleOutputModel>
 ) {
     constructor(fieldStudy: FieldStudy) : this(
         id = fieldStudy.id!!,
         name = fieldStudy.name,
-        /*modules = fieldStudy.modules!!
-            .map { GetModuleOutputModel(it) }*/
+        modules = fieldStudy.modules
+            .map { GetModuleOutputModel(it) }
     )
 }

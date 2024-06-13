@@ -21,7 +21,7 @@ class FieldStudy(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id", nullable = false)
     @JsonBackReference
     val department: Department,
@@ -29,31 +29,31 @@ class FieldStudy(
     @Column(nullable = false)
     val name: String,
 
-/*    @OneToMany(mappedBy = "fieldStudy", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "fieldStudy", fetch = FetchType.EAGER)
     @JsonManagedReference
-    val modules: List<Module> = emptyList()*/
+    val modules: List<Module> = emptyList()
 ) {
     fun copy(
         id: Long? = this.id,
         department: Department = this.department,
         name: String = this.name,
-        /*modules: List<Module>? = this.modules*/
-    ) = FieldStudy(id, department, name, /*modules*/)
+        modules: List<Module> = this.modules
+    ) = FieldStudy(id, department, name, modules)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is FieldStudy) return false
         return id == other.id &&
                 department == other.department &&
-                name == other.name/* &&*/
-                /*modules == other.modules*/
+                name == other.name &&
+                modules == other.modules
     }
 
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + department.hashCode()
         result = 31 * result + name.hashCode()
-        /*result = 31 * result *//*+ (modules?.hashCode() ?: 0)*/
+        result = 31 * result + (modules?.hashCode() ?: 0)
         return result
     }
 }

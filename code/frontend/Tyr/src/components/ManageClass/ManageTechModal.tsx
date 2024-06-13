@@ -19,7 +19,7 @@ interface ManageTechModalProps {
     showEditModal: boolean;
     setShowEditModal: (show: boolean) => void;
     selectedClass: TechsAttendance | null;
-    handleAttendanceChange: (studentId: number, attendance: boolean) => void;
+    /*handleAttendanceChange: (studentId: number, attendance: boolean) => void;*/
     handleSummaryChange: (text: string) => void;
     handleDateChange: (newDate: string) => void;
     handleSaveClass: () => void;
@@ -34,7 +34,7 @@ export const ManageTechModal: React.FC<ManageTechModalProps> = (
         showEditModal,
         setShowEditModal,
         selectedClass,
-        handleAttendanceChange,
+        /*handleAttendanceChange,*/
         handleSummaryChange,
         handleDateChange,
         handleSaveClass,
@@ -47,7 +47,7 @@ export const ManageTechModal: React.FC<ManageTechModalProps> = (
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    {selectedClass?.attendedStudents.map(student => (
+                    {/*{selectedClass?.attendedStudents.map(student => (
                         <Form.Group controlId={`student-attendance-${student.id}`} key={student.id}>
                             <Form.Check
                                 type="checkbox"
@@ -56,7 +56,7 @@ export const ManageTechModal: React.FC<ManageTechModalProps> = (
                                 onChange={(e) => handleAttendanceChange(student.student.id, e.target.checked)}
                             />
                         </Form.Group>
-                    ))}
+                    ))}*/}
                     <Form.Group controlId="class-summary">
                         <Form.Label>Class Summary</Form.Label>
                         <Form.Control

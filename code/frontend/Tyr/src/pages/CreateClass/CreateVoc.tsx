@@ -8,13 +8,12 @@ import {useNavigate} from "react-router-dom";
 import {WebUris} from "../../utils/WebUris";
 import PROFILE = WebUris.PROFILE;
 import useUserInfo from "../../hooks/useUserInfo";
-import useStudents from "../../hooks/useStudents";
 
 /**
  * Page to create a voc class
  */
 const CreateVocClass = () => {
-    const navigate = useNavigate();
+    /*const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const {userInfo} = useUserInfo();
     const role = userInfo?.role;
@@ -24,7 +23,7 @@ const CreateVocClass = () => {
         started: "",
         ended: "",
         approved: false,
-        module: {id: 1}
+        section: {id: 1}
     });
 
     const {handleSaveVocClass, error} = useVocs();
@@ -42,7 +41,7 @@ const CreateVocClass = () => {
     const handleCurriUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setVocData((prevVocData) => ({
             ...prevVocData,
-            module: {id: Number(e.target.value)},
+            section: {id: Number(e.target.value)},
         }));
     };
 
@@ -56,7 +55,7 @@ const CreateVocClass = () => {
     const handleStudentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setVocData((prevVocData) => ({
             ...prevVocData,
-            student: {id: Number(e.target.value)},
+            user: {id: Number(e.target.value)},
         }));
     };
 
@@ -98,7 +97,7 @@ const CreateVocClass = () => {
                     <Form.Label>Curricular Unit</Form.Label>
                     <Form.Select
                         required
-                        value={vocData.module.id.toString()}
+                        value={vocData.section.id.toString()}
                         onChange={handleCurriUnitChange}
                     >
                         <option>Choose The Curricular Unit</option>
@@ -108,13 +107,13 @@ const CreateVocClass = () => {
                     </Form.Select>
                 </Form.Group>
 
-                {role === 'TEACHER' && (
+                {role.name === 'TEACHER' && (
                     <>
                         <Form.Group className="mb-3">
                             <Form.Label>Student</Form.Label>
                             <Form.Select
                                 required
-                                value={vocData.student?.id?.toString() || ''}
+                                value={vocData.user?.id?.toString() || ''}
                                 onChange={handleStudentChange}
                             >
                                 <option>Choose a Student</option>
@@ -140,7 +139,7 @@ const CreateVocClass = () => {
                 </Button>
             </Form>
         </Container>
-    );
+    );*/
 };
 
 export default CreateVocClass;

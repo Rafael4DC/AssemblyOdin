@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import {TechService} from '../services/TechService';
-import {ClassAttendanceService} from '../services/ClassAttendanceService';
 import {TechsAttendance} from "./useClassManager";
 
 /**
@@ -28,13 +27,13 @@ export const useTechClassManager = (initialClasses: TechsAttendance[]) => {
                 const originalClass = initialClasses.find(cls => cls.tech.id === selectedClass.tech.id);
                 if (!originalClass) throw new Error('Original class not found.');
 
-                for (const student of selectedClass.attendedStudents) {
+                /*for (const student of selectedClass.attendedStudents) {
                     const originalStudent = originalClass.attendedStudents.find(st => st.student.id === student.student.id);
                     if (!originalStudent) throw new Error('Original student not found.');
-                    if (student.attended !== originalStudent.attended) {
+                    /!*if (student.attended !== originalStudent.attended) {
                         await ClassAttendanceService.save(student);
-                    }
-                }
+                    }*!/
+                }*/
                 setShowEditModal(false);
             } catch (error) {
                 console.error('Error saving class information:', error);
@@ -44,6 +43,7 @@ export const useTechClassManager = (initialClasses: TechsAttendance[]) => {
         }
     };
 
+/*
     const handleAttendanceChange = (studentId: number, attendance: boolean) => {
         setSelectedClass(prevSelectedClass => {
             if (!prevSelectedClass) return prevSelectedClass;
@@ -53,6 +53,7 @@ export const useTechClassManager = (initialClasses: TechsAttendance[]) => {
             return {...prevSelectedClass, attendedStudents: updatedStudents};
         });
     };
+*/
 
     const handleSummaryChange = (text: string) => {
         setSelectedClass(prevSelectedClass =>
@@ -78,7 +79,7 @@ export const useTechClassManager = (initialClasses: TechsAttendance[]) => {
         loading,
         handleEditClassClick,
         handleSaveClass,
-        handleAttendanceChange,
+        /*handleAttendanceChange,*/
         handleSummaryChange,
         handleDateChange,
         setShowEditModal,

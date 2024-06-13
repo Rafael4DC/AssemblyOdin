@@ -3,7 +3,6 @@ import {TechService} from '../services/TechService';
 import {Voc} from '../model/Voc';
 import {VocService} from '../services/VocService';
 import {Tech} from "../model/Tech";
-import {ClassAttendance} from "../model/ClassAtendance";
 
 /**
  * Filter options for the classes
@@ -26,7 +25,7 @@ export enum ClassFilterOptions {
  */
 export interface TechsAttendance {
     tech: Tech;
-    attendedStudents: ClassAttendance[];
+    /*attendedStudents: ClassAttendance[];*/
 }
 
 /**
@@ -40,9 +39,11 @@ export const useClassManager = () => {
     const [filter, setFilter] = useState<ClassFilterOptions>(ClassFilterOptions.All);
 
     useEffect(() => {
+/*
         TechService.getMyTechsAttendance()
             .then(data => setTechClasses(data))
             .catch(err => console.error(err));
+*/
 
         VocService.getAll()
             .then(data => setVocClasses(data))

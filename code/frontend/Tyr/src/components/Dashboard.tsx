@@ -11,18 +11,20 @@ import VOC_CLASS = WebUris.VOC_CLASS;
 import CREATE_TECH = WebUris.CREATE_TECH;
 import MANAGE_USERS = WebUris.MANAGE_USERS;
 import CURRICULAR_UNIT_MANAGER = WebUris.CURRICULAR_UNIT_MANAGER;
-import useUserInfo from "../hooks/useUserInfo";
+import useGetSession from "../hooks/useGetSession";
 
 /**
  * Dashboard component
  */
 const Dashboard: React.FC = () => {
     const [activeLink, setActiveLink] = React.useState<string>('');
-    const {userInfo} = useUserInfo();
+    const {userInfo} = useGetSession();
     const role = userInfo?.role;
 
     const linkClass = (path: string) =>
         activeLink === path ? "link clickedLink" : "link";
+
+    if(userInfo == null) return null;
 
     return (
         <div className="text-center">
@@ -49,7 +51,7 @@ const Dashboard: React.FC = () => {
                         </Link>
                     </li>
                 {/*)}*/}
-                {role == 'TEACHER' && (
+                {role.name == 'TEACHER' && (
                     <>
                         <h3>Teachers</h3>
                         <li>
@@ -64,7 +66,7 @@ const Dashboard: React.FC = () => {
                         </li>
                     </>
                 )}
-                {role == 'ADMIN' && (
+                {role.name == 'ADMIN' && (
                     <>
                         <h3>Admins</h3>
                         <li>

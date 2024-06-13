@@ -20,19 +20,15 @@ class Module(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "field_study_id", nullable = false)
-    @JsonBackReference
     val fieldStudy: FieldStudy,
 
     @Column(nullable = false)
     val name: String,
 
     @Column(nullable = true)
-    val tier: Int = 1,
-
-/*    @OneToMany(mappedBy = "module")
-    val sections: MutableList<Section> = mutableListOf()*/
+    val tier: Int = 1
 ) {
     fun copy(
         id: Long? = this.id,

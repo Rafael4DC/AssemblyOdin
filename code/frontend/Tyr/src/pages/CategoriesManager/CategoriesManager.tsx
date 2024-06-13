@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {Accordion, Card, Container, Button, Form, Modal} from 'react-bootstrap';
-import {Category} from "../../model/Category";
-import {SubCategory} from "../../model/SubCategory";
+import {Department} from "../../model/Department";
+import {FieldStudy} from "../../model/FieldStudy";
 import {Module} from "../../model/Module";
 import * as React from 'react';
 import useCategories from "../../hooks/useCategories";
@@ -25,16 +25,16 @@ const CategoriesManager: React.FC = () => {
     const [loadingSubCategory, setLoadingSubCategory] = useState(false);
     const [loadingModule, setLoadingModule] = useState(false);
 
-    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-    const [editingSubCategory, setEditingSubCategory] = useState<SubCategory | null>(null);
+    const [editingCategory, setEditingCategory] = useState<Department | null>(null);
+    const [editingSubCategory, setEditingSubCategory] = useState<FieldStudy | null>(null);
     const [editingModule, setEditingModule] = useState<Module | null>(null);
 
-    const handleCategoryEdit = (category: Category) => {
+    const handleCategoryEdit = (category: Department) => {
         setEditingCategory(category);
         setShowCategoryModal(true);
     };
 
-    const handleSubCategoryEdit = (subCategory: SubCategory) => {
+    const handleSubCategoryEdit = (subCategory: FieldStudy) => {
         setEditingSubCategory(subCategory);
         setShowSubCategoryModal(true);
     };
@@ -79,7 +79,7 @@ const CategoriesManager: React.FC = () => {
             <h1>Categories</h1>
             <Button onClick={() => setShowCategoryModal(true)}>Add Category</Button>
             <Accordion defaultActiveKey="0">
-                {categories ? categories.map((category: Category, index: number) => (
+                {categories ? categories.map((category: Department, index: number) => (
                     <Accordion.Item eventKey={index.toString()} key={category.id}>
                         <Accordion.Header>{category.name}</Accordion.Header>
                         <Accordion.Body>
@@ -91,13 +91,13 @@ const CategoriesManager: React.FC = () => {
                                     id: undefined,
                                     name: '',
                                     description: '',
-                                    category: {id: category.id}
+                                    department: {id: category.id}
                                 });
                                 setShowSubCategoryModal(true);
                             }}>Add SubCategory</Button>
                             <Accordion>
-                                {category.subCategories?.map((subCategory, subIndex) => (
-                                    subCategory.category = {id: category.id},
+                                {category.fieldsStudy?.map((subCategory, subIndex) => (
+                                    subCategory.department = {id: category.id},
                                     <Accordion.Item eventKey={subIndex.toString()} key={subCategory.id}>
                                         <Accordion.Header>{subCategory.name}</Accordion.Header>
                                         <Accordion.Body>
@@ -110,13 +110,13 @@ const CategoriesManager: React.FC = () => {
                                                     id: undefined,
                                                     name: '',
                                                     description: '',
-                                                    subCategory: {id: subCategory.id}
+                                                    fieldStudy: {id: subCategory.id}
                                                 });
                                                 setShowModuleModal(true);
                                             }}>Add Module</Button>
                                             <ul>
                                                 {subCategory.modules?.map((module) => (
-                                                    module.subCategory = {id: subCategory.id},
+                                                    module.fieldStudy = {id: subCategory.id},
                                                     <li key={module.id}>
                                                         <strong>{module.name}:</strong> {module.description}
                                                         <Button onClick={() => handleModuleEdit(module)}>Edit</Button>
@@ -162,11 +162,11 @@ interface ModalProps {
     show: boolean;
     onHide: () => void;
     onSave: () => void;
-    category?: Category | null;
-    subCategory?: SubCategory | null;
+    category?: Department | null;
+    subCategory?: FieldStudy | null;
     module?: Module | null;
-    setCategory?: (category: Category | null) => void;
-    setSubCategory?: (subCategory: SubCategory | null) => void;
+    setCategory?: (category: Department | null) => void;
+    setSubCategory?: (subCategory: FieldStudy | null) => void;
     setModule?: (module: Module | null) => void;
     loading?: boolean;
 }
