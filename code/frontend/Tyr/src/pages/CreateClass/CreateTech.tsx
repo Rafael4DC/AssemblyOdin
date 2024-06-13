@@ -7,38 +7,36 @@ import {Module} from "../../model/Module";
 import {ModuleService} from "../../services/ModuleService";
 import {WebUris} from "../../utils/WebUris";
 import MANAGE_CLASSES = WebUris.MANAGE_CLASSES;
+import useSections from "../../hooks/useSections";
 
 /**
  * Page to create a tech class
  */
-const CreateTechClass: () => void = () => {
-/*    const navigate = useNavigate();
+const CreateTechClass = () => {
+    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [modules, setModules] = useState<Module[]>([]);
     const [techData, setTechData] = useState({
-        module: {id: 1},
+        section: {id: 1},
         date: "",
         summary: ""
     });
 
-    useEffect(() => {
-        const fetchModules = async () => {
-            try {
-                const data = await ModuleService.getAll();
-                setModules(data);
-            } catch (error) {
-                console.error('Error fetching modules:', error);
-            }
-        };
+    const { sections } = useSections();
 
-        fetchModules();
-    }, []);
+    if (!sections) return <p>Loading sections...</p>;
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsSubmitting(true);
         try {
-            await TechService.save(techData);
+            await TechService.save(
+                {
+                    section: techData.section.id,
+                    date: techData.date,
+                    summary: techData.summary,
+                    missTech: []
+                }
+            );
             navigate(MANAGE_CLASSES);
         } catch (error) {
             console.error('Error creating tech class:', error);
@@ -93,12 +91,12 @@ const CreateTechClass: () => void = () => {
                     <Form.Select
                         name="module"
                         required
-                        value={techData.module.id}
+                        value={techData.section.id}
                         onChange={handleModuleChange}
                     >
                         <option value="">Choose The Module</option>
-                        {modules.map(section => (
-                            <option key={module.id} value={module.id}>{module.name}</option>
+                        {sections.map(section => (
+                            <option key={section.id} value={section.id}>{section.name}</option>
                         ))}
                     </Form.Select>
                 </Form.Group>
@@ -108,7 +106,7 @@ const CreateTechClass: () => void = () => {
                 </Button>
             </Form>
         </Container>
-    );*/
+    );
 };
 
 export default CreateTechClass;

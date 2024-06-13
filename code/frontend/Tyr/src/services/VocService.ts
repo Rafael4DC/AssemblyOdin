@@ -1,5 +1,5 @@
 import {makeApiRequest} from '../axios/apiRequest';
-import {Voc} from "../model/Voc";
+import {Voc, VocRequest} from "../model/Voc";
 
 /**
  * Service to manage vocs
@@ -16,11 +16,11 @@ export class VocService {
         return makeApiRequest('get', VocService.basePath);
     }
 
-    static async save(vocRequest: Voc): Promise<Voc> {
+    static async save(vocRequest: VocRequest): Promise<Voc> {
         return makeApiRequest('post', `${(VocService.basePath)}/save`, vocRequest);
     }
 
-    static async update(vocRequest: Voc): Promise<Voc> {
+    static async update(vocRequest: VocRequest): Promise<Voc> {
         return makeApiRequest('put', `${(VocService.basePath)}/update`, vocRequest);
     }
 
@@ -28,7 +28,11 @@ export class VocService {
         return makeApiRequest('delete', `${(VocService.basePath)}/${id}`);
     }
 
-    static async getVocsByUser(): Promise<Voc[]> {
-        return makeApiRequest('get', `${(VocService.basePath)}/student`);
+    static async getVocsByUser(): Promise<GetVocsByUserResponse> {
+        return makeApiRequest('get', `${(VocService.basePath)}/user`);
     }
+}
+
+interface GetVocsByUserResponse {
+    vocs: Voc[];
 }

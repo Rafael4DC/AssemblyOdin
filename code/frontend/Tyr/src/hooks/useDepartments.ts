@@ -11,14 +11,14 @@ import { Module } from "../model/Module";
  *
  * @returns the categories, error and handles to save and delete a category
  */
-const useCategories = () => {
-    const [categories, setCategories] = useState<Department[] | null>(null);
+const useDepartments = () => {
+    const [departments, setDepartments] = useState<Department[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         DepartmentService.getAll()
             .then(data => {
-                setCategories(data);
+                setDepartments(data.departments);
             })
             .catch(err => {
                 setError(err);
@@ -26,9 +26,9 @@ const useCategories = () => {
     }, []);
 
     return {
-        categories,
+        departments,
         error,
-        handleSaveCategory: async (category: Department) => {
+        handleSaveDepartments: async (category: Department) => {
             setError(null);
             try {
                 if (category.id) {
@@ -36,23 +36,23 @@ const useCategories = () => {
                 } else {
                     await DepartmentService.save(category);
                 }
-                const updatedCategories = await DepartmentService.getAll();
-                setCategories(updatedCategories);
+                const updatedDepartments = await DepartmentService.getAll();
+                setDepartments(updatedDepartments.departments);
             } catch (err) {
                 setError(err);
             }
         },
-        handleDeleteCategory: async (id: number) => {
+        handleDeleteDepartments: async (id: number) => {
             setError(null);
             try {
                 await DepartmentService.delete(id);
-                const updatedCategories = await DepartmentService.getAll();
-                setCategories(updatedCategories);
+                const updatedDepartments = await DepartmentService.getAll();
+                setDepartments(updatedDepartments.departments);
             } catch (err) {
                 setError(err);
             }
         },
-        handleSaveSubCategory: async (subCategory: FieldStudy) => {
+        handleSaveFieldsStudy: async (subCategory: FieldStudy) => {
             setError(null);
             debugger;
             try {
@@ -61,18 +61,18 @@ const useCategories = () => {
                 } else {
                     await FieldStudyService.save(subCategory);
                 }
-                const updatedCategories = await DepartmentService.getAll();
-                setCategories(updatedCategories);
+                const updatedDepartments = await DepartmentService.getAll();
+                setDepartments(updatedDepartments.departments);
             } catch (err) {
                 setError(err);
             }
         },
-        handleDeleteSubCategory: async (subCategoryId: number) => {
+        handleDeleteFieldsStudy: async (subCategoryId: number) => {
             setError(null);
             try {
                 await FieldStudyService.delete(subCategoryId);
-                const updatedCategories = await DepartmentService.getAll();
-                setCategories(updatedCategories);
+                const updatedDepartments = await DepartmentService.getAll();
+                setDepartments(updatedDepartments.departments);
             } catch (err) {
                 setError(err);
             }
@@ -85,8 +85,8 @@ const useCategories = () => {
                 } else {
                     await ModuleService.save(module);
                 }
-                const updatedCategories = await DepartmentService.getAll();
-                setCategories(updatedCategories);
+                const updatedDepartments = await DepartmentService.getAll();
+                setDepartments(updatedDepartments.departments);
             } catch (err) {
                 setError(err);
             }
@@ -95,8 +95,8 @@ const useCategories = () => {
             setError(null);
             try {
                 await ModuleService.delete(moduleId);
-                const updatedCategories = await DepartmentService.getAll();
-                setCategories(updatedCategories);
+                const updatedDepartments = await DepartmentService.getAll();
+                setDepartments(updatedDepartments.departments);
             } catch (err) {
                 setError(err);
             }
@@ -104,4 +104,4 @@ const useCategories = () => {
     };
 };
 
-export default useCategories;
+export default useDepartments;

@@ -6,7 +6,7 @@ import CurricularUnitManagerFocused from '../pages/CurricularUnitManagerFocused/
 import ManageClasses from '../pages/ManageClassses/ManageClasses';
 import ManageUsers from '../pages/ManageUsers/ManageUsers';
 import {WebUris} from "./WebUris";
-import Category from "../pages/Categories/Category";
+import Category from "../pages/Departments/Department";
 import HOME = WebUris.HOME;
 import PROFILE = WebUris.PROFILE;
 import CATEGORIES = WebUris.CATEGORIES;
@@ -16,6 +16,10 @@ import FOCUSED = WebUris.FOCUSED;
 import NOTFOUND = WebUris.NAN;
 import CURRICULAR_UNIT_MANAGER = WebUris.CURRICULAR_UNIT_MANAGER;
 import CategoriesManager from "../pages/CategoriesManager/CategoriesManager";
+import VOC_CLASS = WebUris.VOC_CLASS;
+import CreateVoc from "../pages/CreateClass/CreateVoc";
+import CreateTech from "../pages/CreateClass/CreateTech";
+import CREATE_TECH = WebUris.CREATE_TECH;
 
 /**
  * Router component
@@ -27,8 +31,8 @@ export function AppRoutes() {
             <Route path={PROFILE} element={<Profile/>}/>
             <Route path={CATEGORIES} element={<Category/>}/>
             <Route path={MANAGE_CLASSES} element={<ManageClasses/>}/>
-{/*            <Route path={VOC_CLASS} element={<VocClass/>}/>
-            <Route path={CREATE_TECH} element={<CreateTech/>}/>*/}
+            <Route path={VOC_CLASS} element={<CreateVoc/>}/>
+            <Route path={CREATE_TECH} element={<CreateTech/>}/>
             <Route path={MANAGE_USERS} element={<ManageUsers/>}/>
             <Route path={CURRICULAR_UNIT_MANAGER} element={<CategoriesManager/>}/>
             <Route path={FOCUSED} element={<CurricularUnitManagerFocused/>}/>

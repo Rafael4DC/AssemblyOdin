@@ -23,7 +23,13 @@ export const useTechClassManager = (initialClasses: TechsAttendance[]) => {
         if (selectedClass) {
             setLoading(true);
             try {
-                await TechService.save(selectedClass.tech);
+                await TechService.save({
+                    id: selectedClass.tech.id,
+                    section: selectedClass.tech.section.id,
+                    date: selectedClass.tech.date,
+                    summary: selectedClass.tech.summary,
+                    missTech: selectedClass.tech.missTech.map(student => student.id)
+                });
                 const originalClass = initialClasses.find(cls => cls.tech.id === selectedClass.tech.id);
                 if (!originalClass) throw new Error('Original class not found.');
 

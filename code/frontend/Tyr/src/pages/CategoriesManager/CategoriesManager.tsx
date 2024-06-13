@@ -4,18 +4,18 @@ import {Department} from "../../model/Department";
 import {FieldStudy} from "../../model/FieldStudy";
 import {Module} from "../../model/Module";
 import * as React from 'react';
-import useCategories from "../../hooks/useCategories";
+import useDepartments from "../../hooks/useDepartments";
 
 const CategoriesManager: React.FC = () => {
     const {
-        categories,
-        handleSaveCategory,
-        handleDeleteCategory,
-        handleSaveSubCategory,
-        handleDeleteSubCategory,
+        departments,
+        handleSaveDepartments,
+        handleDeleteDepartments,
+        handleSaveFieldsStudy,
+        handleDeleteFieldsStudy,
         handleSaveModule,
         handleDeleteModule
-    } = useCategories();
+    } = useDepartments();
 
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [showSubCategoryModal, setShowSubCategoryModal] = useState(false);
@@ -47,7 +47,7 @@ const CategoriesManager: React.FC = () => {
     const handleCategorySave = async () => {
         if (editingCategory) {
             setLoadingCategory(true);
-            await handleSaveCategory(editingCategory);
+            await handleSaveDepartments(editingCategory);
             setLoadingCategory(false);
             setShowCategoryModal(false);
             setEditingCategory(null);
@@ -57,7 +57,7 @@ const CategoriesManager: React.FC = () => {
     const handleSubCategorySave = async () => {
         if (editingSubCategory) {
             setLoadingSubCategory(true);
-            await handleSaveSubCategory(editingSubCategory);
+            await handleSaveFieldsStudy(editingSubCategory);
             setLoadingSubCategory(false);
             setShowSubCategoryModal(false);
             setEditingSubCategory(null);
@@ -79,13 +79,13 @@ const CategoriesManager: React.FC = () => {
             <h1>Categories</h1>
             <Button onClick={() => setShowCategoryModal(true)}>Add Category</Button>
             <Accordion defaultActiveKey="0">
-                {categories ? categories.map((category: Department, index: number) => (
+                {departments ? departments.map((category: Department, index: number) => (
                     <Accordion.Item eventKey={index.toString()} key={category.id}>
                         <Accordion.Header>{category.name}</Accordion.Header>
                         <Accordion.Body>
                             <Card.Text>{category.description}</Card.Text>
                             <Button onClick={() => handleCategoryEdit(category)}>Edit</Button>
-                            <Button variant="danger" onClick={() => handleDeleteCategory(category.id!)}>Delete</Button>
+                            <Button variant="danger" onClick={() => handleDeleteDepartments(category.id!)}>Delete</Button>
                             <Button onClick={() => {
                                 setEditingSubCategory({
                                     id: undefined,
@@ -104,7 +104,7 @@ const CategoriesManager: React.FC = () => {
                                             <Card.Text>{subCategory.description}</Card.Text>
                                             <Button onClick={() => handleSubCategoryEdit(subCategory)}>Edit</Button>
                                             <Button variant="danger"
-                                                    onClick={() => handleDeleteSubCategory(subCategory.id!)}>Delete</Button>
+                                                    onClick={() => handleDeleteFieldsStudy(subCategory.id!)}>Delete</Button>
                                             <Button onClick={() => {
                                                 setEditingModule({
                                                     id: undefined,

@@ -5,4 +5,5 @@ package pt.isel.odin.service.tech.error
  */
 sealed class GetTechError {
     data object NotFoundTech : GetTechError()
+    data object NotFoundUser : GetTechError()
 }

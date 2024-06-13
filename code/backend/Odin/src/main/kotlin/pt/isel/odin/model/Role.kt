@@ -27,6 +27,11 @@ class Role(
         id: Long? = this.id,
         name: String? = this.name
     ) = Role(id, name)
+
+    enum class RoleEnum {
+        ADMIN,
+        TEACHER,
+        STUDENT
+    }
 }
 
-fun Long?.toRole() = Role(id = this!!.toLong())

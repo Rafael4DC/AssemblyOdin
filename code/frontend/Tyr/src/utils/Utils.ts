@@ -69,6 +69,7 @@ export const filterCourses: FilterCoursesFunction = (courses, filter, dateKey) =
     const oneWeekFromNow = new Date();
     oneWeekFromNow.setDate(now.getDate() + 7);
 
+    debugger;
     return courses.filter((course) => {
         const courseDate = new Date((course as any)[dateKey]);
         switch (filter) {

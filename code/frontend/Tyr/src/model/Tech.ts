@@ -24,3 +24,12 @@ export interface Tech {
 
     attendance?: boolean;
 }
+
+export interface TechRequest {
+    id?: number;
+    teacher?: number;
+    section?: number;
+    date?: string;
+    summary?: string;
+    missTech?: number[];
+}

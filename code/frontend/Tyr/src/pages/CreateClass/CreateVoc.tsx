@@ -2,21 +2,23 @@ import * as React from "react";
 import {useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
 import useVocs from "../../hooks/useVocs";
-import {Voc} from "../../model/Voc";
-import useCategories from "../../hooks/useCategories";
+import {Voc, VocRequest} from "../../model/Voc";
+import useDepartments from "../../hooks/useDepartments";
 import {useNavigate} from "react-router-dom";
 import {WebUris} from "../../utils/WebUris";
 import PROFILE = WebUris.PROFILE;
 import useUserInfo from "../../hooks/useUserInfo";
+import useStudents from "../../hooks/useStudents";
+import useSections from "../../hooks/useSections";
 
 /**
  * Page to create a voc class
  */
 const CreateVocClass = () => {
-    /*const navigate = useNavigate();
+    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const {userInfo} = useUserInfo();
-    const role = userInfo?.role;
+    const role = userInfo?.role.name;
 
     const [vocData, setVocData] = useState<Voc>({
         description: "",
@@ -27,13 +29,22 @@ const CreateVocClass = () => {
     });
 
     const {handleSaveVocClass, error} = useVocs();
-    const {categories} = useCategories();
+    const {sections} = useSections();
     const {students} = useStudents();
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
         setIsSubmitting(true);
-        await handleSaveVocClass(vocData);
+        await handleSaveVocClass(
+            {
+                description: vocData.description,
+                started: vocData.started,
+                ended: vocData.ended,
+                approved: vocData.approved,
+                user: vocData.user?.id,
+                section: vocData.section.id,
+            }
+        );
         if (error == null) navigate(PROFILE)
         else setIsSubmitting(false);
     };
@@ -101,13 +112,13 @@ const CreateVocClass = () => {
                         onChange={handleCurriUnitChange}
                     >
                         <option>Choose The Curricular Unit</option>
-                        {categories && categories.map(unit => (
-                            <option key={unit.id} value={unit.id}>{unit.name}</option>
+                        {sections && sections.map(section => (
+                            <option key={section.id} value={section.id}>{section.name}</option>
                         ))}
                     </Form.Select>
                 </Form.Group>
 
-                {role.name === 'TEACHER' && (
+                {role === 'TEACHER' && (
                     <>
                         <Form.Group className="mb-3">
                             <Form.Label>Student</Form.Label>
@@ -139,7 +150,7 @@ const CreateVocClass = () => {
                 </Button>
             </Form>
         </Container>
-    );*/
+    );
 };
 
 export default CreateVocClass;

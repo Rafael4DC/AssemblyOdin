@@ -22,3 +22,13 @@ export interface Voc {
     started?: string,
     ended?: string,
 }
+
+export interface VocRequest {
+    id?: number,
+    description?: string,
+    approved?: boolean,
+    user?: number,
+    section?: number,
+    started?: string,
+    ended?: string,
+}

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
+import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
 import pt.isel.odin.model.Tech
 import pt.isel.odin.model.user.User
@@ -13,6 +14,7 @@ import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.tech.error.DeleteTechError
 import pt.isel.odin.service.tech.error.GetTechError
 import pt.isel.odin.service.tech.error.SaveUpdateTechError
+import pt.isel.odin.service.voc.error.GetVocError
 import pt.isel.odin.utils.failure
 import pt.isel.odin.utils.success
 import java.time.LocalDateTime
@@ -72,28 +74,21 @@ class TechService(
                 success(tech)
             }.orElse(failure(DeleteTechError.NotFoundTech))
 
-    fun getByUser(email: String): List<Tech> {
-        /*val user = userService.getByEmail(email) ?: throw NotFoundException("No User Found")
-        return if (user.role?.name == "STUDENT") {
-            techRepository.getByStudentId(user.id!!)
-        } else {
-            techRepository.getByUserId(user.id!!)
-        }*/
-        return emptyList()
+    fun getByUser(email: String): GetAllTechsResult {
+        val user = getUser(email = email) ?: return failure(GetTechError.NotFoundUser)// Diferenciar Teacher de Student
+        val optionalTech =
+            if (Role.RoleEnum.valueOf(user.role.name!!) == Role.RoleEnum.TEACHER)
+                techRepository.findByTeacher(user)
+            else
+                techRepository.findByStudent(user.id!!)
+
+        return optionalTech
+            .map { success(it) }
+            .orElse(success(emptyList()))
     }
 
-    /*fun getMyTechsAttendance(email: String): List<TechAttendanceResponse> {
-        val techs = getByUser(email)
-        return techs.map { tech ->
-            TechAttendanceResponse(
-                tech,
-                missTechService.getById(tech.id!!)
-            )
-        }
-    }*/
-
-    private fun getUser(userId: Long?, email: String): User? {
-        val user = if (userId == null)
+    private fun getUser(userId: Long? = null, email: String): User? {
+        val user = if (userId == null || userId == 0L)
             userRepository.findByEmail(email)
         else
             userRepository.findById(userId)

@@ -2,6 +2,7 @@ package pt.isel.odin.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
@@ -38,7 +39,7 @@ class Tech(
     @Column(nullable = false)
     val summary: String,
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     val missTech: MutableList<User> = mutableListOf()
 ) {
     fun copy(

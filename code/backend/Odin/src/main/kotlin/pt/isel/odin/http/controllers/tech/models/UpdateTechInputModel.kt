@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size
 data class UpdateTechInputModel(
     val id: Long,
 
-    val teacher: Long,
+    val teacher: Long? = null,
 
     val section: Long,
 

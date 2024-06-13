@@ -102,4 +102,11 @@ class UserController(private val userService: UserService) {
             is Success -> responde(GetUserOutputModel(user.value))
             is Failure -> Problem.responseForError(user.value)
         }
+
+    @GetMapping("/students")
+    fun getStudents(): ResponseEntity<*> =
+        when (val user = userService.getStudents()) {
+            is Success -> responde(getAllUsersOutputModel(user.value))
+            is Failure -> Problem.responseForError(user.value)
+        }
 }

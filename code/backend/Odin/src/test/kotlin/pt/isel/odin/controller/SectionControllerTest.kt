@@ -12,11 +12,6 @@ class SectionControllerTest {
     @Autowired
     lateinit var vocRepository: VocRepository
 
-    @Test
-    fun `Find User Repository`() {
-        val vocs = vocRepository.findByUserId(29)
-        println(vocs)
-    }
 
     /*@Test
     fun `Save User Repository`(){

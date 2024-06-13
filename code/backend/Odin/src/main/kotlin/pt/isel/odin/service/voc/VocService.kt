@@ -67,10 +67,15 @@ class VocService(
                 success(voc)
             }.orElse(failure(DeleteVocError.NotFoundVoc))
 
-    /*fun getByStudent(email: String): List<Voc> {
-        val student = userService.getByEmail(email)
-        return vocRepository.findByUserId(1)
-    }*/
+    @Transactional
+    fun getByUser(email: String): GetAllVocsResult {
+        return userRepository.findByEmail(email)
+            .map { user ->
+                vocRepository.findByUser(user)
+                    .map<GetAllVocsResult> { success(it) }
+                    .orElse(failure(GetVocError.NotFoundVoc))
+            }.orElse(failure(GetVocError.NotFoundUser))
+    }
 
     private fun getUser(userId: Long?, email: String): User? {
         val user = if (userId == null)

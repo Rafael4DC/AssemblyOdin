@@ -12,7 +12,7 @@ export class DepartmentService {
         return makeApiRequest('get', `${(DepartmentService.basePath)}/${id}`);
     }
 
-    static async getAll(): Promise<Department[]> {
+    static async getAll(): Promise<GetDepartmentsResponse> {
         return makeApiRequest('get', DepartmentService.basePath);
     }
 
@@ -27,4 +27,8 @@ export class DepartmentService {
     static async delete(id: number): Promise<void> {
         return makeApiRequest('delete', `${(DepartmentService.basePath)}/${id}`);
     }
+}
+
+interface GetDepartmentsResponse {
+    departments: Department[];
 }

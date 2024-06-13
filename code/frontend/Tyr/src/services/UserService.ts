@@ -31,6 +31,14 @@ export class UserService {
     static async delete(id: number): Promise<void> {
         return makeApiRequest('delete', `${(UserService.basePath)}/${id}`);
     }
+
+    static async getStudents(): Promise<GetUsersResponse> {
+        return makeApiRequest('get', `${(UserService.basePath)}/students`);
+    }
+}
+
+interface GetUsersResponse {
+    users: User[];
 }
 
 

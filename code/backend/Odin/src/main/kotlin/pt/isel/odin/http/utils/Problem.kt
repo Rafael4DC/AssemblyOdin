@@ -240,6 +240,7 @@ class Problem(
              * Voc
              */
             GetVocError.NotFoundVoc to notFoundVoc,
+            GetVocError.NotFoundUser to notFoundUser,
             DeleteVocError.NotFoundVoc to notFoundVoc,
             SaveUpdateVocError.NotFoundVoc to notFoundVoc,
             SaveUpdateVocError.NotFoundUser to notFoundUser,

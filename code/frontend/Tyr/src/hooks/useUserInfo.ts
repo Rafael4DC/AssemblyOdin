@@ -27,10 +27,10 @@ const useUserInfo = () => {
             });
     }, []);
 
-    /*useEffect(() => {
+    useEffect(() => {
         TechService.getTechsByUser()
             .then(data => {
-                setUserTechs(data);
+                setUserTechs(data.techs);
             })
             .catch(err => {
                 setError(err);
@@ -40,12 +40,12 @@ const useUserInfo = () => {
     useEffect(() => {
         VocService.getVocsByUser()
             .then(data => {
-                setUserVocs(data);
+                setUserVocs(data.vocs);
             })
             .catch(err => {
                 setError(err);
             });
-    }, []);*/
+    }, []);
 
     return {userInfo, userTechs, userVocs, error};
 };

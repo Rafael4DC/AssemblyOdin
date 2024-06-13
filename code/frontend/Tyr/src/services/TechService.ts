@@ -1,5 +1,5 @@
 import {makeApiRequest} from '../axios/apiRequest';
-import {Tech} from "../model/Tech";
+import {Tech, TechRequest} from "../model/Tech";
 
 /**
  * Service to manage techs
@@ -16,11 +16,11 @@ export class TechService {
         return makeApiRequest('get', TechService.basePath);
     }
 
-    static async save(techRequest: Tech): Promise<Tech> {
+    static async save(techRequest: TechRequest): Promise<Tech> {
         return makeApiRequest('post', `${(TechService.basePath)}/save`, techRequest);
     }
 
-    static async update(techRequest: Tech): Promise<Tech> {
+    static async update(techRequest: TechRequest): Promise<Tech> {
         return makeApiRequest('put', `${(TechService.basePath)}/update`, techRequest);
     }
 
@@ -28,11 +28,15 @@ export class TechService {
         return makeApiRequest('delete', `${(TechService.basePath)}/${id}`);
     }
 
-    static async getTechsByUser(): Promise<Tech[]> {
+    static async getTechsByUser(): Promise<GetTechsByUserResponse> {
         return makeApiRequest('get', `${(TechService.basePath)}/user`);
     }
 
 /*    static async getMyTechsAttendance(): Promise<TechsAttendance[]> {
         return makeApiRequest('get', `${(TechService.basePath)}/attendance`);
     }*/
+}
+
+interface GetTechsByUserResponse {
+    techs: Tech[];
 }

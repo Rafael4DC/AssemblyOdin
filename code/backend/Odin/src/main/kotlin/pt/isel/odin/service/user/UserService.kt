@@ -122,6 +122,12 @@ class UserService(
                 success(user)
             }.orElse(failure(DeleteUserError.NotFoundUser))
 
+    fun getStudents(): GetAllUsersResult {
+        return success(userRepository.findUserByRole_NameIs("STUDENT"))
+            /*.map<GetAllUsersResult> { users -> success(users) }
+            .orElse(failure(GetUserError.NotFoundUser))*/
+    }
+
     companion object {
         private val log = logger(UserService::class.java)
     }

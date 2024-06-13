@@ -29,14 +29,14 @@ function Profile() {
                     </div>
                 </Col>
             </Row>
-            {/*<Row>
+            <Row>
                 <Col className="mb-3">
                     <TecTable techs={userTechs}/>
                 </Col>
                 <Col className="mb-3">
                     <VocTable courses={userVocs}/>
                 </Col>
-            </Row>*/}
+            </Row>
         </Container>
     );
 }

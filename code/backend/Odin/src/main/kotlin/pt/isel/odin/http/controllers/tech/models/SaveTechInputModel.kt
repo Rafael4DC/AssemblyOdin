@@ -8,7 +8,7 @@ import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
 
 data class SaveTechInputModel(
-    val teacher: Long,
+    val teacher: Long? = null,
 
     val section: Long,
 

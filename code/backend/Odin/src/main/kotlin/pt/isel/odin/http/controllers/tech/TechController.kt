@@ -64,21 +64,10 @@ class TechController(private val techService: TechService) {
             is Failure -> Problem.responseForError(result.value)
         }
 
-    /*@GetMapping("/user")
+    @GetMapping("/user")
     fun getByUser(authentication: Principal): ResponseEntity<*> =
         when (val result = techService.getByUser(authentication.toEmail())) {
-            is Success -> ResponseEntity.ok(GetTechsByUserOutputModel(result.value))
+            is Success -> ResponseEntity.ok(getAllTechsOutputModel(result.value))
             is Failure -> Problem.responseForError(result.value)
         }
-    */
-    /**
-     * Gets all techs and students by User email.
-     *
-     * @param authentication the User.
-     *//*
-    @GetMapping("/attendance")
-    fun getMyTechsAttendance(authentication: Principal): List<TechAttendanceResponse> {
-        return techService.getMyTechsAttendance(authentication.toEmail())
-    }*/
-
 }

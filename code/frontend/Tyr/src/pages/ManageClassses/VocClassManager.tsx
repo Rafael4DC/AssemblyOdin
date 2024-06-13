@@ -33,7 +33,14 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
         if (selectedVoc) {
             setLoading(true);
             try {
-                await VocService.save(selectedVoc);
+                await VocService.save({
+                    id: selectedVoc.id,
+                    description: selectedVoc.description,
+                    approved: selectedVoc.approved,
+                    section: selectedVoc.section?.id,
+                    started: selectedVoc.started,
+                    ended: selectedVoc.ended,
+                });
                 setShowApprovalModal(false);
             } catch (error) {
                 console.error('Error saving Voc:', error);

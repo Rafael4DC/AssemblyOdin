@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {VocService} from '../services/VocService';
-import {Voc} from "../model/Voc";
+import {Voc, VocRequest} from "../model/Voc";
 
 /**
  * Hook to get the voc classes
@@ -25,7 +25,7 @@ const useVocs = () => {
     return {
         vocs,
         error,
-        handleSaveVocClass: async (vocClass: Voc) => {
+        handleSaveVocClass: async (vocClass: VocRequest) => {
             setError(null);
             try {
                 if (vocClass.id) {

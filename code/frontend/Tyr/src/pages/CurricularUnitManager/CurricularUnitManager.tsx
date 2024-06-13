@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import {Form, Table} from 'react-bootstrap';
 import DetailView from './DetailView';
-import useCategories from "../../hooks/useCategories";
+import useDepartments from "../../hooks/useDepartments";
 import {Department} from "../../model/Department";
 
 
@@ -15,17 +15,17 @@ enum FilterOptions {
 
 function CurricularUnitManager() {
     const {
-        categories,
-        handleSaveCategory,
-        handleDeleteCategory,
+        departments,
+        handleSaveDepartments,
+        handleDeleteDepartments,
         error
-    } = useCategories();
+    } = useDepartments();
 
     const [filter, setFilter] = useState(FilterOptions.Ongoing);
     const [selectedCourse, setSelectedCourse] = useState<Department | null>(null);
 
     const saveCourse = (updatedCourse: Department) => {
-        handleSaveCategory(updatedCourse)
+        handleSaveDepartments(updatedCourse)
         setSelectedCourse(updatedCourse);
         console.log(selectedCourse);
     };
@@ -77,9 +77,9 @@ function CurricularUnitManager() {
                         <th>Dates</th>
                     </tr>
                     </thead>
-                    {categories ?
+                    {departments ?
                         < tbody>
-                        {categories.map(renderCourseRow)}
+                        {departments.map(renderCourseRow)}
                         </tbody>
                         : <div className="text-center my-5">
                             <div className="spinner-border" role="status"></div>

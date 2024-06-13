@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
                 </li>
                 <li>
                     <Link to={CATEGORIES} className={linkClass(CATEGORIES)} onClick={() => setActiveLink(CATEGORIES)}>
-                        Curricular Units
+                        Departments
                     </Link>
                 </li>
                 {/*{role == 'STUDENT' && (*/}

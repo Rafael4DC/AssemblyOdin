@@ -29,9 +29,21 @@ const useTechs = () => {
             setError(null);
             try {
                 if (tech.id) {
-                    return await TechService.update(tech);
+                    return await TechService.update({
+                        id: tech.id,
+                        section: tech.section?.id,
+                        date: tech.date,
+                        summary: tech.summary,
+                        missTech: tech.missTech?.map(student => student.id)
+
+                    });
                 } else {
-                    return await TechService.save(tech);
+                    return await TechService.save({
+                        section: tech.section?.id,
+                        date: tech.date,
+                        summary: tech.summary,
+                        missTech: tech.missTech?.map(student => student.id)
+                    });
                 }
             } catch (err) {
                 setError(err);
