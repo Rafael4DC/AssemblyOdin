@@ -55,11 +55,11 @@ class Tech(
         if (this === other) return true
         if (other !is Tech) return false
         return id == other.id &&
-                teacher == other.teacher &&
-                section == other.section &&
-                date == other.date &&
-                summary == other.summary &&
-                missTech == other.missTech
+            teacher == other.teacher &&
+            section == other.section &&
+            date == other.date &&
+            summary == other.summary &&
+            missTech == other.missTech
     }
 
     override fun hashCode(): Int {

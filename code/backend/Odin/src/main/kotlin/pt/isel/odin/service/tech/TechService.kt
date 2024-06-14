@@ -6,7 +6,6 @@ import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
-import pt.isel.odin.model.Tech
 import pt.isel.odin.model.user.User
 import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.TechRepository
@@ -14,7 +13,6 @@ import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.tech.error.DeleteTechError
 import pt.isel.odin.service.tech.error.GetTechError
 import pt.isel.odin.service.tech.error.SaveUpdateTechError
-import pt.isel.odin.service.voc.error.GetVocError
 import pt.isel.odin.utils.failure
 import pt.isel.odin.utils.success
 import java.time.LocalDateTime
@@ -75,12 +73,13 @@ class TechService(
             }.orElse(failure(DeleteTechError.NotFoundTech))
 
     fun getByUser(email: String): GetAllTechsResult {
-        val user = getUser(email = email) ?: return failure(GetTechError.NotFoundUser)// Diferenciar Teacher de Student
+        val user = getUser(email = email) ?: return failure(GetTechError.NotFoundUser) // Diferenciar Teacher de Student
         val optionalTech =
-            if (Role.RoleEnum.valueOf(user.role.name!!) == Role.RoleEnum.TEACHER)
+            if (Role.RoleEnum.valueOf(user.role.name!!) == Role.RoleEnum.TEACHER) {
                 techRepository.findByTeacher(user)
-            else
+            } else {
                 techRepository.findByStudent(user.id!!)
+            }
 
         return optionalTech
             .map { success(it) }
@@ -88,17 +87,24 @@ class TechService(
     }
 
     private fun getUser(userId: Long? = null, email: String): User? {
-        val user = if (userId == null || userId == 0L)
+        val user = if (userId == null || userId == 0L) {
             userRepository.findByEmail(email)
-        else
+        } else {
             userRepository.findById(userId)
-        return if (user.isEmpty) null
-        else user.get()
+        }
+        return if (user.isEmpty) {
+            null
+        } else {
+            user.get()
+        }
     }
 
     private fun getSection(sectionId: Long): Section? {
         val section = sectionRepository.findById(sectionId)
-        return if (section.isEmpty) null
-        else section.get()
+        return if (section.isEmpty) {
+            null
+        } else {
+            section.get()
+        }
     }
 }

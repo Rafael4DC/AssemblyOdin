@@ -147,7 +147,6 @@ class FieldStudyServiceTest {
         assertEquals(SaveUpdateFieldStudyError.AlreadyExistsFieldStudy, (result as Failure).value)
     }
 
-
     @Test
     fun `Update field study`() {
         // given: a valid UpdateFieldStudyInputModel and existing field study

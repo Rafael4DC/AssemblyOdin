@@ -14,7 +14,6 @@ import java.util.Optional
 interface TechRepository : JpaRepository<Tech, Long> {
     fun findByTeacher(user: User): Optional<List<Tech>>
 
-
     @Query(
         nativeQuery = true,
         value =

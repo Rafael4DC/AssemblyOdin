@@ -193,7 +193,9 @@ class UserServiceTest {
             UpdateUserInputModel(
                 id = user.id!!,
                 email = "userupdated@example.com",
-                username = "userupdated", role = roleId, credits = 100
+                username = "userupdated",
+                role = roleId,
+                credits = 100
             )
         val updatedUser =
             existingUser.copy(
@@ -202,7 +204,6 @@ class UserServiceTest {
                 username = updateUserInputModel.username,
                 credits = updateUserInputModel.credits
             )
-
 
         // when: updating the user
         val result = userService.update(updateUserInputModel)

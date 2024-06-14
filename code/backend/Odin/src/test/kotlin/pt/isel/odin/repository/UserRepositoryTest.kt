@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.transaction.annotation.Transactional
-import pt.isel.odin.model.Role
-import pt.isel.odin.model.user.User
 import pt.isel.odin.utils.TestData
 
 @DataJpaTest

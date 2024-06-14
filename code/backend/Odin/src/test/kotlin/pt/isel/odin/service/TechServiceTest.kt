@@ -10,9 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
-import pt.isel.odin.model.Department
-import pt.isel.odin.model.FieldStudy
-import pt.isel.odin.model.Module
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
 import pt.isel.odin.model.Tech
@@ -62,7 +59,6 @@ class TechServiceTest {
 
     @Autowired
     private lateinit var moduleRepository: ModuleRepository
-    
 
     @Test
     fun `Get tech by ID`() {
@@ -157,7 +153,7 @@ class TechServiceTest {
             teacher = user.id!!,
             section = section.id!!,
             date = LocalDateTime.now().toString(),
-            summary = "Tech Summary",
+            summary = "Tech Summary"
         )
 
         // when: saving the tech

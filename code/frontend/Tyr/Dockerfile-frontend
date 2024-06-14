@@ -1,0 +1,16 @@
+# Use an official Node.js image to build and run the app
+FROM node:14.18.1
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json /app/
+RUN npm install
+
+# Copy source files
+COPY . /app
+
+# Expose port and start the application
+EXPOSE 3000
+CMD ["npm","start"]

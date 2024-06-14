@@ -33,7 +33,6 @@ class VocRepositoryTest {
     @Autowired
     lateinit var moduleRepository: ModuleRepository
 
-
     @Test
     fun `Save Voc`() {
         // given: a Role instance, a User instance, a Department, a FieldStudy, a Module instance, and a Voc instance

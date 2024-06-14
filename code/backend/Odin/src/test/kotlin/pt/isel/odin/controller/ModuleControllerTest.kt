@@ -273,7 +273,7 @@ class ModuleControllerTest {
             .jsonPath("$.title").isEqualTo("Module Not Found")
     }
 
-    fun getModule(name: String? = null): Module{
+    fun getModule(name: String? = null): Module {
         val department = departmentRepository.save(Department(name = "Department of Humanities"))
         val fieldStudy = fieldStudyRepository.save(FieldStudy(name = "History", department = department))
         return moduleRepository.save(

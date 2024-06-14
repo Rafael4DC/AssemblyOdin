@@ -2,7 +2,6 @@ package pt.isel.odin.http.controllers.voc.models
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
-import pt.isel.odin.model.Module
 import pt.isel.odin.model.Section
 import pt.isel.odin.model.Voc
 import pt.isel.odin.model.user.User

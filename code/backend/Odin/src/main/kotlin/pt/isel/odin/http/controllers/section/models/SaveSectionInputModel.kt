@@ -21,7 +21,8 @@ data class SaveSectionInputModel(
 ) {
     fun toSection(
         students: MutableList<User>,
-        module: Module) =
+        module: Module
+    ) =
         Section(
             name = name,
             summary = summary,

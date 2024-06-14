@@ -83,7 +83,8 @@ class Problem(
         )
 
         private val roleIncorrectUser = Problem(
-            400, URI(
+            400,
+            URI(
                 GITHUB_URL + "role-incorrect"
             ),
             "Role Incorrect"
@@ -245,7 +246,7 @@ class Problem(
             SaveUpdateVocError.NotFoundVoc to notFoundVoc,
             SaveUpdateVocError.NotFoundUser to notFoundUser,
             SaveUpdateVocError.NotFoundSection to notFoundSection,
-            SaveUpdateVocError.NotFoundFieldStudy to notFoundFieldStudy,
+            SaveUpdateVocError.NotFoundFieldStudy to notFoundFieldStudy
         )
     }
 }

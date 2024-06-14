@@ -27,7 +27,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDateTimeVersion")
@@ -48,6 +47,15 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = "17"
     }
+}
+
+// Disable KtLint tasks during Docker build
+if (System.getenv("DISABLE_KTLINT") != null) {
+    tasks.named("test").configure { enabled = false }
+    tasks.named("ktlintTestSourceSetCheck").configure { enabled = false }
+    tasks.named("ktlintKotlinScriptCheck").configure { enabled = false }
+    tasks.named("ktlintCheck").configure { enabled = false }
+    tasks.named("ktlintFormat").configure { enabled = false }
 }
 
 tasks.withType<Test> {

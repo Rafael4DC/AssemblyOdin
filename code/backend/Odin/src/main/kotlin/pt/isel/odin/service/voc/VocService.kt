@@ -20,7 +20,7 @@ import java.time.LocalDateTime
 class VocService(
     private val vocRepository: VocRepository,
     private val userRepository: UserRepository,
-    private val sectionRepository: SectionRepository,
+    private val sectionRepository: SectionRepository
 ) {
 
     fun getById(id: Long): GetVocResult =
@@ -78,17 +78,24 @@ class VocService(
     }
 
     private fun getUser(userId: Long?, email: String): User? {
-        val user = if (userId == null)
+        val user = if (userId == null) {
             userRepository.findByEmail(email)
-        else
+        } else {
             userRepository.findById(userId)
-        return if (user.isEmpty) null
-        else user.get()
+        }
+        return if (user.isEmpty) {
+            null
+        } else {
+            user.get()
+        }
     }
 
     private fun getSection(sectionId: Long): Section? {
         val section = sectionRepository.findById(sectionId)
-        return if (section.isEmpty) null
-        else section.get()
+        return if (section.isEmpty) {
+            null
+        } else {
+            section.get()
+        }
     }
 }

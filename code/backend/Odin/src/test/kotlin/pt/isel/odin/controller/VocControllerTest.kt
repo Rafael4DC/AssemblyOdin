@@ -1,6 +1,5 @@
 package pt.isel.odin.controller
 
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import pt.isel.odin.repository.VocRepository
@@ -11,7 +10,6 @@ class VocControllerTest {
 
     @Autowired
     lateinit var vocRepository: VocRepository
-
 
     /*@Test
     fun `Save User Repository`(){

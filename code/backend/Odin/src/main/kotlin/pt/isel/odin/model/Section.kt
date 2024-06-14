@@ -1,6 +1,5 @@
 package pt.isel.odin.model
 
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -45,9 +44,9 @@ class Section(
         if (this === other) return true
         if (other !is Section) return false
         return id == other.id &&
-                name == other.name &&
-                summary == other.summary &&
-                students == other.students
+            name == other.name &&
+            summary == other.summary &&
+            students == other.students
     }
 
     override fun hashCode(): Int {

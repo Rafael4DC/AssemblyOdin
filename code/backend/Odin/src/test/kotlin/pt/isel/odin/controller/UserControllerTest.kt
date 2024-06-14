@@ -268,7 +268,6 @@ class UserControllerTest {
             .jsonPath("$.title").isEqualTo("Role Incorrect")
     }
 
-
     @Test
     fun `Delete user`() {
         // given: a user

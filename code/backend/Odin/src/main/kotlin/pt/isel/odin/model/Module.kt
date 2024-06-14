@@ -1,7 +1,5 @@
 package pt.isel.odin.model
 
-import com.fasterxml.jackson.annotation.JsonBackReference
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -10,7 +8,6 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
 @Entity
@@ -41,9 +38,9 @@ class Module(
         if (this === other) return true
         if (other !is Module) return false
         return id == other.id &&
-                fieldStudy == other.fieldStudy &&
-                name == other.name &&
-                tier == other.tier
+            fieldStudy == other.fieldStudy &&
+            name == other.name &&
+            tier == other.tier
     }
 
     override fun hashCode(): Int {
@@ -53,6 +50,4 @@ class Module(
         result = 31 * result + tier
         return result
     }
-
 }
-

@@ -25,11 +25,12 @@ class DataInitializer(private val dataPopulationService: DataPopulationService) 
     @Bean
     fun initData(): CommandLineRunner {
         return CommandLineRunner {
+            val dataFilePath = System.getenv("INITIAL_DATA_PATH")
+                ?: "src/main/kotlin/pt/isel/odin/utils/InitialData.json"
+
             if (dataPopulationService.departmentRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()
-                val data: InitialData = mapper.readValue(
-                    File("C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin" +
-                            "/src/main/kotlin/pt/isel/odin/utils/InitialData.json"))
+                val data: InitialData = mapper.readValue(File(dataFilePath))
                 dataPopulationService.populateData(data)
             } else {
                 println("Data already populated")
