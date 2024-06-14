@@ -16,7 +16,7 @@ module.exports = {
         compress: false,
         proxy: {
             '/api': {
-                target: 'http://localhost:8080',
+                target: process.env.BACKEND_URL || 'http://localhost:8080',
                 // introducing an API delay to make testing easier
                 pathRewrite: async function (path, req) {
                     await delay(1000);

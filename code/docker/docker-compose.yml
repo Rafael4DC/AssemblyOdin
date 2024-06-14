@@ -34,7 +34,7 @@ services:
     env_file:
       - .env
     ports:
-      - "3000:1337"
+      - "1337:1337"
     networks:
       - frontend-network
 
