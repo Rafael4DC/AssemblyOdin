@@ -52,7 +52,7 @@ class FieldStudy(
         var result = id?.hashCode() ?: 0
         result = 31 * result + department.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + (modules?.hashCode() ?: 0)
+        result = 31 * result + modules.hashCode()
         return result
     }
 }

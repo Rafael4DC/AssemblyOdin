@@ -1,6 +1,9 @@
 package pt.isel.odin.repository
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -129,7 +132,7 @@ class SectionRepositoryTest {
         // given: a saved Section instance
         val savedDepartment = departmentRepository.save(TestData.department5)
         val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy5.copy(department = savedDepartment))
-        val savedModule = moduleRepository.save(TestData.module6.copy(fieldStudy = savedFieldStudy))
+        moduleRepository.save(TestData.module6.copy(fieldStudy = savedFieldStudy))
         val section = TestData.section6
         val savedSection = sectionRepository.save(section)
 
@@ -146,7 +149,7 @@ class SectionRepositoryTest {
         // given: a Role instance, multiple User instances, and a Section instance with students
         val savedDepartment = departmentRepository.save(TestData.department5)
         val savedFieldStudy = fieldStudyRepository.save(TestData.fieldStudy5.copy(department = savedDepartment))
-        val savedModule = moduleRepository.save(TestData.module6.copy(fieldStudy = savedFieldStudy))
+        moduleRepository.save(TestData.module6.copy(fieldStudy = savedFieldStudy))
         val savedRole = roleRepository.save(TestData.role1)
         val user1 = User(email = TestData.user1.email, username = TestData.user1.username, role = savedRole)
         val user2 = User(email = TestData.user2.email, username = TestData.user2.username, role = savedRole)

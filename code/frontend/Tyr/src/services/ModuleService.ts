@@ -12,7 +12,7 @@ export class ModuleService {
         return makeApiRequest('get', `${(ModuleService.basePath)}/${id}`);
     }
 
-    static async getAll(): Promise<Module[]> {
+    static async getAll(): Promise<ModuleResponse> {
         return makeApiRequest('get', `${(ModuleService.basePath)}`);
     }
 
@@ -27,4 +27,8 @@ export class ModuleService {
     static async delete(id: number): Promise<void> {
         return makeApiRequest('delete', `${(ModuleService.basePath)}/${id}`);
     }
+}
+
+interface ModuleResponse {
+    modules: Module[];
 }

@@ -12,7 +12,7 @@ export class VocService {
         return makeApiRequest('get', `${(VocService.basePath)}/${id}`);
     }
 
-    static async getAll(): Promise<Voc[]> {
+    static async getAll(): Promise<GetVocsByUserResponse> {
         return makeApiRequest('get', VocService.basePath);
     }
 

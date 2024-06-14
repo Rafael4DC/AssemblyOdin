@@ -8,7 +8,7 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import pt.isel.odin.controller.utils.TestSecurityConfig
+import pt.isel.odin.controller.utils.Config
 import pt.isel.odin.http.controllers.user.models.GetAllUsersOutputModel
 import pt.isel.odin.http.controllers.user.models.GetUserOutputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
@@ -21,7 +21,7 @@ import pt.isel.odin.repository.UserRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import(TestSecurityConfig::class)
+@Import(Config::class)
 class UserControllerTest {
 
     @LocalServerPort

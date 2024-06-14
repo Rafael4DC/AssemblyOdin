@@ -6,7 +6,7 @@ import {Module} from "../../model/Module";
 import * as React from 'react';
 import useDepartments from "../../hooks/useDepartments";
 
-const CategoriesManager: React.FC = () => {
+const DepartmentsManager: React.FC = () => {
     const {
         departments,
         handleSaveDepartments,
@@ -285,4 +285,4 @@ const ModuleModal: React.FC<ModalProps> = ({show, onHide, onSave, module, setMod
     </Modal>
 );
 
-export default CategoriesManager;
+export default DepartmentsManager;

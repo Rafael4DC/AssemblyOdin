@@ -67,7 +67,7 @@ class FieldStudyService(
     fun delete(id: Long): DeleteFieldStudyResult =
         fieldStudyRepository.findById(id)
             .map<DeleteFieldStudyResult> { field ->
-                val a = fieldStudyRepository.delete(field)
+                fieldStudyRepository.delete(field)
                 success(field)
             }.orElse(failure(DeleteFieldStudyError.NotFoundFieldStudy))
 }

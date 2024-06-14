@@ -9,3 +9,11 @@ export interface Section {
     module?: Module;
     students?: User[];
 }
+
+export interface SectionRequest {
+    id?: number;
+    name?: string;
+    summary?: string;
+    module?: number;
+    students?: number[];
+}

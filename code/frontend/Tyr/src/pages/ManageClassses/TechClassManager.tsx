@@ -1,9 +1,9 @@
 import {Button, Table} from 'react-bootstrap';
 import * as React from 'react';
-import {ManageTechModal} from '../../components/ManageClass/ManageTechModal';
 import {toDateTimeStr} from '../../utils/Utils';
 import {useTechClassManager} from "../../hooks/useTechClassManager";
 import {TechsAttendance} from "../../hooks/useClassManager";
+import ManageTechModal from "../../components/ManageClass/ManageTechModal";
 
 /**
  * Props for the TechClassManager component
@@ -17,19 +17,17 @@ interface TechClassManagerProps {
 /**
  * Component to manage tech classes
  */
-const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
+const TechClassManager: React.FC<TechClassManagerProps> = ({ classes }) => {
     const {
         selectedClass,
         showEditModal,
         loading,
         handleEditClassClick,
         handleSaveClass,
-        /*handleAttendanceChange,*/
         handleSummaryChange,
         handleDateChange,
         setShowEditModal,
     } = useTechClassManager(classes);
-
 
     const renderClassRow = (cls: TechsAttendance) => (
         <tr key={cls.tech.id}>
@@ -50,7 +48,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
     return (
         <div>
             <h3>Tech Classes Manager</h3>
-            <div style={{maxHeight: '250px', overflowY: 'auto'}}>
+            <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
                 <Table striped bordered hover responsive>
                     <thead>
                     <tr>
@@ -64,7 +62,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
                     {classes.length ?
                         classes.map(renderClassRow)
                         :
-                        <p>No classes found</p>}
+                        <tr><td colSpan={4}>No classes found</td></tr>}
                     </tbody>
                 </Table>
             </div>
@@ -72,7 +70,6 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
                 showEditModal={showEditModal}
                 setShowEditModal={setShowEditModal}
                 selectedClass={selectedClass}
-                /*handleAttendanceChange={handleAttendanceChange}*/
                 handleSummaryChange={handleSummaryChange}
                 handleDateChange={handleDateChange}
                 handleSaveClass={handleSaveClass}

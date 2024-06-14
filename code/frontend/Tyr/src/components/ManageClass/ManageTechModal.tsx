@@ -29,12 +29,11 @@ interface ManageTechModalProps {
 /**
  * Modal to manage and edit the tech classes
  */
-export const ManageTechModal: React.FC<ManageTechModalProps> = (
+const ManageTechModal: React.FC<ManageTechModalProps> = (
     {
         showEditModal,
         setShowEditModal,
         selectedClass,
-        /*handleAttendanceChange,*/
         handleSummaryChange,
         handleDateChange,
         handleSaveClass,
@@ -47,16 +46,6 @@ export const ManageTechModal: React.FC<ManageTechModalProps> = (
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    {/*{selectedClass?.attendedStudents.map(student => (
-                        <Form.Group controlId={`student-attendance-${student.id}`} key={student.id}>
-                            <Form.Check
-                                type="checkbox"
-                                label={student.student.username}
-                                checked={student.attended}
-                                onChange={(e) => handleAttendanceChange(student.student.id, e.target.checked)}
-                            />
-                        </Form.Group>
-                    ))}*/}
                     <Form.Group controlId="class-summary">
                         <Form.Label>Class Summary</Form.Label>
                         <Form.Control
@@ -87,3 +76,5 @@ export const ManageTechModal: React.FC<ManageTechModalProps> = (
         </Modal>
     );
 };
+
+export default ManageTechModal;

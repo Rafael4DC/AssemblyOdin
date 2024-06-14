@@ -9,8 +9,12 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import pt.isel.odin.controller.utils.TestSecurityConfig
-import pt.isel.odin.http.controllers.fieldstudy.models.*
+import pt.isel.odin.controller.utils.Config
+import pt.isel.odin.http.controllers.fieldstudy.models.GetAllFieldsStudyOutputModel
+import pt.isel.odin.http.controllers.fieldstudy.models.GetFieldStudyOutputModel
+import pt.isel.odin.http.controllers.fieldstudy.models.SaveFieldStudyInputModel
+import pt.isel.odin.http.controllers.fieldstudy.models.SaveFieldStudyOutputModel
+import pt.isel.odin.http.controllers.fieldstudy.models.UpdateFieldStudyInputModel
 import pt.isel.odin.model.Department
 import pt.isel.odin.model.FieldStudy
 import pt.isel.odin.repository.DepartmentRepository
@@ -18,7 +22,7 @@ import pt.isel.odin.repository.FieldStudyRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import(TestSecurityConfig::class)
+@Import(Config::class)
 class FieldStudyControllerTest {
 
     @LocalServerPort

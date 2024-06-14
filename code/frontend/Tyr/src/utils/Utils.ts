@@ -36,8 +36,15 @@ export const getDuration = (start?: string, end?: string) => {
     if (!start || !end) return '';
     const startDate = new Date(start);
     const endDate = new Date(end);
+
+    // Check if the dates are valid
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) return '';
+
+    // Calculate the duration in minutes
     const duration = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
-    return `${duration} min`;
+
+    // Return the duration in minutes, ensure it's not negative
+    return duration >= 0 ? `${duration} min` : '';
 };
 
 /**
