@@ -116,8 +116,6 @@ class DepartmentServiceTest {
         assertEquals(SaveUpdateDepartmentError.IncorrectNameDepartment, (result as Failure).value)
     }
 
-
-
     @Test
     fun `Update department`() {
         // given: a valid UpdateDepartmentInputModel and existing department

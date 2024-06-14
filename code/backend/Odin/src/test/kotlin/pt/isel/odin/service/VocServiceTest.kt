@@ -10,9 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import pt.isel.odin.http.controllers.voc.models.SaveVocInputModel
 import pt.isel.odin.http.controllers.voc.models.UpdateVocInputModel
-import pt.isel.odin.model.Department
-import pt.isel.odin.model.FieldStudy
-import pt.isel.odin.model.Module
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
 import pt.isel.odin.model.Voc
@@ -62,7 +59,6 @@ class VocServiceTest {
 
     @Autowired
     private lateinit var moduleRepository: ModuleRepository
-
 
     @Test
     fun `Get voc by ID`() {

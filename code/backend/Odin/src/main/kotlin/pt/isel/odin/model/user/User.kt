@@ -58,10 +58,10 @@ class User(
         if (this === other) return true
         if (other !is User) return false
         return id == other.id &&
-                email == other.email &&
-                username == other.username &&
-                credits == other.credits &&
-                role == other.role
+            email == other.email &&
+            username == other.username &&
+            credits == other.credits &&
+            role == other.role
     }
 
     override fun hashCode(): Int {
@@ -73,4 +73,3 @@ class User(
         return result
     }
 }
-

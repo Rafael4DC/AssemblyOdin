@@ -1,10 +1,8 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import {TechService} from "../../services/TechService";
-import {Module} from "../../model/Module";
-import {ModuleService} from "../../services/ModuleService";
 import {WebUris} from "../../utils/WebUris";
 import MANAGE_CLASSES = WebUris.MANAGE_CLASSES;
 import useSections from "../../hooks/useSections";
@@ -44,10 +42,10 @@ const CreateTechClass = () => {
         }
     };
 
-    const handleModuleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setTechData((prevTechData) => ({
             ...prevTechData,
-            module: {id: parseInt(e.target.value, 10)},
+            section: {id: Number(e.target.value)},
         }));
     };
 
@@ -92,7 +90,7 @@ const CreateTechClass = () => {
                         name="module"
                         required
                         value={techData.section.id}
-                        onChange={handleModuleChange}
+                        onChange={handleSectionChange}
                     >
                         <option value="">Choose The Module</option>
                         {sections.map(section => (

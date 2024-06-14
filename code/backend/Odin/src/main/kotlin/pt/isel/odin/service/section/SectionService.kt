@@ -11,7 +11,6 @@ import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.section.error.DeleteSectionError
 import pt.isel.odin.service.section.error.GetSectionError
 import pt.isel.odin.service.section.error.SaveUpdateSectionError
-import pt.isel.odin.service.tech.error.SaveUpdateTechError
 import pt.isel.odin.utils.failure
 import pt.isel.odin.utils.success
 
@@ -31,8 +30,9 @@ class SectionService(
 
     @Transactional
     fun save(saveSectionInputModel: SaveSectionInputModel): CreationSectionResult {
-        if (sectionRepository.findByName(saveSectionInputModel.name).isPresent)
+        if (sectionRepository.findByName(saveSectionInputModel.name).isPresent) {
             return failure(SaveUpdateSectionError.AlreadyExistsSection)
+        }
 
         val module = getModule(saveSectionInputModel.module) ?: return failure(SaveUpdateSectionError.NotFoundModule)
 
@@ -69,10 +69,12 @@ class SectionService(
                 success(section)
             }.orElse(failure(DeleteSectionError.NotFoundSection))
 
-
     private fun getModule(moduleId: Long): Module? {
         val module = moduleRepository.findById(moduleId)
-        return if (module.isEmpty) null
-        else module.get()
+        return if (module.isEmpty) {
+            null
+        } else {
+            module.get()
+        }
     }
 }

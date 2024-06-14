@@ -180,7 +180,7 @@ class SectionServiceTest {
             id = (result as Success).value.id!!,
             name = saveSectionInputModel.name,
             summary = saveSectionInputModel.summary,
-            module = module,
+            module = module
         )
         assertEquals(section, result.value)
     }
@@ -278,7 +278,7 @@ class SectionServiceTest {
             id = section.id!!,
             name = existingSection.name,
             module = module.id!!,
-            summary = existingSection.summary,
+            summary = existingSection.summary
         )
         val updatedSection = existingSection.copy(
             id = section.id!!,
@@ -294,7 +294,6 @@ class SectionServiceTest {
         assertTrue(result is Success)
         assertEquals(updatedSection, (result as Success).value)
     }
-
 
     @Test
     fun `Update non-existent section`() {

@@ -55,7 +55,6 @@ object TestData {
     val user7 = User(email = "support@example.com", username = "support", role = role5)
     val user8 = User(email = "operations@example.com", username = "operations", role = role6)
 
-
     val tech1 = Tech(teacher = user1, section = section1, date = LocalDateTime.now(), summary = "Tech summary")
     val tech2 = Tech(teacher = user1, section = section2, date = LocalDateTime.now(), summary = "Algebra Tech summary")
     val tech3 = Tech(teacher = user1, section = section3, date = LocalDateTime.now(), summary = "Physics Tech 1")
@@ -118,7 +117,6 @@ object TestData {
         started = LocalDateTime.now(),
         ended = LocalDateTime.now().plusDays(1)
     )
-
 
     val nonExistentId = 999L
     val negativeId = -1L

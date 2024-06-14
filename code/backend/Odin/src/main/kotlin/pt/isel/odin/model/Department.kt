@@ -1,7 +1,6 @@
 package pt.isel.odin.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -35,8 +34,8 @@ class Department(
         if (this === other) return true
         if (other !is Department) return false
         return id == other.id &&
-                name == other.name &&
-                fieldsStudy == other.fieldsStudy
+            name == other.name &&
+            fieldsStudy == other.fieldsStudy
     }
 
     override fun hashCode(): Int {

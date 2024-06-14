@@ -28,8 +28,11 @@ class DataInitializer(private val dataPopulationService: DataPopulationService) 
             if (dataPopulationService.departmentRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()
                 val data: InitialData = mapper.readValue(
-                    File("C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin" +
-                            "/src/main/kotlin/pt/isel/odin/utils/InitialData.json"))
+                    File(
+                        "C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin" +
+                            "/src/main/kotlin/pt/isel/odin/utils/InitialData.json"
+                    )
+                )
                 dataPopulationService.populateData(data)
             } else {
                 println("Data already populated")

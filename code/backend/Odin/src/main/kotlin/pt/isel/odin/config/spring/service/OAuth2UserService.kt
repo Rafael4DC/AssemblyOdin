@@ -11,7 +11,7 @@ import pt.isel.odin.utils.Success
 
 @Service
 class OAuth2UserService(
-    private val userService: UserService,
+    private val userService: UserService
 ) : OidcUserService() {
 
     override fun loadUser(userRequest: OidcUserRequest): OidcUser {

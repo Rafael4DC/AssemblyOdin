@@ -9,14 +9,18 @@ import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import pt.isel.odin.controller.utils.TestSecurityConfig
-import pt.isel.odin.http.controllers.department.models.*
+import pt.isel.odin.controller.utils.Config
+import pt.isel.odin.http.controllers.department.models.GetAllDepartmentsOutputModel
+import pt.isel.odin.http.controllers.department.models.GetDepartmentOutputModel
+import pt.isel.odin.http.controllers.department.models.SaveDepartmentInputModel
+import pt.isel.odin.http.controllers.department.models.SaveDepartmentOutputModel
+import pt.isel.odin.http.controllers.department.models.UpdateDepartmentInputModel
 import pt.isel.odin.model.Department
 import pt.isel.odin.repository.DepartmentRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import(TestSecurityConfig::class)
+@Import(Config::class)
 class DepartmentControllerTest {
 
     @LocalServerPort

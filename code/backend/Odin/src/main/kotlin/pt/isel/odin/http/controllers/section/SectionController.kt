@@ -62,4 +62,3 @@ class SectionController(private val sectionService: SectionService) {
             is Failure -> Problem.responseForError(result.value)
         }
 }
-

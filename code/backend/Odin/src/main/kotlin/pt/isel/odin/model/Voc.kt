@@ -58,12 +58,12 @@ class Voc(
         if (this === other) return true
         if (other !is Voc) return false
         return id == other.id &&
-                description == other.description &&
-                approved == other.approved &&
-                user == other.user &&
-                section == other.section &&
-                started == other.started &&
-                ended == other.ended
+            description == other.description &&
+            approved == other.approved &&
+            user == other.user &&
+            section == other.section &&
+            started == other.started &&
+            ended == other.ended
     }
 
     override fun hashCode(): Int {

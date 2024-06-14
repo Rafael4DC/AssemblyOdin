@@ -1,6 +1,10 @@
 package pt.isel.odin.repository
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -32,7 +36,6 @@ class VocRepositoryTest {
 
     @Autowired
     lateinit var moduleRepository: ModuleRepository
-
 
     @Test
     fun `Save Voc`() {

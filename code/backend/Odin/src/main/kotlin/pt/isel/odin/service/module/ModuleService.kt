@@ -27,8 +27,9 @@ class ModuleService(
 
     @Transactional
     fun save(saveModuleInputModel: SaveModuleInputModel): CreationModuleResult {
-        if (moduleRepository.findByName(saveModuleInputModel.name).isPresent)
+        if (moduleRepository.findByName(saveModuleInputModel.name).isPresent) {
             return failure(SaveUpdateModuleError.AlreadyExistsModule)
+        }
 
         val fieldStudy = fieldStudyRepository.findById(saveModuleInputModel.fieldStudy)
         if (fieldStudy.isEmpty) return failure(SaveUpdateModuleError.NotFoundFieldStudy)
@@ -48,7 +49,7 @@ class ModuleService(
                         module.copy(
                             name = updateModuleInputModel.name,
                             fieldStudy = fieldStudy.get(),
-                            tier = updateModuleInputModel.tier,
+                            tier = updateModuleInputModel.tier
                         )
                     )
                 )

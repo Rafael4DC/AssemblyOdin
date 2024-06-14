@@ -4,7 +4,6 @@ import pt.isel.odin.http.controllers.module.models.GetModuleOutputModel
 import pt.isel.odin.http.controllers.user.models.GetUserOutputModel
 import pt.isel.odin.model.Section
 
-
 data class GetSectionOutputModel(
     val id: Long,
     val name: String,

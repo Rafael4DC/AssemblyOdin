@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.isel.odin.http.controllers.voc.models.GetAllVocsOutputModel
 import pt.isel.odin.http.controllers.voc.models.GetVocOutputModel
 import pt.isel.odin.http.controllers.voc.models.SaveVocInputModel
 import pt.isel.odin.http.controllers.voc.models.SaveVocOutputModel
@@ -67,7 +66,7 @@ class VocController(private val vocService: VocService) {
 
     @GetMapping("/user")
     fun getByUser(authentication: Principal): ResponseEntity<*> =
-        when(val result = vocService.getByUser(authentication.toEmail())) {
+        when (val result = vocService.getByUser(authentication.toEmail())) {
             is Success -> ResponseEntity.ok(getAllVocsOutputModel(result.value))
             is Failure -> Problem.responseForError(result.value)
         }

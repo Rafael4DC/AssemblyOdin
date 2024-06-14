@@ -66,7 +66,6 @@ class UserController(private val userService: UserService) {
             is Failure -> Problem.responseForError(users.value)
         }
 
-
     /**
      * Saves a user.
      *

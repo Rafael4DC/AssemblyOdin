@@ -68,8 +68,9 @@ class UserService(
         validateUserInput(saveInputModel.username, saveInputModel.email)?.let { return it }
         log.info("Validations passed successfully with email: ${saveInputModel.email} and username: ${saveInputModel.username}.")
 
-        if (userRepository.findByEmail(saveInputModel.email).isPresent)
+        if (userRepository.findByEmail(saveInputModel.email).isPresent) {
             return failure(SaveUpdateUserError.EmailAlreadyExistsUser)
+        }
 
         val role = roleRepository.findById(saveInputModel.role)
         if (role.isEmpty) return failure(SaveUpdateUserError.RoleIncorrectUser)

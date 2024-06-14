@@ -2,7 +2,6 @@ package pt.isel.odin.model
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -44,16 +43,16 @@ class FieldStudy(
         if (this === other) return true
         if (other !is FieldStudy) return false
         return id == other.id &&
-                department == other.department &&
-                name == other.name &&
-                modules == other.modules
+            department == other.department &&
+            name == other.name &&
+            modules == other.modules
     }
 
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + department.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + (modules?.hashCode() ?: 0)
+        result = 31 * result + modules.hashCode()
         return result
     }
 }

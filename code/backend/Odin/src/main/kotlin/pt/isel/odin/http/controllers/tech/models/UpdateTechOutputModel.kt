@@ -1,6 +1,5 @@
 package pt.isel.odin.http.controllers.tech.models
 
-import pt.isel.odin.http.controllers.module.models.GetModuleOutputModel
 import pt.isel.odin.http.controllers.section.models.GetSectionOutputModel
 import pt.isel.odin.http.controllers.user.models.GetUserOutputModel
 import pt.isel.odin.model.Tech
