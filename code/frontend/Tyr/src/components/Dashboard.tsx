@@ -12,6 +12,8 @@ import CREATE_TECH = WebUris.CREATE_TECH;
 import MANAGE_USERS = WebUris.MANAGE_USERS;
 import CURRICULAR_UNIT_MANAGER = WebUris.CURRICULAR_UNIT_MANAGER;
 import useGetSession from "../hooks/useGetSession";
+import CREATE_SECTION = WebUris.CREATE_SECTION;
+import SECTION = WebUris.SECTION;
 
 /**
  * Dashboard component
@@ -55,12 +57,26 @@ const Dashboard: React.FC = () => {
                     <>
                         <h3>Teachers</h3>
                         <li>
-                            <Link to={TEACHER_CLASS_MANAGER} className={linkClass(TEACHER_CLASS_MANAGER)} onClick={() => setActiveLink(TEACHER_CLASS_MANAGER)}>
+                            <Link to={TEACHER_CLASS_MANAGER} className={linkClass(TEACHER_CLASS_MANAGER)}
+                                  onClick={() => setActiveLink(TEACHER_CLASS_MANAGER)}>
                                 Manage Classes
                             </Link>
                         </li>
                         <li>
-                            <Link to={CREATE_TECH} className={linkClass(CREATE_TECH)} onClick={() => setActiveLink(CREATE_TECH)}>
+                            <Link to={SECTION} className={linkClass(SECTION)}
+                                  onClick={() => setActiveLink(SECTION)}>
+                                Section
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={CREATE_SECTION} className={linkClass(CREATE_SECTION)}
+                                  onClick={() => setActiveLink(CREATE_SECTION)}>
+                                Create Section
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={CREATE_TECH} className={linkClass(CREATE_TECH)}
+                                  onClick={() => setActiveLink(CREATE_TECH)}>
                                 Create Tech
                             </Link>
                         </li>
@@ -70,8 +86,9 @@ const Dashboard: React.FC = () => {
                     <>
                         <h3>Admins</h3>
                         <li>
-                            <Link to={MANAGE_USERS} className={linkClass(MANAGE_USERS)} onClick={() => setActiveLink(MANAGE_USERS)}>
-                                Manage Users
+                            <Link to={MANAGE_USERS} className={linkClass(MANAGE_USERS)}
+                                  onClick={() => setActiveLink(MANAGE_USERS)}>
+                            Manage Users
                             </Link>
                         </li>
                         <li>

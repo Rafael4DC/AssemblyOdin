@@ -40,13 +40,13 @@ export const useClassManager = () => {
 
     useEffect(() => {
 /*
-        TechService.getMyTechsAttendance()
-            .then(data => setTechClasses(data))
+        TechService.getTechsByUser()
+            .then(data => setTechClasses(data.techs))
             .catch(err => console.error(err));
 */
 
         VocService.getAll()
-            .then(data => setVocClasses(data))
+            .then(data => setVocClasses(data.vocs))
             .catch(err => console.error(err));
     }, []);
 

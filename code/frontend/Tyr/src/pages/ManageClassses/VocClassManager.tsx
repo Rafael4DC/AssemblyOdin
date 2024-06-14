@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {Voc} from '../../model/Voc';
 import {VocService} from "../../services/VocService";
 import VocApprovalModal from "../../components/ManageClass/VocApprovalModal";
-import {toDateTimeStr} from "../../utils/Utils";
+import {getDuration, toDateTimeStr} from "../../utils/Utils";
 
 /**
  * Props for the VocClassManager component
@@ -33,7 +33,7 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
         if (selectedVoc) {
             setLoading(true);
             try {
-                await VocService.save({
+                await VocService.update({
                     id: selectedVoc.id,
                     description: selectedVoc.description,
                     approved: selectedVoc.approved,
@@ -50,19 +50,12 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
         }
     };
 
-    const getDuration = (start?: string, end?: string) => {
-        if (!start || !end) return '';
-        const startDate = new Date(start);
-        const endDate = new Date(end);
-        const duration = (endDate.getTime() - startDate.getTime()) / 1000 / 60; // duration in minutes
-        return `${duration} min`;
-    };
-
     const renderVocRow = (voc: Voc) => (
         <tr key={voc.id}>
             <td>{voc.description}</td>
             <td>{voc.section?.name}</td>
             <td>{toDateTimeStr(voc.started)}</td>
+            <td>{voc.user.username}</td>
             <td>{getDuration(voc.started, voc.ended)}</td>
             <td>{voc.approved ? '✓' : '—'}</td>
             <td>
@@ -87,9 +80,10 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
                     <thead>
                     <tr>
                         <th>Description</th>
-                        <th>Module</th>
+                        <th>Section</th>
                         <th>Start Time</th>
-                        <th>Length</th>
+                        <th>Student</th>
+                        <th>Duration</th>
                         <th>Approved</th>
                         <th>Action</th>
                     </tr>

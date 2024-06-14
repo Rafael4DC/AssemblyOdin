@@ -6,6 +6,8 @@ export namespace WebUris {
     export const PROFILE = '/profile';
     export const CATEGORIES = '/categories';
     export const MANAGE_CLASSES = '/manageclasses';
+    export const CREATE_SECTION = '/createsection';
+    export const SECTION = '/section';
     export const VOC_CLASS = '/VocClass';
     export const CREATE_TECH = '/createtech';
     export const MANAGE_USERS = '/ManageUsers';

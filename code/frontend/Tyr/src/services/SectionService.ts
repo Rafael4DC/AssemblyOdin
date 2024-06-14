@@ -1,5 +1,5 @@
 import {makeApiRequest} from '../axios/apiRequest';
-import {Section} from "../model/Section";
+import {Section, SectionRequest} from "../model/Section";
 
 /**
  * Service to manage sections
@@ -16,11 +16,11 @@ export class SectionService {
         return makeApiRequest('get', `${(SectionService.basePath)}`);
     }
 
-    static async save(sectionRequest: Section): Promise<Section> {
+    static async save(sectionRequest: SectionRequest): Promise<Section> {
         return makeApiRequest('post', `${(SectionService.basePath)}/save`, sectionRequest);
     }
 
-    static async update(sectionRequest: Section): Promise<Section> {
+    static async update(sectionRequest: SectionRequest): Promise<Section> {
         return makeApiRequest('put', `${(SectionService.basePath)}/update`, sectionRequest);
     }
 

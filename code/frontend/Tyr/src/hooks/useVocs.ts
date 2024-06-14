@@ -14,7 +14,7 @@ const useVocs = () => {
     useEffect(() => {
         VocService.getAll()
             .then(data => {
-                setVocs(data);
+                setVocs(data.vocs);
             })
             .catch(err => {
                 setError(err);
