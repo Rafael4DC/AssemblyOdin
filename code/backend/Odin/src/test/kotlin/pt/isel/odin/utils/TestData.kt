@@ -60,7 +60,8 @@ object TestData {
     val tech3 = Tech(teacher = user1, section = section3, date = LocalDateTime.now(), summary = "Physics Tech 1")
     val tech4 = Tech(teacher = user1, section = section4, date = LocalDateTime.now(), summary = "Physics Tech 2")
     val tech5 = Tech(teacher = user1, section = section5, date = LocalDateTime.now(), summary = "Botany Tech")
-    val tech6 = Tech(teacher = user1, section = section6, date = LocalDateTime.now(), summary = "Organic Chemistry Tech")
+    val tech6 =
+        Tech(teacher = user1, section = section6, date = LocalDateTime.now(), summary = "Organic Chemistry Tech")
     val tech7 = Tech(
         teacher = user1,
         section = section7,

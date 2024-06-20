@@ -157,7 +157,11 @@ class TechRepositoryTest {
         val savedTeacherRole = roleRepository.save(TestData.role1)
         val savedTeacher = userRepository.save(TestData.user1.copy(role = savedTeacherRole))
         val savedSection = createSection()
-        val tech = TestData.tech7.copy(teacher = savedTeacher, section = savedSection, missTech = mutableListOf(savedStudent1, savedStudent2))
+        val tech = TestData.tech7.copy(
+            teacher = savedTeacher,
+            section = savedSection,
+            missTech = mutableListOf(savedStudent1, savedStudent2)
+        )
 
         // when: saving the tech
         val savedTech = techRepository.save(tech)

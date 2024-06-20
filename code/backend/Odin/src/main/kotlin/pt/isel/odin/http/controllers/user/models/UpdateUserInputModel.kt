@@ -4,6 +4,15 @@ import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
+/**
+ * Represents the input model for updating a user.
+ *
+ * @property id The user id.
+ * @property email The user email.
+ * @property username The user username.
+ * @property credits The user credits.
+ * @property role The user role.
+ */
 data class UpdateUserInputModel(
     val id: Long,
 

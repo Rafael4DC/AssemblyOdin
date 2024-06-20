@@ -13,13 +13,13 @@ import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
 
 /**
- * Represents the Teoric lectures (TEC) in the system.
+ * Represents the Teoric lectures (tech) in the system.
  *
- * @property id the TEC id
- * @property teacher the teacher that is responsible for the TEC
- * @property section the course that the TEC is about
- * @property date the date of the TEC
- * @property summary the summary of the TEC
+ * @property id the tech id
+ * @property teacher the teacher that is responsible for the tech
+ * @property section the course that the tech is about
+ * @property date the date of the tech
+ * @property summary the summary of the tech
  */
 @Entity
 @Table(name = "tech")
@@ -42,6 +42,18 @@ class Tech(
     @ManyToMany(fetch = FetchType.EAGER)
     val missTech: MutableList<User> = mutableListOf()
 ) {
+    /**
+     * Creates a copy of the tech with the given values.
+     *
+     * @param id the tech id
+     * @param teacher the teacher that is responsible for the tech
+     * @param section the course that the tech is about
+     * @param date the date of the tech
+     * @param summary the summary of the tech
+     * @param missTech the tech [User]
+     *
+     * @return the new [Tech]
+     */
     fun copy(
         id: Long? = this.id,
         teacher: User = this.teacher,

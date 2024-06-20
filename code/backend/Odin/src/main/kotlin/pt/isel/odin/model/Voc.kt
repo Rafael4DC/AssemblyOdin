@@ -11,15 +11,15 @@ import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
 
 /**
- * Represents the Pratical classes (VOC) in the system.
+ * Represents the Pratical classes (voc) in the system.
  *
- * @property id the VOC id
- * @property description the description of the VOC
- * @property user the student that is responsible for the VOC
- * @property section the course that the VOC is about
- * @property started the date of the VOC
- * @property ended the length of the VOC
- * @property approved if the VOC was approved
+ * @property id the voc id
+ * @property description the description of the voc
+ * @property approved if the voc was approved
+ * @property user the student that is responsible for the voc
+ * @property section the section that the voc is being teach
+ * @property started the date start of the voc
+ * @property ended the date end of the voc
  */
 @Entity
 @Table(name = "voc")
@@ -44,6 +44,19 @@ class Voc(
 
     val ended: LocalDateTime
 ) {
+    /**
+     * Creates a copy of the voc with the given values.
+     *
+     * @param id the voc id
+     * @param description the description of the voc
+     * @param approved if the voc was approved
+     * @param user the student that is responsible for the voc
+     * @param section the section that the voc is being teach
+     * @param started the date start of the voc
+     * @param ended the date end of the voc
+     *
+     * @return the new [Voc]
+     */
     fun copy(
         id: Long? = this.id,
         description: String = this.description,

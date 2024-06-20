@@ -1,16 +1,26 @@
 package pt.isel.odin.http.utils
 
+import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
 import java.net.URI
 
 /**
- * Utility functions to create responses.
+ * Creates a response entity with the given response, status and uri.
+ *
+ * @param response The response.
+ * @param status The status.
+ * @param uri The uri.
+ *
+ * @return The response entity.
  */
-fun <T> responde(response: T, status: Long = 200, uri: URI) = ResponseEntity
-    .status(status.toInt())
-    .header("Location", uri.toASCIIString())
-    .body<Any>(response)
+fun <T> responde(response: T, status: Int = 200, uri: URI? = null): ResponseEntity<Any> {
+    val headers = HttpHeaders().apply {
+        add(HttpHeaders.CONTENT_TYPE, "application/json")
+        uri?.let { add(HttpHeaders.LOCATION, it.toASCIIString()) }
+    }
 
-fun <T> responde(response: T, status: Int = 200) = ResponseEntity
-    .status(status)
-    .body<Any>(response)
+    return ResponseEntity
+        .status(status)
+        .headers(headers)
+        .body(response)
+}

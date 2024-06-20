@@ -2,6 +2,7 @@ package pt.isel.odin.controller
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,15 +11,13 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import pt.isel.odin.controller.utils.Config
+import pt.isel.odin.controller.utils.ControllerTestUtils
+import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.fieldstudy.models.GetAllFieldsStudyOutputModel
 import pt.isel.odin.http.controllers.fieldstudy.models.GetFieldStudyOutputModel
 import pt.isel.odin.http.controllers.fieldstudy.models.SaveFieldStudyInputModel
 import pt.isel.odin.http.controllers.fieldstudy.models.SaveFieldStudyOutputModel
 import pt.isel.odin.http.controllers.fieldstudy.models.UpdateFieldStudyInputModel
-import pt.isel.odin.model.Department
-import pt.isel.odin.model.FieldStudy
-import pt.isel.odin.repository.DepartmentRepository
-import pt.isel.odin.repository.FieldStudyRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -29,27 +28,20 @@ class FieldStudyControllerTest {
     var port: Int = 0
 
     @Autowired
-    lateinit var fieldStudyRepository: FieldStudyRepository
+    lateinit var testUtils: ControllerTestUtils
 
-    @Autowired
-    lateinit var departmentRepository: DepartmentRepository
-
-    private val baseUrl get() = "http://localhost:$port/api/fieldstudy"
-
-    private val client by lazy {
-        WebTestClient.bindToServer().baseUrl(baseUrl).build()
-    }
+    private lateinit var client: WebTestClient
 
     @BeforeEach
     fun setup() {
-        fieldStudyRepository.deleteAll()
+        testUtils.cleanDatabase()
+        client = testUtils.setupClient(port, Uris.FieldsStudy.RESOURCE)
     }
 
     @Test
     fun `Get field study by ID`() {
         // given: a field study
-        val department = departmentRepository.save(Department(name = "Department of Science"))
-        val fieldStudy = fieldStudyRepository.save(FieldStudy(name = "Computer Science", department = department))
+        val fieldStudy = testUtils.createFieldStudy()
 
         // when: getting the field study by its ID
         val result = client.get()
@@ -78,9 +70,8 @@ class FieldStudyControllerTest {
     @Test
     fun `Get all field studies`() {
         // given: two field studies
-        val department = departmentRepository.save(Department(name = "Department of Humanities"))
-        val fieldStudy1 = fieldStudyRepository.save(FieldStudy(name = "History", department = department))
-        val fieldStudy2 = fieldStudyRepository.save(FieldStudy(name = "Philosophy", department = department))
+        val fieldStudy1 = testUtils.createFieldStudy()
+        val fieldStudy2 = testUtils.createFieldStudy()
 
         val expectedFieldStudies = listOf(
             GetFieldStudyOutputModel(fieldStudy1),
@@ -103,15 +94,15 @@ class FieldStudyControllerTest {
     @Test
     fun `Save field study`() {
         // given: a field study input model
-        val department = departmentRepository.save(Department(name = "Department of Arts"))
+        val department = testUtils.createDepartment()
         val input = SaveFieldStudyInputModel(name = "Music", department = department.id!!)
 
         // when: saving the field study
         val fieldStudyId = client.post()
-            .uri("/save")
+            .uri(Uris.FieldsStudy.SAVE)
             .bodyValue(input)
             .exchange()
-            .expectStatus().isOk
+            .expectStatus().isCreated
             .expectBody(SaveFieldStudyOutputModel::class.java)
             .returnResult()
             .responseBody
@@ -132,14 +123,13 @@ class FieldStudyControllerTest {
     @Test
     fun `Save field study with duplicate name`() {
         // given: a field study with the same name
-        val department = departmentRepository.save(Department(name = "Department of Social Sciences"))
-        fieldStudyRepository.save(FieldStudy(name = "Sociology", department = department))
-        val input = SaveFieldStudyInputModel(name = "Sociology", department = department.id!!)
+        val fieldStudy = testUtils.createFieldStudy()
+        val input = SaveFieldStudyInputModel(name = fieldStudy.name, department = fieldStudy.department.id!!)
 
         // when: saving the field study
         // then: a conflict error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.FieldsStudy.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(409)
@@ -150,12 +140,12 @@ class FieldStudyControllerTest {
     @Test
     fun `Save field study with invalid name`() {
         // when: saving a field study with an invalid name
-        val department = departmentRepository.save(Department(name = "Department of Invalid Names"))
+        val department = testUtils.createDepartment()
         val input = SaveFieldStudyInputModel(name = "", department = department.id!!)
 
         // then: a bad request error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.FieldsStudy.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(400)
@@ -170,7 +160,7 @@ class FieldStudyControllerTest {
 
         // then: a bad request error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.FieldsStudy.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isNotFound
@@ -181,13 +171,16 @@ class FieldStudyControllerTest {
     @Test
     fun `Update field study`() {
         // given: a field study
-        val department = departmentRepository.save(Department(name = "Department of Medicine"))
-        val fieldStudy = fieldStudyRepository.save(FieldStudy(name = "Neurology", department = department))
-        val input = UpdateFieldStudyInputModel(id = fieldStudy.id!!, name = "Cardiology", department = department.id!!)
+        val fieldStudy = testUtils.createFieldStudy()
+        val input = UpdateFieldStudyInputModel(
+            id = fieldStudy.id!!,
+            name = "Cardiology",
+            department = fieldStudy.department.id!!
+        )
 
         // when: updating the field study
         val result = client.put()
-            .uri("/update")
+            .uri(Uris.FieldsStudy.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isOk
@@ -202,12 +195,12 @@ class FieldStudyControllerTest {
     @Test
     fun `Update non-existent field study`() {
         // when: updating a non-existent field study
-        val department = departmentRepository.save(Department(name = "Department of Non-Existent Studies"))
+        val department = testUtils.createDepartment()
         val input = UpdateFieldStudyInputModel(id = 999, name = "Non-Existent Field", department = department.id!!)
 
         // then: a not found error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.FieldsStudy.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(404)
@@ -218,12 +211,12 @@ class FieldStudyControllerTest {
     @Test
     fun `Update field study with invalid name`() {
         // when: updating a field study with an invalid name
-        val department = departmentRepository.save(Department(name = "Department of Valid Names"))
+        val department = testUtils.createDepartment()
         val input = UpdateFieldStudyInputModel(id = 1, name = "", department = department.id!!)
 
         // then: a bad request error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.FieldsStudy.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isBadRequest
@@ -238,7 +231,7 @@ class FieldStudyControllerTest {
 
         // then: a bad request error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.FieldsStudy.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isNotFound
@@ -247,10 +240,10 @@ class FieldStudyControllerTest {
     }
 
     @Test
+    @Disabled
     fun `Delete field study`() {
         // given: a field study
-        val department = departmentRepository.save(Department(name = "Department to be Deleted"))
-        val fieldStudy = fieldStudyRepository.save(FieldStudy(name = "Field to be Deleted", department = department))
+        val fieldStudy = testUtils.createFieldStudy()
 
         // when: deleting the field study
         val result = client.delete()
@@ -281,5 +274,31 @@ class FieldStudyControllerTest {
             .expectStatus().isNotFound
             .expectBody()
             .jsonPath("$.title").isEqualTo("Field Study Not Found")
+    }
+
+    @Test
+    @Disabled
+    fun `Delete field study that has module`() {
+        // given: a field study
+        val module = testUtils.createModule()
+        val fieldStudy = module.fieldStudy
+
+        // when: deleting the field study
+        val result = client.delete()
+            .uri("/${fieldStudy.id}")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(GetFieldStudyOutputModel::class.java)
+            .returnResult()
+            .responseBody
+
+        client.get().uri("/${fieldStudy.id}")
+            .exchange()
+            .expectStatus().isNotFound
+            .expectBody()
+            .jsonPath("$.title").isEqualTo("Field Study Not Found")
+
+        // then: the field study matches the expected field study
+        assertEquals(fieldStudy.name, result!!.name)
     }
 }

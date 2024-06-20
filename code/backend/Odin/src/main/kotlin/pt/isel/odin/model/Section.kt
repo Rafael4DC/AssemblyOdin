@@ -12,6 +12,15 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import pt.isel.odin.model.user.User
 
+/**
+ * Represents a section in the system.
+ *
+ * @property id the section id
+ * @property name the section name
+ * @property summary the section summary
+ * @property module the section [Module]
+ * @property students the section [User]
+ */
 @Entity
 @Table(name = "section")
 class Section(
@@ -32,6 +41,17 @@ class Section(
     @ManyToMany(fetch = FetchType.EAGER)
     val students: MutableList<User> = mutableListOf()
 ) {
+    /**
+     * Creates a copy of the section with the given values.
+     *
+     * @param id the section id
+     * @param name the section name
+     * @param summary the section summary
+     * @param module the section [Module]
+     * @param students the section [User]
+     *
+     * @return the new [Section]
+     */
     fun copy(
         id: Long? = this.id,
         name: String = this.name,

@@ -10,7 +10,21 @@ import java.util.*
  */
 @Repository
 interface UserRepository : JpaRepository<User, Long> {
+    /**
+     * Finds a user by its email.
+     *
+     * @param email the user email
+     *
+     * @return the [User] if found, [Optional.empty] otherwise
+     */
     fun findByEmail(email: String): Optional<User>
 
+    /**
+     * Finds a user by its role.
+     *
+     * @param roleName the user role name
+     *
+     * @return the [User] if found, [Optional.empty] otherwise
+     */
     fun findUserByRole_NameIs(roleName: String): List<User>
 }

@@ -7,6 +7,15 @@ import pt.isel.odin.model.Tech
 import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
 
+/**
+ * Represents the input model for saving a tech.
+ *
+ * @property teacher The tech teacher.
+ * @property section The tech section.
+ * @property date The tech date.
+ * @property summary The tech summary.
+ * @property missTech The tech missing students.
+ */
 data class SaveTechInputModel(
     val teacher: Long? = null,
 
@@ -20,6 +29,15 @@ data class SaveTechInputModel(
 
     val missTech: List<Long> = emptyList()
 ) {
+    /**
+     * Converts the [SaveTechInputModel] to a [Tech].
+     *
+     * @param teacher The [User].
+     * @param section The [Section].
+     * @param missTech The [User] list.
+     *
+     * @return The [Tech].
+     */
     fun toTech(
         teacher: User,
         section: Section,

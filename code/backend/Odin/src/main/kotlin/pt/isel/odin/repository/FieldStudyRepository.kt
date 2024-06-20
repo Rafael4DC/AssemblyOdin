@@ -10,5 +10,12 @@ import java.util.*
  */
 @Repository
 interface FieldStudyRepository : JpaRepository<FieldStudy, Long> {
+    /**
+     * Finds a field of study by its name.
+     *
+     * @param name the field of study name
+     *
+     * @return the [FieldStudy] if found, [Optional.empty] otherwise
+     */
     fun findByName(name: String): Optional<FieldStudy>
 }

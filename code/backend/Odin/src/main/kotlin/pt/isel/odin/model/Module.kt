@@ -10,6 +10,14 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
+/**
+ * Represents a module in the system.
+ *
+ * @property id the module id
+ * @property fieldStudy the module [FieldStudy]
+ * @property name the module name
+ * @property tier the module tier
+ */
 @Entity
 @Table(name = "module")
 class Module(
@@ -27,6 +35,16 @@ class Module(
     @Column(nullable = true)
     val tier: Int = 1
 ) {
+    /**
+     * Creates a copy of the module with the given values.
+     *
+     * @param id the module id
+     * @param fieldStudy the module [FieldStudy]
+     * @param name the module name
+     * @param tier the module tier
+     *
+     * @return the new [Module]
+     */
     fun copy(
         id: Long? = this.id,
         fieldStudy: FieldStudy = this.fieldStudy,

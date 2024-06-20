@@ -16,6 +16,7 @@ import pt.isel.odin.model.Role
  * @property id the user id
  * @property username the user username
  * @property email the user email
+ * @property credits the user credits
  * @property role the user role, is a [Role]
  */
 @Entity
@@ -46,6 +47,17 @@ class User(
         const val MAX_NAME_SIZE = 50
     }
 
+    /**
+     * Creates a copy of the user with the given values.
+     *
+     * @param id the user id
+     * @param email the user email
+     * @param username the user username
+     * @param credits the user credits
+     * @param role the user role
+     *
+     * @return the new user
+     */
     fun copy(
         id: Long? = this.id,
         email: String = this.email,

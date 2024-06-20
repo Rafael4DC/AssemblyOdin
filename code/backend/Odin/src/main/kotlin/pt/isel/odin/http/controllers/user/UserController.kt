@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.user.models.GetUserOutputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserOutputModel
@@ -27,85 +28,107 @@ import java.security.Principal
  * Represents the controller that contains the endpoints related to the user.
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(Uris.Users.RESOURCE)
 class UserController(private val userService: UserService) {
 
     /**
      * Gets the session user.
      *
      * @param authentication the authentication token.
+     *
+     * @return Session user info
      */
-    @GetMapping("/session")
+    @GetMapping(Uris.Users.SESSION)
     fun getSession(authentication: Principal): ResponseEntity<*> =
-        when (val user = userService.getByEmail(authentication.toEmail())) {
-            is Success -> responde(GetUserOutputModel(user.value))
-            is Failure -> Problem.responseForError(user.value)
+        when (val result = userService.getByEmail(authentication.toEmail())) {
+            is Success -> responde(GetUserOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
         }
 
     /**
      * Gets a user by its id.
      *
      * @param id the user id.
+     *
+     * @return The user.
      */
-    @GetMapping("/{id}")
+    @GetMapping(Uris.Users.GET_BY_ID)
     fun getById(@PathVariable id: Long): ResponseEntity<*> =
-        when (val user = userService.getById(id)) {
-            is Success -> responde(GetUserOutputModel(user.value))
-            is Failure -> Problem.responseForError(user.value)
+        when (val result = userService.getById(id)) {
+            is Success -> responde(GetUserOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
         }
 
     /**
      * Gets all users.
      *
      * @return a list of users.
+     *
+     * @return All users.
      */
     @GetMapping
     fun getAll(): ResponseEntity<*> =
-        when (val users = userService.getAll()) {
-            is Success -> responde(getAllUsersOutputModel(users.value))
-            is Failure -> Problem.responseForError(users.value)
+        when (val result = userService.getAll()) {
+            is Success -> responde(getAllUsersOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
         }
 
     /**
      * Saves a user.
      *
      * @param saveUserInputModel the user to save.
+     *
+     * @return The saved user id.
      */
-    @PostMapping("/save")
+    @PostMapping(Uris.Users.SAVE)
     fun save(@RequestBody saveUserInputModel: SaveUserInputModel): ResponseEntity<*> =
-        when (val user = userService.save(saveUserInputModel)) {
-            is Success -> responde(SaveUserOutputModel(user.value))
-            is Failure -> Problem.responseForError(user.value)
+        when (val result = userService.save(saveUserInputModel)) {
+            is Success -> responde(
+                SaveUserOutputModel(result.value),
+                201,
+                Uris.Users.byId(result.value.id)
+            )
+
+            is Failure -> Problem.responseForError(result.value)
         }
 
     /**
      * Updates a user.
      *
      * @param updateInputModel the user to update.
+     *
+     * @return The updated user.
      */
-    @PutMapping("/update")
+    @PutMapping(Uris.Users.UPDATE)
     fun update(@RequestBody updateInputModel: UpdateUserInputModel): ResponseEntity<*> =
-        when (val user = userService.update(updateInputModel)) {
-            is Success -> responde(UpdateUserOutputModel(user.value))
-            is Failure -> Problem.responseForError(user.value)
+        when (val result = userService.update(updateInputModel)) {
+            is Success -> responde(UpdateUserOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
         }
 
     /**
      * Deletes a user by its id.
      *
      * @param id the user id.
+     *
+     * @return The deleted user.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(Uris.Users.DELETE)
     fun delete(@PathVariable id: Long): ResponseEntity<*> =
-        when (val user = userService.delete(id)) {
-            is Success -> responde(GetUserOutputModel(user.value))
-            is Failure -> Problem.responseForError(user.value)
+        when (val result = userService.delete(id)) {
+            is Success -> responde(GetUserOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
         }
 
-    @GetMapping("/students")
+    /**
+     * Gets all students.
+     *
+     * @return All students.
+     */
+    @GetMapping(Uris.Users.GET_STUDENTS)
     fun getStudents(): ResponseEntity<*> =
-        when (val user = userService.getStudents()) {
-            is Success -> responde(getAllUsersOutputModel(user.value))
-            is Failure -> Problem.responseForError(user.value)
+        when (val result = userService.getStudents()) {
+            is Success -> responde(getAllUsersOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
         }
 }

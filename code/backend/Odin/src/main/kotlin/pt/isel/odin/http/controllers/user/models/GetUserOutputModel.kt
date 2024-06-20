@@ -2,6 +2,17 @@ package pt.isel.odin.http.controllers.user.models
 
 import pt.isel.odin.model.user.User
 
+/**
+ * Represents the output model for getting a user.
+ *
+ * @property id The user id.
+ * @property email The user email.
+ * @property username The user username.
+ * @property credits The user credits.
+ * @property role The user role.
+ *
+ * @constructor Creates a [GetUserOutputModel] from a [User].
+ */
 data class GetUserOutputModel(
     val id: Long,
     val email: String,

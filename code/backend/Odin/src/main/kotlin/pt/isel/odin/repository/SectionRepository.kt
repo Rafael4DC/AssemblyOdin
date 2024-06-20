@@ -10,5 +10,12 @@ import java.util.*
  */
 @Repository
 interface SectionRepository : JpaRepository<Section, Long> {
+    /**
+     * Finds a section by its name.
+     *
+     * @param name the section name
+     *
+     * @return the [Section] if found, [Optional.empty] otherwise
+     */
     fun findByName(name: String): Optional<Section>
 }

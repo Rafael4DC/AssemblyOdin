@@ -52,9 +52,16 @@ class DataPopulationService(
         data.departments.forEach { categoryData ->
             val department = departmentRepository.save(Department(name = categoryData.name))
             categoryData.fieldsStudy.forEach { subCategoryData ->
-                val fieldStudy = fieldStudyRepository.save(FieldStudy(department = department, name = subCategoryData.name))
+                val fieldStudy =
+                    fieldStudyRepository.save(FieldStudy(department = department, name = subCategoryData.name))
                 subCategoryData.modules.forEach { moduleData ->
-                    moduleRepository.save(Module(fieldStudy = fieldStudy, name = moduleData.name, tier = moduleData.tier))
+                    moduleRepository.save(
+                        Module(
+                            fieldStudy = fieldStudy,
+                            name = moduleData.name,
+                            tier = moduleData.tier
+                        )
+                    )
                 }
             }
         }
