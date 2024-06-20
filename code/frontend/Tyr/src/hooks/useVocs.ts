@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {VocService} from '../services/VocService';
-import {Voc, VocRequest} from "../model/Voc";
+import {VocService} from '../services/voc/VocService';
+import {Voc, VocRequest} from "../services/voc/models/Voc";
 
 /**
  * Hook to get the voc classes

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useState} from 'react';
 import {Table} from 'react-bootstrap';
-import {Voc} from "../../model/Voc";
+import {Voc} from "../../services/voc/models/Voc";
 import {filterCourses, FilterOptions, getDuration} from "../../utils/Utils";
 import {fixedRowHeight, scrollableTableStyle} from "./TecTable";
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import {useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import {TechService} from "../../services/TechService";
+import {TechService} from "../../services/tech/TechService";
 import {WebUris} from "../../utils/WebUris";
 import MANAGE_CLASSES = WebUris.MANAGE_CLASSES;
 import useSections from "../../hooks/useSections";

@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import {Section} from "../model/Section";
-import {SectionService} from "../services/SectionService";
-import {Module} from "../model/Module";
-import {ModuleService} from "../services/ModuleService";
+import {Section} from "../services/section/models/Section";
+import {SectionService} from "../services/section/SectionService";
+import {Module} from "../services/module/models/Module";
+import {ModuleService} from "../services/module/ModuleService";
 
 const useModules = () => {
     const [modules, setModules] = useState<Module[] | null>(null);

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {TechService} from '../services/TechService';
+import {TechService} from '../services/tech/TechService';
 import {TechsAttendance} from "./useClassManager";
 
 /**

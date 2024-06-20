@@ -1,8 +1,8 @@
 import {Button, Table} from 'react-bootstrap';
 import * as React from 'react';
 import {useState} from 'react';
-import {Voc} from '../../model/Voc';
-import {VocService} from "../../services/VocService";
+import {Voc} from '../../services/voc/models/Voc';
+import {VocService} from "../../services/voc/VocService";
 import VocApprovalModal from "../../components/ManageClass/VocApprovalModal";
 import {getDuration, toDateTimeStr} from "../../utils/Utils";
 

@@ -6,7 +6,7 @@ import useStudents from "../../hooks/useStudents";
 import { useNavigate } from "react-router-dom";
 import { WebUris } from "../../utils/WebUris";
 import PROFILE = WebUris.PROFILE;
-import {SectionService} from "../../services/SectionService";
+import {SectionService} from "../../services/section/SectionService";
 
 /**
  * Page to create a section

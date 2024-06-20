@@ -1,5 +1,5 @@
-import {Tech} from "../model/Tech";
-import {Voc} from "../model/Voc";
+import {Tech} from "../services/tech/models/Tech";
+import {Voc} from "../services/voc/models/Voc";
 
 /**
  * Formated the date String of backend to a more readable date and time string

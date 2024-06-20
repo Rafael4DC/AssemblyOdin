@@ -1,8 +1,8 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import { Container, Table } from 'react-bootstrap';
-import {SectionService} from "../../services/SectionService";
-import {Section} from "../../model/Section";
+import {SectionService} from "../../services/section/SectionService";
+import {Section} from "../../services/section/models/Section";
 
 /**
  * Page to view all sections and their users

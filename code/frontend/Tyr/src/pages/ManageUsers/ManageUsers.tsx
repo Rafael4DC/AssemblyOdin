@@ -1,7 +1,7 @@
 import {Button, Col, Container, FormControl, InputGroup, Row, Table} from 'react-bootstrap';
 import * as React from 'react';
 import useUsers from "../../hooks/useUsers";
-import {User} from "../../model/User";
+import {User} from "../../services/user/models/User";
 import {Spinner} from "../../utils/Spinner";
 import {ModalShowAction} from "../../components/ManageUsers/ModalShowAction";
 import {AlertError} from "../../utils/AlertError";

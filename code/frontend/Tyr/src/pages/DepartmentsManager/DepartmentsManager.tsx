@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {Accordion, Card, Container, Button, Form, Modal} from 'react-bootstrap';
-import {Department} from "../../model/Department";
-import {FieldStudy} from "../../model/FieldStudy";
-import {Module} from "../../model/Module";
+import {Department} from "../../services/department/models/Department";
+import {FieldStudy} from "../../services/fieldstudy/models/FieldStudy";
+import {Module} from "../../services/module/models/Module";
 import * as React from 'react';
 import useDepartments from "../../hooks/useDepartments";
 

@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {TechService} from '../services/TechService';
-import {Tech} from "../model/Tech";
+import {TechService} from '../services/tech/TechService';
+import {Tech} from "../services/tech/models/Tech";
 
 /**
  * Hook to get the tech classes

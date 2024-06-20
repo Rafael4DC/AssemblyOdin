@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {UserService} from '../services/UserService';
-import {User} from "../model/User";
+import {UserService} from '../services/user/UserService';
+import {User} from "../services/user/models/User";
 
 
 /**

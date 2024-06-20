@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Button, Form, ListGroup, Modal} from 'react-bootstrap';
-import {Tech} from '../../model/Tech';
+import {Tech} from '../../services/tech/models/Tech';
 
 /**
  * Props for the ClassEditModal component

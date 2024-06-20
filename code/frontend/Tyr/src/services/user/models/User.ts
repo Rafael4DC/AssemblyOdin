@@ -8,8 +8,6 @@ import {Role} from "./Role";
  * @param username the username of the user
  * @param role the role of the user
  * @param credits the credits of the user
- *
- * @param attendance if the user attended the class
  */
 export interface User {
     id?: number;
@@ -17,8 +15,6 @@ export interface User {
     username?: string;
     role?: Role;
     credits?: number;
-
-    attendance?: boolean;
 }
 
 /**

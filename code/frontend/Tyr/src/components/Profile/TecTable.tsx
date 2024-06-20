@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import {Button, Table} from 'react-bootstrap';
 import TextModal from '../Shared/TextModal';
-import {Tech} from '../../model/Tech';
+import {Tech} from '../../services/tech/models/Tech';
 import {filterCourses, FilterOptions, toDateTimeStr} from "../../utils/Utils";
 
 export const maxRows = 5;

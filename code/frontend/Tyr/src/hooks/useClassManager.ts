@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
-import {TechService} from '../services/TechService';
-import {Voc} from '../model/Voc';
-import {VocService} from '../services/VocService';
-import {Tech} from "../model/Tech";
+import {TechService} from '../services/tech/TechService';
+import {Voc} from '../services/voc/models/Voc';
+import {VocService} from '../services/voc/VocService';
+import {Tech} from "../services/tech/models/Tech";
 
 /**
  * Filter options for the classes

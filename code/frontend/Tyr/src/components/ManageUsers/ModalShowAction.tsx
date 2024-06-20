@@ -1,5 +1,5 @@
 import {Button, Form, Modal} from "react-bootstrap";
-import {RoleOptions, User} from "../../model/User";
+import {RoleOptions, User} from "../../services/user/models/User";
 import * as React from "react";
 
 /**

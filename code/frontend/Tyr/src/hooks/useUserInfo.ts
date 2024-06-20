@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
-import {UserService} from '../services/UserService';
-import {User} from '../model/User';
-import {Tech} from "../model/Tech";
-import {Voc} from "../model/Voc";
-import {TechService} from "../services/TechService";
-import {VocService} from "../services/VocService";
+import {UserService} from '../services/user/UserService';
+import {User} from '../services/user/models/User';
+import {Tech} from "../services/tech/models/Tech";
+import {Voc} from "../services/voc/models/Voc";
+import {TechService} from "../services/tech/TechService";
+import {VocService} from "../services/voc/VocService";
 
 /**
  * Hook to get the user info

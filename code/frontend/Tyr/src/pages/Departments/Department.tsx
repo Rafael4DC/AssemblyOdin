@@ -1,5 +1,5 @@
 import {Accordion, Card, Container} from 'react-bootstrap';
-import {Department} from "../../model/Department";
+import {Department} from "../../services/department/models/Department";
 import * as React from 'react';
 import useDepartments from "../../hooks/useDepartments";
 

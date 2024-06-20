@@ -1,8 +1,8 @@
 // DetailView.js
 import * as React from 'react';
 import {useState} from 'react';
-import {Tech} from '../../model/Tech';
-import {Module} from "../../model/Module";
+import {Tech} from '../../services/tech/models/Tech';
+import {Module} from "../../services/module/models/Module";
 
 
 interface DetailViewProps {

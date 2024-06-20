@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { DepartmentService } from "../services/DepartmentService";
-import { FieldStudyService } from "../services/FieldStudyService";
-import { ModuleService } from "../services/ModuleService";
-import { Department } from "../model/Department";
-import { FieldStudy } from "../model/FieldStudy";
-import { Module } from "../model/Module";
+import { DepartmentService } from "../services/department/DepartmentService";
+import { FieldStudyService } from "../services/fieldstudy/FieldStudyService";
+import { ModuleService } from "../services/module/ModuleService";
+import { Department } from "../services/department/models/Department";
+import { FieldStudy } from "../services/fieldstudy/models/FieldStudy";
+import { Module } from "../services/module/models/Module";
 
 /**
  * Hook to get the categories

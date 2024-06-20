@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {Form, Table} from 'react-bootstrap';
 import DetailView from './DetailView';
 import useDepartments from "../../hooks/useDepartments";
-import {Department} from "../../model/Department";
+import {Department} from "../../services/department/models/Department";
 
 
 enum FilterOptions {
