@@ -38,7 +38,7 @@ const TecTable: React.FC<TecTableProps> = ({techs}) => {
             <td>{tech.section.name}</td>
             <td>{tech.teacher.username}</td>
             <td>{toDateTimeStr(tech.date)}</td>
-            <td>{tech.attendance ? '✓' : '—'}</td>
+            <td>{tech ? '✓' : '—'}</td>
             <td>
                 <Button variant="link" onClick={() => {
                     setCurrentSummary(tech.summary);

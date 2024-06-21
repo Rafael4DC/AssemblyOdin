@@ -1,4 +1,4 @@
-# Use an official Gradle image to build the app with JDK 17
+# Use an official Gradle image toResOrError build the app with JDK 17
 FROM gradle:8.4-jdk17 AS build
 WORKDIR /home/app
 
@@ -7,7 +7,7 @@ ENV DISABLE_KTLINT=true
 
 RUN gradle clean build --no-daemon --stacktrace --gradle-user-home /home/app/.gradle
 
-# Use an official OpenJDK image to run the app with JDK 17
+# Use an official OpenJDK image toResOrError run the app with JDK 17
 FROM openjdk:17-jdk-slim
 WORKDIR /home/app
 

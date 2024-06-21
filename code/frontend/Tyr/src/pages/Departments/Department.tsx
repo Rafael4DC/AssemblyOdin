@@ -9,7 +9,6 @@ import useDepartments from "../../hooks/useDepartments";
 const DepartmentsDisplay: React.FC = () => {
     const {departments} = useDepartments();
 
-    debugger;
     return (
         <Container>
             <h1>Departments</h1>

@@ -1,4 +1,4 @@
-import { makeApiRequest } from '../../axios/apiRequest';
+import {apiRequest} from '../../axios/apiRequest';
 import {
     CreationFieldStudyResult,
     DeleteFieldStudyResult,
@@ -22,7 +22,7 @@ export namespace FieldStudyService {
      * @returns the field of study
      */
     export async function getById(id: number): Promise<GetFieldStudyResult> {
-        return makeApiRequest('get', `${basePath}/${id}`);
+        return apiRequest('get', `${basePath}/${id}`);
     }
 
     /**
@@ -31,7 +31,7 @@ export namespace FieldStudyService {
      * @returns all fields of study
      */
     export async function getAll(): Promise<GetAllFieldsStudyResult> {
-        return makeApiRequest('get', basePath);
+        return apiRequest('get', basePath);
     }
 
     /**
@@ -42,7 +42,7 @@ export namespace FieldStudyService {
      * @returns the result of the creation
      */
     export async function save(fieldStudyRequest: FieldStudyInputModel): Promise<CreationFieldStudyResult> {
-        return makeApiRequest('post', `${basePath}/save`, fieldStudyRequest);
+        return apiRequest('post', `${basePath}/save`, fieldStudyRequest);
     }
 
     /**
@@ -53,7 +53,7 @@ export namespace FieldStudyService {
      * @returns the result of the update
      */
     export async function update(fieldStudyRequest: FieldStudyInputModel): Promise<CreationFieldStudyResult> {
-        return makeApiRequest('put', `${basePath}/update`, fieldStudyRequest);
+        return apiRequest('put', `${basePath}/update`, fieldStudyRequest);
     }
 
     /**
@@ -64,6 +64,6 @@ export namespace FieldStudyService {
      * @returns the result of the deletion
      */
     export async function deleteById(id: number): Promise<DeleteFieldStudyResult> {
-        return makeApiRequest('delete', `${basePath}/${id}`);
+        return apiRequest('delete', `${basePath}/${id}`);
     }
 }

@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {User} from "../services/user/models/User";
 import {UserService} from "../services/user/UserService";
+import {Failure, Success} from "../services/_utils/Either";
 
 const useStudents = () => {
     const [students, setStudents] = useState<User[] | null>(null);
@@ -9,7 +10,11 @@ const useStudents = () => {
     useEffect(() => {
         UserService.getStudents()
             .then(data => {
-                setStudents(data.users);
+                if (data instanceof Success) {
+                    setStudents(data.value.users);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);

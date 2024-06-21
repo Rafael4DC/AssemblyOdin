@@ -5,6 +5,7 @@ import {SessionContext} from "./SessionProvider";
 export interface Session {
     username: string;
     email: string;
+    role: string;
 }
 
 export interface SessionManager {

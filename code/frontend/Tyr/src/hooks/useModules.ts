@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
-import {Section} from "../services/section/models/Section";
-import {SectionService} from "../services/section/SectionService";
 import {Module} from "../services/module/models/Module";
 import {ModuleService} from "../services/module/ModuleService";
+import {Failure, Success} from "../services/_utils/Either";
 
 const useModules = () => {
     const [modules, setModules] = useState<Module[] | null>(null);
@@ -11,13 +10,16 @@ const useModules = () => {
     useEffect(() => {
         ModuleService.getAll()
             .then(data => {
-                setModules(data.modules);
+                if (data instanceof Success) {
+                    setModules(data.value.modules);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);
             });
     }, []);
-
 
 
     return {modules, error};

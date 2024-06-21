@@ -4,8 +4,8 @@ import {Button, Container, Form} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 import {TechService} from "../../services/tech/TechService";
 import {WebUris} from "../../utils/WebUris";
-import MANAGE_CLASSES = WebUris.MANAGE_CLASSES;
 import useSections from "../../hooks/useSections";
+import MANAGE_CLASSES = WebUris.MANAGE_CLASSES;
 
 /**
  * Page to create a tech class
@@ -19,7 +19,7 @@ const CreateTechClass = () => {
         summary: ""
     });
 
-    const { sections } = useSections();
+    const {sections} = useSections();
 
     if (!sections) return <p>Loading sections...</p>;
 

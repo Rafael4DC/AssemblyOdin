@@ -11,7 +11,7 @@ export type GetVocResult = Either<Error | Problem, Voc>;
 /**
  * Represents the result of a voc get all operations.
  */
-export type GetAllVocsResult = Either<Error | Problem, GetAllVocsOutputModel[]>;
+export type GetAllVocsResult = Either<Error | Problem, GetAllVocsOutputModel>;
 
 /**
  * Represents the result of a voc creation operation.

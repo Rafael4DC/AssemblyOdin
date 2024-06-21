@@ -11,7 +11,7 @@ export type GetTechResult = Either<Error | Problem, Tech>;
 /**
  * Represents the result of a tech get all operations.
  */
-export type GetAllTechsResult = Either<Error | Problem, GetAllTechsOutputModel[]>;
+export type GetAllTechsResult = Either<Error | Problem, GetAllTechsOutputModel>;
 
 /**
  * Represents the result of a tech creation operation.

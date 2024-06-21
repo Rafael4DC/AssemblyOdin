@@ -1,10 +1,5 @@
-import { makeApiRequest } from '../../axios/apiRequest';
-import {
-    CreationTechResult,
-    DeleteTechResult,
-    GetAllTechsResult,
-    GetTechResult
-} from "./TechResult";
+import {apiRequest} from '../../axios/apiRequest';
+import {CreationTechResult, DeleteTechResult, GetAllTechsResult, GetTechResult} from "./TechResult";
 import {TechInputModel} from "./models/TechInputModel";
 
 /**
@@ -22,7 +17,7 @@ export namespace TechService {
      * @returns the tech
      */
     export async function getById(id: number): Promise<GetTechResult> {
-        return makeApiRequest('get', `${basePath}/${id}`);
+        return apiRequest('get', `${basePath}/${id}`);
     }
 
     /**
@@ -31,7 +26,7 @@ export namespace TechService {
      * @returns all techs
      */
     export async function getAll(): Promise<GetAllTechsResult> {
-        return makeApiRequest('get', basePath);
+        return apiRequest('get', basePath);
     }
 
     /**
@@ -42,7 +37,7 @@ export namespace TechService {
      * @returns the result of the creation
      */
     export async function save(techRequest: TechInputModel): Promise<CreationTechResult> {
-        return makeApiRequest('post', `${basePath}/save`, techRequest);
+        return apiRequest('post', `${basePath}/save`, techRequest);
     }
 
     /**
@@ -53,7 +48,7 @@ export namespace TechService {
      * @returns the result of the update
      */
     export async function update(techRequest: TechInputModel): Promise<CreationTechResult> {
-        return makeApiRequest('put', `${basePath}/update`, techRequest);
+        return apiRequest('put', `${basePath}/update`, techRequest);
     }
 
     /**
@@ -64,7 +59,7 @@ export namespace TechService {
      * @returns the result of the deletion
      */
     export async function deleteById(id: number): Promise<DeleteTechResult> {
-        return makeApiRequest('delete', `${basePath}/${id}`);
+        return apiRequest('delete', `${basePath}/${id}`);
     }
 
     /**
@@ -73,6 +68,6 @@ export namespace TechService {
      * @returns the techs
      */
     export async function getTechsByUser(): Promise<GetAllTechsResult> {
-        return makeApiRequest('get', `${basePath}/user`);
+        return apiRequest('get', `${basePath}/user`);
     }
 }

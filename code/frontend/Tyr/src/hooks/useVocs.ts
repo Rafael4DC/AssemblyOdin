@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import {VocService} from '../services/voc/VocService';
-import {Voc, VocRequest} from "../services/voc/models/Voc";
+import {Voc} from "../services/voc/models/Voc";
+import {Failure, Success} from "../services/_utils/Either";
+import {VocInputModel} from "../services/voc/models/VocInputModel";
 
 /**
  * Hook to get the voc classes
@@ -14,7 +16,11 @@ const useVocs = () => {
     useEffect(() => {
         VocService.getAll()
             .then(data => {
-                setVocs(data.vocs);
+                if (data instanceof Success) {
+                    setVocs(data.value.vocs);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);
@@ -25,7 +31,7 @@ const useVocs = () => {
     return {
         vocs,
         error,
-        handleSaveVocClass: async (vocClass: VocRequest) => {
+        handleSaveVocClass: async (vocClass: VocInputModel) => {
             setError(null);
             try {
                 if (vocClass.id) {
@@ -40,7 +46,7 @@ const useVocs = () => {
         handleDeleteVocClass: async (id: number) => {
             setError(null);
             try {
-                await VocService.delete(id);
+                await VocService.deleteById(id);
             } catch (err) {
                 setError(err);
             }

@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
-import { DepartmentService } from "../services/department/DepartmentService";
-import { FieldStudyService } from "../services/fieldstudy/FieldStudyService";
-import { ModuleService } from "../services/module/ModuleService";
-import { Department } from "../services/department/models/Department";
-import { FieldStudy } from "../services/fieldstudy/models/FieldStudy";
-import { Module } from "../services/module/models/Module";
+import {useEffect, useState} from 'react';
+import {DepartmentService} from "../services/department/DepartmentService";
+import {FieldStudyService} from "../services/fieldstudy/FieldStudyService";
+import {ModuleService} from "../services/module/ModuleService";
+import {Department} from "../services/department/models/Department";
+import {FieldStudy} from "../services/fieldstudy/models/FieldStudy";
+import {Module} from "../services/module/models/Module";
+import {Failure, Success} from "../services/_utils/Either";
 
 /**
  * Hook to get the categories
@@ -18,7 +19,11 @@ const useDepartments = () => {
     useEffect(() => {
         DepartmentService.getAll()
             .then(data => {
-                setDepartments(data.departments);
+                if (data instanceof Success) {
+                    setDepartments(data.value.departments);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);
@@ -37,7 +42,11 @@ const useDepartments = () => {
                     await DepartmentService.save(category);
                 }
                 const updatedDepartments = await DepartmentService.getAll();
-                setDepartments(updatedDepartments.departments);
+                if (updatedDepartments instanceof Success) {
+                    setDepartments(updatedDepartments.value.departments);
+                } else if (updatedDepartments instanceof Failure) {
+                    console.error('Error fetching data:', updatedDepartments.value);
+                }
             } catch (err) {
                 setError(err);
             }
@@ -45,9 +54,13 @@ const useDepartments = () => {
         handleDeleteDepartments: async (id: number) => {
             setError(null);
             try {
-                await DepartmentService.delete(id);
+                await DepartmentService.deleteById(id);
                 const updatedDepartments = await DepartmentService.getAll();
-                setDepartments(updatedDepartments.departments);
+                if (updatedDepartments instanceof Success) {
+                    setDepartments(updatedDepartments.value.departments);
+                } else if (updatedDepartments instanceof Failure) {
+                    console.error('Error fetching data:', updatedDepartments.value);
+                }
             } catch (err) {
                 setError(err);
             }
@@ -62,7 +75,11 @@ const useDepartments = () => {
                     await FieldStudyService.save(subCategory);
                 }
                 const updatedDepartments = await DepartmentService.getAll();
-                setDepartments(updatedDepartments.departments);
+                if (updatedDepartments instanceof Success) {
+                    setDepartments(updatedDepartments.value.departments);
+                } else if (updatedDepartments instanceof Failure) {
+                    console.error('Error fetching data:', updatedDepartments.value);
+                }
             } catch (err) {
                 setError(err);
             }
@@ -70,9 +87,13 @@ const useDepartments = () => {
         handleDeleteFieldsStudy: async (subCategoryId: number) => {
             setError(null);
             try {
-                await FieldStudyService.delete(subCategoryId);
+                await FieldStudyService.deleteById(subCategoryId);
                 const updatedDepartments = await DepartmentService.getAll();
-                setDepartments(updatedDepartments.departments);
+                if (updatedDepartments instanceof Success) {
+                    setDepartments(updatedDepartments.value.departments);
+                } else if (updatedDepartments instanceof Failure) {
+                    console.error('Error fetching data:', updatedDepartments.value);
+                }
             } catch (err) {
                 setError(err);
             }
@@ -86,7 +107,11 @@ const useDepartments = () => {
                     await ModuleService.save(module);
                 }
                 const updatedDepartments = await DepartmentService.getAll();
-                setDepartments(updatedDepartments.departments);
+                if (updatedDepartments instanceof Success) {
+                    setDepartments(updatedDepartments.value.departments);
+                } else if (updatedDepartments instanceof Failure) {
+                    console.error('Error fetching data:', updatedDepartments.value);
+                }
             } catch (err) {
                 setError(err);
             }
@@ -94,9 +119,13 @@ const useDepartments = () => {
         handleDeleteModule: async (moduleId: number) => {
             setError(null);
             try {
-                await ModuleService.delete(moduleId);
+                await ModuleService.deleteById(moduleId);
                 const updatedDepartments = await DepartmentService.getAll();
-                setDepartments(updatedDepartments.departments);
+                if (updatedDepartments instanceof Success) {
+                    setDepartments(updatedDepartments.value.departments);
+                } else if (updatedDepartments instanceof Failure) {
+                    console.error('Error fetching data:', updatedDepartments.value);
+                }
             } catch (err) {
                 setError(err);
             }

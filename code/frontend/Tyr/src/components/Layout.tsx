@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Dashboard from './Dashboard';
 import './Layout.css';
 
 /**
@@ -14,12 +13,11 @@ interface LayoutProps {
 /**
  * Layout for the dashboard
  */
+/*
 const Layout = ({children}: LayoutProps) => {
     return (
         <div className="dashboard-container">
-            <div className="sidebar">
                 <Dashboard/>
-            </div>
             <div className="main-content">
                 {children}
             </div>
@@ -27,4 +25,4 @@ const Layout = ({children}: LayoutProps) => {
     );
 };
 
-export default Layout;
+export default Layout;*/

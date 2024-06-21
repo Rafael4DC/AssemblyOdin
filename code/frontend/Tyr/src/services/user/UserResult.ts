@@ -11,7 +11,7 @@ export type GetUserResult = Either<Error | Problem, User>;
 /**
  * Represents the result of a user get all operations.
  */
-export type GetAllUsersResult = Either<Error | Problem, GetAllUsersOutputModel[]>;
+export type GetAllUsersResult = Either<Error | Problem, GetAllUsersOutputModel>;
 
 /**
  * Represents the result of a user creation operation.

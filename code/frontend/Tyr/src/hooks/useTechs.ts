@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {TechService} from '../services/tech/TechService';
 import {Tech} from "../services/tech/models/Tech";
+import {Failure, Success} from "../services/_utils/Either";
 
 /**
  * Hook to get the tech classes
@@ -14,7 +15,11 @@ const useTechs = () => {
     useEffect(() => {
         TechService.getAll()
             .then(data => {
-                setTechs(data);
+                if (data instanceof Success) {
+                    setTechs(data.value.techs);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);
@@ -52,7 +57,7 @@ const useTechs = () => {
         handleDeleteTech: async (id: number) => {
             setError(null);
             try {
-                await TechService.delete(id);
+                await TechService.deleteById(id);
             } catch (err) {
                 setError(err);
             }

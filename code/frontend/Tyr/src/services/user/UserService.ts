@@ -1,10 +1,5 @@
-import { makeApiRequest } from "../../axios/apiRequest";
-import {
-    CreationUserResult,
-    DeleteUserResult,
-    GetAllUsersResult,
-    GetUserResult
-} from "./UserResult";
+import {apiRequest} from "../../axios/apiRequest";
+import {CreationUserResult, DeleteUserResult, GetAllUsersResult, GetUserResult} from "./UserResult";
 import {UserInputModel} from "./models/UserInputModel";
 
 /**
@@ -20,7 +15,7 @@ export namespace UserService {
      * @returns the current session information
      */
     export async function getSession(): Promise<GetUserResult> {
-        return makeApiRequest('get', `${basePath}/session`);
+        return apiRequest('get', `${basePath}/session`);
     }
 
     /**
@@ -31,7 +26,7 @@ export namespace UserService {
      * @returns the user
      */
     export async function getById(id: string): Promise<GetUserResult> {
-        return makeApiRequest('get', `${basePath}/${id}`);
+        return apiRequest('get', `${basePath}/${id}`);
     }
 
     /**
@@ -40,7 +35,7 @@ export namespace UserService {
      * @returns all users
      */
     export async function getAll(): Promise<GetAllUsersResult> {
-        return makeApiRequest('get', basePath);
+        return apiRequest('get', basePath);
     }
 
     /**
@@ -51,7 +46,7 @@ export namespace UserService {
      * @returns the result of the creation
      */
     export async function save(userRequest: UserInputModel): Promise<CreationUserResult> {
-        return makeApiRequest('post', `${basePath}/save`, userRequest);
+        return apiRequest('post', `${basePath}/save`, userRequest);
     }
 
     /**
@@ -62,7 +57,7 @@ export namespace UserService {
      * @returns the result of the update
      */
     export async function update(userRequest: UserInputModel): Promise<CreationUserResult> {
-        return makeApiRequest('put', `${basePath}/update`, userRequest);
+        return apiRequest('put', `${basePath}/update`, userRequest);
     }
 
     /**
@@ -73,7 +68,7 @@ export namespace UserService {
      * @returns the result of the deletion
      */
     export async function deleteById(id: number): Promise<DeleteUserResult> {
-        return makeApiRequest('delete', `${basePath}/${id}`);
+        return apiRequest('delete', `${basePath}/${id}`);
     }
 
     /**
@@ -82,6 +77,6 @@ export namespace UserService {
      * @returns all students
      */
     export async function getStudents(): Promise<GetAllUsersResult> {
-        return makeApiRequest('get', `${basePath}/students`);
+        return apiRequest('get', `${basePath}/students`);
     }
 }

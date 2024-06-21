@@ -11,7 +11,7 @@ export type GetModuleResult = Either<Error | Problem, Module>;
 /**
  * Represents the result of a module get all operations.
  */
-export type GetAllModulesResult = Either<Error | Problem, GetAllModulesOutputModel[]>;
+export type GetAllModulesResult = Either<Error | Problem, GetAllModulesOutputModel>;
 
 /**
  * Represents the result of a module creation operation.

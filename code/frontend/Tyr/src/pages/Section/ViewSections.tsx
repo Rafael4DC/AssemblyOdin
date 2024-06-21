@@ -1,8 +1,9 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import { Container, Table } from 'react-bootstrap';
+import {Container, Table} from 'react-bootstrap';
 import {SectionService} from "../../services/section/SectionService";
 import {Section} from "../../services/section/models/Section";
+import {Failure, Success} from "../../services/_utils/Either";
 
 /**
  * Page to view all sections and their users
@@ -14,7 +15,11 @@ const ViewSections = () => {
         const fetchSections = async () => {
             try {
                 const data = await SectionService.getAll();
-                setSections(data.sections);
+                if (data instanceof Success) {
+                    setSections(data.value.sections);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching sections:', data.value);
+                }
             } catch (error) {
                 console.error('Error fetching sections:', error);
             }

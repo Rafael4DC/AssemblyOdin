@@ -1,9 +1,9 @@
+import * as React from 'react';
 import {useState} from 'react';
-import {Accordion, Card, Container, Button, Form, Modal} from 'react-bootstrap';
+import {Accordion, Button, Card, Container, Form, Modal} from 'react-bootstrap';
 import {Department} from "../../services/department/models/Department";
 import {FieldStudy} from "../../services/fieldstudy/models/FieldStudy";
 import {Module} from "../../services/module/models/Module";
-import * as React from 'react';
 import useDepartments from "../../hooks/useDepartments";
 
 const DepartmentsManager: React.FC = () => {
@@ -85,7 +85,8 @@ const DepartmentsManager: React.FC = () => {
                         <Accordion.Body>
                             <Card.Text>{category.description}</Card.Text>
                             <Button onClick={() => handleCategoryEdit(category)}>Edit</Button>
-                            <Button variant="danger" onClick={() => handleDeleteDepartments(category.id!)}>Delete</Button>
+                            <Button variant="danger"
+                                    onClick={() => handleDeleteDepartments(category.id!)}>Delete</Button>
                             <Button onClick={() => {
                                 setEditingSubCategory({
                                     id: undefined,
@@ -98,35 +99,36 @@ const DepartmentsManager: React.FC = () => {
                             <Accordion>
                                 {category.fieldsStudy?.map((subCategory, subIndex) => (
                                     subCategory.department = {id: category.id},
-                                    <Accordion.Item eventKey={subIndex.toString()} key={subCategory.id}>
-                                        <Accordion.Header>{subCategory.name}</Accordion.Header>
-                                        <Accordion.Body>
-                                            <Card.Text>{subCategory.description}</Card.Text>
-                                            <Button onClick={() => handleSubCategoryEdit(subCategory)}>Edit</Button>
-                                            <Button variant="danger"
-                                                    onClick={() => handleDeleteFieldsStudy(subCategory.id!)}>Delete</Button>
-                                            <Button onClick={() => {
-                                                setEditingModule({
-                                                    id: undefined,
-                                                    name: '',
-                                                    description: '',
-                                                    fieldStudy: {id: subCategory.id}
-                                                });
-                                                setShowModuleModal(true);
-                                            }}>Add Module</Button>
-                                            <ul>
-                                                {subCategory.modules?.map((module) => (
-                                                    module.fieldStudy = {id: subCategory.id},
-                                                    <li key={module.id}>
-                                                        <strong>{module.name}:</strong> {module.description}
-                                                        <Button onClick={() => handleModuleEdit(module)}>Edit</Button>
-                                                        <Button variant="danger"
-                                                                onClick={() => handleDeleteModule(module.id!)}>Delete</Button>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </Accordion.Body>
-                                    </Accordion.Item>
+                                        <Accordion.Item eventKey={subIndex.toString()} key={subCategory.id}>
+                                            <Accordion.Header>{subCategory.name}</Accordion.Header>
+                                            <Accordion.Body>
+                                                <Card.Text>{subCategory.description}</Card.Text>
+                                                <Button onClick={() => handleSubCategoryEdit(subCategory)}>Edit</Button>
+                                                <Button variant="danger"
+                                                        onClick={() => handleDeleteFieldsStudy(subCategory.id!)}>Delete</Button>
+                                                <Button onClick={() => {
+                                                    setEditingModule({
+                                                        id: undefined,
+                                                        name: '',
+                                                        description: '',
+                                                        fieldStudy: {id: subCategory.id}
+                                                    });
+                                                    setShowModuleModal(true);
+                                                }}>Add Module</Button>
+                                                <ul>
+                                                    {subCategory.modules?.map((module) => (
+                                                        module.fieldStudy = {id: subCategory.id},
+                                                            <li key={module.id}>
+                                                                <strong>{module.name}:</strong> {module.description}
+                                                                <Button
+                                                                    onClick={() => handleModuleEdit(module)}>Edit</Button>
+                                                                <Button variant="danger"
+                                                                        onClick={() => handleDeleteModule(module.id!)}>Delete</Button>
+                                                            </li>
+                                                    ))}
+                                                </ul>
+                                            </Accordion.Body>
+                                        </Accordion.Item>
                                 ))}
                             </Accordion>
                         </Accordion.Body>

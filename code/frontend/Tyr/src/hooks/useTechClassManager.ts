@@ -49,17 +49,17 @@ export const useTechClassManager = (initialClasses: TechsAttendance[]) => {
         }
     };
 
-/*
-    const handleAttendanceChange = (studentId: number, attendance: boolean) => {
-        setSelectedClass(prevSelectedClass => {
-            if (!prevSelectedClass) return prevSelectedClass;
-            const updatedStudents = prevSelectedClass.attendedStudents.map(student =>
-                student.student.id === studentId ? {...student, attended: attendance} : student
-            );
-            return {...prevSelectedClass, attendedStudents: updatedStudents};
-        });
-    };
-*/
+    /*
+        const handleAttendanceChange = (studentId: number, attendance: boolean) => {
+            setSelectedClass(prevSelectedClass => {
+                if (!prevSelectedClass) return prevSelectedClass;
+                const updatedStudents = prevSelectedClass.attendedStudents.map(student =>
+                    student.student.id === studentId ? {...student, attended: attendance} : student
+                );
+                return {...prevSelectedClass, attendedStudents: updatedStudents};
+            });
+        };
+    */
 
     const handleSummaryChange = (text: string) => {
         setSelectedClass(prevSelectedClass =>

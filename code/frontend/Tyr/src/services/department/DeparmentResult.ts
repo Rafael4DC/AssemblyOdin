@@ -11,7 +11,7 @@ export type GetDepartmentResult = Either<Error | Problem, Department>;
 /**
  * Represents the result of a department get all operations.
  */
-export type GetAllDepartmentsResult = Either<Error | Problem, GetAllDepartmentsOutputModel[]>;
+export type GetAllDepartmentsResult = Either<Error | Problem, GetAllDepartmentsOutputModel>;
 
 /**
  * Represents the result of a department creation operation.

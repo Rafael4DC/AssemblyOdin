@@ -1,10 +1,5 @@
-import { makeApiRequest } from '../../axios/apiRequest';
-import {
-    CreationVocResult,
-    DeleteVocResult,
-    GetAllVocsResult,
-    GetVocResult
-} from "./VocResult";
+import {apiRequest} from '../../axios/apiRequest';
+import {CreationVocResult, DeleteVocResult, GetAllVocsResult, GetVocResult} from "./VocResult";
 import {VocInputModel} from "./models/VocInputModel";
 
 /**
@@ -22,7 +17,7 @@ export namespace VocService {
      * @returns the voc
      */
     export async function getById(id: number): Promise<GetVocResult> {
-        return makeApiRequest('get', `${basePath}/${id}`);
+        return apiRequest('get', `${basePath}/${id}`);
     }
 
     /**
@@ -31,7 +26,7 @@ export namespace VocService {
      * @returns all vocs
      */
     export async function getAll(): Promise<GetAllVocsResult> {
-        return makeApiRequest('get', basePath);
+        return apiRequest('get', basePath);
     }
 
     /**
@@ -42,7 +37,7 @@ export namespace VocService {
      * @returns the result of the creation
      */
     export async function save(vocRequest: VocInputModel): Promise<CreationVocResult> {
-        return makeApiRequest('post', `${basePath}/save`, vocRequest);
+        return apiRequest('post', `${basePath}/save`, vocRequest);
     }
 
     /**
@@ -53,7 +48,7 @@ export namespace VocService {
      * @returns the result of the update
      */
     export async function update(vocRequest: VocInputModel): Promise<CreationVocResult> {
-        return makeApiRequest('put', `${basePath}/update`, vocRequest);
+        return apiRequest('put', `${basePath}/update`, vocRequest);
     }
 
     /**
@@ -64,7 +59,7 @@ export namespace VocService {
      * @returns the result of the deletion
      */
     export async function deleteById(id: number): Promise<DeleteVocResult> {
-        return makeApiRequest('delete', `${basePath}/${id}`);
+        return apiRequest('delete', `${basePath}/${id}`);
     }
 
     /**
@@ -73,6 +68,6 @@ export namespace VocService {
      * @returns all vocs
      */
     export async function getVocsByUser(): Promise<GetAllVocsResult> {
-        return makeApiRequest('get', `${basePath}/user`);
+        return apiRequest('get', `${basePath}/user`);
     }
 }

@@ -11,7 +11,7 @@ export type GetSectionResult = Either<Error | Problem, Section>;
 /**
  * Represents the result of a section get all operations.
  */
-export type GetAllSectionsResult = Either<Error | Problem, GetAllSectionsOutputModel[]>;
+export type GetAllSectionsResult = Either<Error | Problem, GetAllSectionsOutputModel>;
 
 /**
  * Represents the result of a section creation operation.

@@ -1,4 +1,3 @@
-
 /**
  * Role model
  *

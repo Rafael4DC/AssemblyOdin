@@ -5,6 +5,7 @@ import {Tech} from "../services/tech/models/Tech";
 import {Voc} from "../services/voc/models/Voc";
 import {TechService} from "../services/tech/TechService";
 import {VocService} from "../services/voc/VocService";
+import {Failure, Success} from "../services/_utils/Either";
 
 /**
  * Hook to get the user info
@@ -20,7 +21,11 @@ const useUserInfo = () => {
     useEffect(() => {
         UserService.getSession()
             .then(data => {
-                setUserInfo(data);
+                if (data instanceof Success) {
+                    setUserInfo(data.value);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);
@@ -30,7 +35,11 @@ const useUserInfo = () => {
     useEffect(() => {
         TechService.getTechsByUser()
             .then(data => {
-                setUserTechs(data.techs);
+                if (data instanceof Success) {
+                    setUserTechs(data.value.techs);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);
@@ -40,7 +49,11 @@ const useUserInfo = () => {
     useEffect(() => {
         VocService.getVocsByUser()
             .then(data => {
-                setUserVocs(data.vocs);
+                if (data instanceof Success) {
+                    setUserVocs(data.value.vocs);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);

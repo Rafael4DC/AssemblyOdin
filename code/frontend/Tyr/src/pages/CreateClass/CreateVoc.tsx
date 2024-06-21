@@ -2,14 +2,13 @@ import * as React from "react";
 import {useState} from "react";
 import {Button, Container, Form} from "react-bootstrap";
 import useVocs from "../../hooks/useVocs";
-import {Voc, VocRequest} from "../../services/voc/models/Voc";
-import useDepartments from "../../hooks/useDepartments";
+import {Voc} from "../../services/voc/models/Voc";
 import {useNavigate} from "react-router-dom";
 import {WebUris} from "../../utils/WebUris";
-import PROFILE = WebUris.PROFILE;
 import useUserInfo from "../../hooks/useUserInfo";
 import useStudents from "../../hooks/useStudents";
 import useSections from "../../hooks/useSections";
+import PROFILE = WebUris.PROFILE;
 
 /**
  * Page to create a voc class

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {AppRoutes} from './utils/Router';
-import Layout from "./components/Layout";
+import Dashboard from "./components/Dashboard";
 
 
 /**
@@ -8,9 +8,9 @@ import Layout from "./components/Layout";
  */
 export function App() {
     return (
-        <Layout>
+        <Dashboard>
             <AppRoutes/>
-        </Layout>
+        </Dashboard>
     );
 }
 

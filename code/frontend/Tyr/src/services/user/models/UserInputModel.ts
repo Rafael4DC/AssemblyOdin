@@ -1,4 +1,3 @@
-
 /**
  * Input model for user
  *

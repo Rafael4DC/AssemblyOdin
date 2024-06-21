@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import {UserService} from '../services/user/UserService';
 import {User} from "../services/user/models/User";
+import {Failure, Success} from "../services/_utils/Either";
+import {UserInputModel} from "../services/user/models/UserInputModel";
 
 
 /**
@@ -25,19 +27,26 @@ const useUsers = () => {
         ? users?.filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
         : users;
 
-    const handleSaveUser = async (user: User) => {
+    const handleSaveUser = async (user: UserInputModel) => {
         setError(null);
         try {
             setIsSubmitting(true);
-            const result = await UserService.save(user)
+            let result = await UserService.save(user)
+            let data: User
+            if (result instanceof Failure) {
+                throw new Error();
+            }
+            if (result instanceof Success) {
+                data = result.value;
+            }
 
             setUsers(prevUsers => {
                 const updatedUsers = prevUsers ? [...prevUsers] : [];
                 const userIndex = updatedUsers.findIndex(u => u.id === user.id);
                 if (userIndex > -1) {
-                    updatedUsers[userIndex] = result;
+                    updatedUsers[userIndex] = data;
                 } else {
-                    updatedUsers.push(result);
+                    updatedUsers.push(data);
                 }
                 return updatedUsers;
             });
@@ -54,7 +63,7 @@ const useUsers = () => {
         setError(null);
         try {
             setIsSubmitting(true);
-            await UserService.delete(id);
+            await UserService.deleteById(id);
             setUsers(prevUsers => prevUsers?.filter(user => user.id !== id) || null);
             setIsSubmitting(false);
             setShowEditModal(false);
@@ -67,7 +76,11 @@ const useUsers = () => {
     useEffect(() => {
         UserService.getAll()
             .then(data => {
-                setUsers(data);
+                if (data instanceof Success) {
+                    setUsers(data.value.users);
+                } else if (data instanceof Failure) {
+                    console.error('Error fetching data:', data.value);
+                }
             })
             .catch(err => {
                 setError(err);

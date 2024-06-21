@@ -11,7 +11,7 @@ export type GetFieldStudyResult = Either<Error | Problem, FieldStudy>;
 /**
  * Represents the result of a field of study get all operations.
  */
-export type GetAllFieldsStudyResult = Either<Error | Problem, GetAllFieldsStudyOutputModel[]>;
+export type GetAllFieldsStudyResult = Either<Error | Problem, GetAllFieldsStudyOutputModel>;
 
 /**
  * Represents the result of a field of study creation operation.

@@ -74,7 +74,7 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
 
     return (
         <div>
-        <h3>Voc Classes Manager</h3>
+            <h3>Voc Classes Manager</h3>
             <div style={{maxHeight: '250px', overflowY: 'auto'}}>
                 <Table striped bordered hover responsive>
                     <thead>

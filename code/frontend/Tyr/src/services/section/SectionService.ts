@@ -1,10 +1,5 @@
-import { makeApiRequest } from '../../axios/apiRequest';
-import {
-    CreationSectionResult,
-    DeleteSectionResult,
-    GetAllSectionsResult,
-    GetSectionResult
-} from "./SectionResult";
+import {apiRequest} from '../../axios/apiRequest';
+import {CreationSectionResult, DeleteSectionResult, GetAllSectionsResult, GetSectionResult} from "./SectionResult";
 import {SectionInputModel} from "./models/SectionInputModel";
 
 /**
@@ -22,7 +17,7 @@ export namespace SectionService {
      * @returns the section
      */
     export async function getById(id: number): Promise<GetSectionResult> {
-        return makeApiRequest('get', `${basePath}/${id}`);
+        return apiRequest('get', `${basePath}/${id}`);
     }
 
     /**
@@ -31,7 +26,7 @@ export namespace SectionService {
      * @returns all sections
      */
     export async function getAll(): Promise<GetAllSectionsResult> {
-        return makeApiRequest('get', basePath);
+        return apiRequest('get', basePath);
     }
 
     /**
@@ -42,7 +37,7 @@ export namespace SectionService {
      * @returns the result of the creation
      */
     export async function save(sectionRequest: SectionInputModel): Promise<CreationSectionResult> {
-        return makeApiRequest('post', `${basePath}/save`, sectionRequest);
+        return apiRequest('post', `${basePath}/save`, sectionRequest);
     }
 
     /**
@@ -53,7 +48,7 @@ export namespace SectionService {
      * @returns the result of the update
      */
     export async function update(sectionRequest: SectionInputModel): Promise<CreationSectionResult> {
-        return makeApiRequest('put', `${basePath}/update`, sectionRequest);
+        return apiRequest('put', `${basePath}/update`, sectionRequest);
     }
 
     /**
@@ -64,6 +59,6 @@ export namespace SectionService {
      * @returns the result of the deletion
      */
     export async function deleteById(id: number): Promise<DeleteSectionResult> {
-        return makeApiRequest('delete', `${basePath}/${id}`);
+        return apiRequest('delete', `${basePath}/${id}`);
     }
 }

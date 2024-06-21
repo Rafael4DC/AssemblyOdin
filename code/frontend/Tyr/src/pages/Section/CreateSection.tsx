@@ -1,12 +1,12 @@
 import * as React from "react";
-import { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
+import {useState} from "react";
+import {Button, Container, Form} from "react-bootstrap";
 import useModules from "../../hooks/useModules";
 import useStudents from "../../hooks/useStudents";
-import { useNavigate } from "react-router-dom";
-import { WebUris } from "../../utils/WebUris";
-import PROFILE = WebUris.PROFILE;
+import {useNavigate} from "react-router-dom";
+import {WebUris} from "../../utils/WebUris";
 import {SectionService} from "../../services/section/SectionService";
+import PROFILE = WebUris.PROFILE;
 
 /**
  * Page to create a section
@@ -18,12 +18,12 @@ const CreateSection = () => {
     const [sectionData, setSectionData] = useState({
         name: "",
         summary: "",
-        module: { id: 1 },
+        module: {id: 1},
         students: []
     });
 
-    const { modules } = useModules();
-    const { students } = useStudents();
+    const {modules} = useModules();
+    const {students} = useStudents();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -44,7 +44,7 @@ const CreateSection = () => {
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setSectionData((prevSectionData) => ({
             ...prevSectionData,
             [name]: value,
@@ -54,7 +54,7 @@ const CreateSection = () => {
     const handleModuleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSectionData((prevSectionData) => ({
             ...prevSectionData,
-            module: { id: Number(e.target.value) },
+            module: {id: Number(e.target.value)},
         }));
     };
 

@@ -1,6 +1,7 @@
 import {Button, Form, Modal} from "react-bootstrap";
-import {RoleOptions, User} from "../../services/user/models/User";
+import {User} from "../../services/user/models/User";
 import * as React from "react";
+import {UserInputModel} from "../../services/user/models/UserInputModel";
 
 /**
  * Props for the ModalShowAction component
@@ -19,7 +20,7 @@ interface ModalShowActionProps {
     onHide: () => void;
     selectedUser: User | null;
     setSelectedUser: (user: User) => void;
-    handleSaveUser: (user: User) => Promise<void>;
+    handleSaveUser: (user: UserInputModel) => Promise<void>;
     handleDeleteUser: (id: number) => Promise<void>;
     isSubmitting: boolean;
     setIsSubmitting: (submitting: boolean) => void;
@@ -118,7 +119,12 @@ export function ModalShowAction(props: ModalShowActionProps) {
                 </Button>
                 <Button
                     variant="primary"
-                    onClick={() => handleSaveUser(selectedUser)}
+                    onClick={() => handleSaveUser({
+                        username: selectedUser?.username,
+                        email: selectedUser?.email,
+                        role: selectedUser?.role.id,
+                        credits: selectedUser?.credits
+                    })}
                     disabled={isSubmitting}
                 >
                     {isSubmitting ? 'Saving...' : 'Save Changes'}

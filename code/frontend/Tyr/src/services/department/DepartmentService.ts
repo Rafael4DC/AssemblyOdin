@@ -1,4 +1,4 @@
-import {makeApiRequest} from '../../axios/apiRequest';
+import {apiRequest} from '../../axios/apiRequest';
 import {
     CreationDepartmentResult,
     DeleteDepartmentResult,
@@ -22,7 +22,7 @@ export namespace DepartmentService {
      * @returns the department
      */
     export async function getById(id: number): Promise<GetDepartmentResult> {
-        return makeApiRequest('get', `${basePath}/${id}`);
+        return apiRequest('get', `${basePath}/${id}`);
     }
 
     /**
@@ -31,7 +31,7 @@ export namespace DepartmentService {
      * @returns all departments
      */
     export async function getAll(): Promise<GetAllDepartmentsResult> {
-        return makeApiRequest('get', basePath);
+        return apiRequest('get', basePath);
     }
 
     /**
@@ -42,7 +42,7 @@ export namespace DepartmentService {
      * @returns the result of the creation
      */
     export async function save(departmentRequest: DepartmentInputModel): Promise<CreationDepartmentResult> {
-        return makeApiRequest('post', `${basePath}/save`, departmentRequest);
+        return apiRequest('post', `${basePath}/save`, departmentRequest);
     }
 
     /**
@@ -53,7 +53,7 @@ export namespace DepartmentService {
      * @returns the result of the update
      */
     export async function update(departmentRequest: DepartmentInputModel): Promise<CreationDepartmentResult> {
-        return makeApiRequest('put', `${basePath}/update`, departmentRequest);
+        return apiRequest('put', `${basePath}/update`, departmentRequest);
     }
 
     /**
@@ -64,7 +64,7 @@ export namespace DepartmentService {
      * @returns the result of the deletion
      */
     export async function deleteById(id: number): Promise<DeleteDepartmentResult> {
-        return makeApiRequest('delete', `${basePath}/${id}`);
+        return apiRequest('delete', `${basePath}/${id}`);
     }
 }
 

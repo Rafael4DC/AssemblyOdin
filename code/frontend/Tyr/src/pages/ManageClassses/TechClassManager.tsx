@@ -17,7 +17,7 @@ interface TechClassManagerProps {
 /**
  * Component to manage tech classes
  */
-const TechClassManager: React.FC<TechClassManagerProps> = ({ classes }) => {
+const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
     const {
         selectedClass,
         showEditModal,
@@ -48,7 +48,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({ classes }) => {
     return (
         <div>
             <h3>Tech Classes Manager</h3>
-            <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
+            <div style={{maxHeight: '250px', overflowY: 'auto'}}>
                 <Table striped bordered hover responsive>
                     <thead>
                     <tr>
@@ -62,7 +62,9 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({ classes }) => {
                     {classes.length ?
                         classes.map(renderClassRow)
                         :
-                        <tr><td colSpan={4}>No classes found</td></tr>}
+                        <tr>
+                            <td colSpan={4}>No classes found</td>
+                        </tr>}
                     </tbody>
                 </Table>
             </div>

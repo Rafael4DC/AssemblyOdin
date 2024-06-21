@@ -10,9 +10,17 @@ export class Problem {
     title: string;
     type: string;
 
-    constructor(type: string, title: string, status?: number) {
-        this.status = status;
-        this.title = title;
-        this.type = type;
+    constructor(problem: InputProblem) {
+        this.status = problem.status;
+        this.title = problem.title;
+        this.type = problem.type;
     }
 }
+
+interface InputProblem {
+    status?: number
+    title: string
+    type: string
+}
+
+export const problemMediaType = "application/problem+json"

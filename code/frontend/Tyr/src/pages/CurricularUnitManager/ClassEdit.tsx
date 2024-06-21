@@ -66,19 +66,19 @@ const ClassEditModal: React.FC<ClassEditModalProps> = (
         return null;
     }
 
-/*    const handleAttendanceChange = (studentId: number, attended: boolean) => {
-        setEditedClass((prevClass) => {
-            if (prevClass) {
-                return {
-                    ...prevClass,
-                    attendedStudents: prevClass.attendedStudents.map((s) =>
-                        s.id === studentId ? {...s, attendance: attended} : s,
-                    ),
-                };
-            }
-            return null;
-        });
-    };*/
+    /*    const handleAttendanceChange = (studentId: number, attended: boolean) => {
+            setEditedClass((prevClass) => {
+                if (prevClass) {
+                    return {
+                        ...prevClass,
+                        attendedStudents: prevClass.attendedStudents.map((s) =>
+                            s.id === studentId ? {...s, attendance: attended} : s,
+                        ),
+                    };
+                }
+                return null;
+            });
+        };*/
 
     return (
         <Modal show={show} onHide={onHide} centered>

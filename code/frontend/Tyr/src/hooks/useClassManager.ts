@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
-import {TechService} from '../services/tech/TechService';
 import {Voc} from '../services/voc/models/Voc';
 import {VocService} from '../services/voc/VocService';
 import {Tech} from "../services/tech/models/Tech";
+import {Failure, Success} from "../services/_utils/Either";
 
 /**
  * Filter options for the classes
@@ -39,14 +39,21 @@ export const useClassManager = () => {
     const [filter, setFilter] = useState<ClassFilterOptions>(ClassFilterOptions.All);
 
     useEffect(() => {
-/*
-        TechService.getTechsByUser()
-            .then(data => setTechClasses(data.techs))
-            .catch(err => console.error(err));
-*/
+        /*
+                TechService.getTechsByUser()
+                    .then(data => setTechClasses(data.techs))
+                    .catch(err => console.error(err));
+        */
 
         VocService.getAll()
-            .then(data => setVocClasses(data.vocs))
+            .then(data => {
+                    if (data instanceof Success) {
+                        setVocClasses(data.value.vocs);
+                    } else if (data instanceof Failure) {
+                        console.error('Error fetching data:', data.value);
+                    }
+                }
+            )
             .catch(err => console.error(err));
     }, []);
 

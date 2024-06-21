@@ -28,12 +28,14 @@ export function failure<L>(error: L): Either<L, never> {
  * Represents Failure
  */
 export class Failure<L> {
-    constructor(public value: L) {}
+    constructor(public value: L) {
+    }
 }
 
 /**
  * Represents Success
  */
 export class Success<R> {
-    constructor(public value: R) {}
+    constructor(public value: R) {
+    }
 }
