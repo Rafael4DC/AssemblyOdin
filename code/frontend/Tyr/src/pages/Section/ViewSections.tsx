@@ -1,62 +1,100 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {Container, Table} from 'react-bootstrap';
-import {SectionService} from "../../services/section/SectionService";
+import useSections from "../../hooks/useSections";
+import {Card, CardContent, Container, Grid, ListItem, Modal, IconButton} from "@mui/material";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
+import {Spinner} from "../../utils/Spinner";
+import CloseIcon from '@mui/icons-material/Close';
 import {Section} from "../../services/section/models/Section";
-import {Failure, Success} from "../../services/_utils/Either";
 
 /**
  * Page to view all sections and their users
  */
-const ViewSections = () => {
-    const [sections, setSections] = useState<Section[]>([]);
+function SectionDisplay() {
+    const {sections} = useSections();
+    const [open, setOpen] = React.useState(false);
+    const [selectedSection, setSelectedSection] = React.useState(null);
 
-    useEffect(() => {
-        const fetchSections = async () => {
-            try {
-                const data = await SectionService.getAll();
-                if (data instanceof Success) {
-                    setSections(data.value.sections);
-                } else if (data instanceof Failure) {
-                    console.error('Error fetching sections:', data.value);
-                }
-            } catch (error) {
-                console.error('Error fetching sections:', error);
-            }
-        };
+    const handleOpen = (section: Section) => {
+        setSelectedSection(section);
+        setOpen(true);
+    };
 
-        fetchSections();
-    }, []);
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedSection(null);
+    };
+
+    if (sections == null) return <Spinner/>
 
     return (
         <Container>
-            <h1>All Sections</h1>
-            <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>Section Name</th>
-                    <th>Summary</th>
-                    <th>Module</th>
-                    <th>Students</th>
-                </tr>
-                </thead>
-                <tbody>
+            <Grid container spacing={4}>
                 {sections.map(section => (
-                    <tr key={section.id}>
-                        <td>{section.name}</td>
-                        <td>{section.summary}</td>
-                        <td>{section.module?.name}</td>
-                        <td>
-                            {section.students.map(student => (
-                                <div key={student.id}>{student.username}</div>
-                            ))}
-                        </td>
-                    </tr>
+                    <Grid item xs={12} sm={6} md={4} key={section.id}>
+                        <Card sx={{maxWidth: 600, margin: '20px auto'}}>
+                            <CardContent>
+                                <Typography sx={{color: '#000'}} variant="h5" component="div">
+                                    {section.name}
+                                </Typography>
+                                <Typography sx={{color: '#000'}} variant="subtitle1" color="text.secondary">
+                                    Module: {section.module?.name}
+                                </Typography>
+                                <Box sx={{maxHeight: 300, overflow: 'auto', marginTop: 2}}>
+                                    <Typography sx={{color: '#000'}} variant="button" display="block"
+                                                onClick={() => handleOpen(section)}>
+                                        View All Students
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                 ))}
-                </tbody>
-            </Table>
+            </Grid>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 4,
+                    maxHeight: '80vh',
+                    overflow: 'auto',
+                }}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Typography sx={{color: '#000'}} id="modal-title" variant="h6" component="h2">
+                            Students in {selectedSection?.name}
+                        </Typography>
+                        <IconButton onClick={handleClose}>
+                            <CloseIcon/>
+                        </IconButton>
+                    </Box>
+                    <List>
+                        {selectedSection?.students?.map((student: {
+                            id: React.Key;
+                            username: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal;
+                        }) => (
+                            <ListItem sx={{color: '#000'}} key={student.id}>
+                                <ListItemText sx={{color: '#000'}} primary={student.username}/>
+                            </ListItem>
+                        )) || <Typography sx={{color: '#000'}} variant="body2" color="text.secondary">No students
+                            enrolled.</Typography>}
+                    </List>
+                </Box>
+            </Modal>
         </Container>
     );
 };
 
-export default ViewSections;
+export default SectionDisplay;

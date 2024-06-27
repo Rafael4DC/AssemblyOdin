@@ -70,7 +70,7 @@ class SectionServiceTest {
         val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
         moduleRepository.save(module)
         val section =
-            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
+            Section(name = "Section A", module = module, students = mutableListOf(user))
         sectionRepository.save(section)
 
         // when: retrieving the section by ID
@@ -105,9 +105,9 @@ class SectionServiceTest {
         val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
         moduleRepository.save(module)
         val section1 =
-            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
+            Section(name = "Section A", module = module, students = mutableListOf(user))
         val section2 =
-            Section(name = "Section B", summary = "Summary B", module = module, students = mutableListOf(user))
+            Section(name = "Section B", module = module, students = mutableListOf(user))
         sectionRepository.save(section1)
         sectionRepository.save(section2)
 
@@ -135,7 +135,6 @@ class SectionServiceTest {
         val saveSectionInputModel =
             SaveSectionInputModel(
                 name = "Section A",
-                summary = "Summary A",
                 module = module.id!!,
                 students = listOf(user.id!!)
             )
@@ -148,7 +147,6 @@ class SectionServiceTest {
         val section = Section(
             id = (result as Success).value.id!!,
             name = saveSectionInputModel.name,
-            summary = saveSectionInputModel.summary,
             students = mutableListOf(user),
             module = module
         )
@@ -169,7 +167,7 @@ class SectionServiceTest {
         val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
         moduleRepository.save(module)
         val saveSectionInputModel =
-            SaveSectionInputModel(name = "Section A", module = module.id!!, summary = "Summary A")
+            SaveSectionInputModel(name = "Section A", module = module.id!!)
 
         // when: saving the section
         val result = sectionService.save(saveSectionInputModel)
@@ -179,7 +177,6 @@ class SectionServiceTest {
         val section = Section(
             id = (result as Success).value.id!!,
             name = saveSectionInputModel.name,
-            summary = saveSectionInputModel.summary,
             module = module
         )
         assertEquals(section, result.value)
@@ -201,13 +198,11 @@ class SectionServiceTest {
         val saveSectionInputModel =
             SaveSectionInputModel(
                 name = "Section A",
-                summary = "Summary A",
                 module = module.id!!,
                 students = listOf(user.id!!)
             )
         val existingSection = Section(
             name = saveSectionInputModel.name,
-            summary = saveSectionInputModel.summary,
             module = module,
             students = mutableListOf(user)
         )
@@ -235,19 +230,17 @@ class SectionServiceTest {
         val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
         moduleRepository.save(module)
         val existingSection =
-            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
+            Section(name = "Section A", module = module, students = mutableListOf(user))
         val section = sectionRepository.save(existingSection)
         val updateSectionInputModel = UpdateSectionInputModel(
             id = section.id!!,
             name = "Section A Updated",
-            summary = "Summary A Updated",
             module = module.id!!,
             students = listOf(user.id!!)
         )
         val updatedSection = existingSection.copy(
             id = section.id!!,
             name = updateSectionInputModel.name,
-            summary = updateSectionInputModel.summary
         )
 
         // when: updating the section
@@ -272,18 +265,16 @@ class SectionServiceTest {
         val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
         moduleRepository.save(module)
         val existingSection =
-            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
+            Section(name = "Section A", module = module, students = mutableListOf(user))
         val section = sectionRepository.save(existingSection)
         val updateSectionInputModel = UpdateSectionInputModel(
             id = section.id!!,
             name = existingSection.name,
             module = module.id!!,
-            summary = existingSection.summary
         )
         val updatedSection = existingSection.copy(
             id = section.id!!,
             name = updateSectionInputModel.name,
-            summary = updateSectionInputModel.summary,
             students = mutableListOf()
         )
 
@@ -311,7 +302,6 @@ class SectionServiceTest {
         val updateSectionInputModel = UpdateSectionInputModel(
             id = 1,
             name = "Section A Updated",
-            summary = "Summary A Updated",
             module = module.id!!,
             students = listOf(user.id!!)
         )
@@ -338,7 +328,7 @@ class SectionServiceTest {
         val module = Module(name = "Quantum Mechanics", fieldStudy = fieldStudy, tier = 1)
         moduleRepository.save(module)
         val section =
-            Section(name = "Section A", summary = "Summary A", module = module, students = mutableListOf(user))
+            Section(name = "Section A", module = module, students = mutableListOf(user))
         sectionRepository.save(section)
 
         // when: deleting the section

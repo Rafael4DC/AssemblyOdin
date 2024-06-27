@@ -15,7 +15,8 @@ export interface Tech {
     id?: number;
     teacher?: User;
     section?: Section;
-    date?: string;
+    started?: string;
+    ended?: string;
     summary?: string;
     missTech?: User[];
 }

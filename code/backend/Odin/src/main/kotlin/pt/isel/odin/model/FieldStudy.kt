@@ -37,6 +37,8 @@ class FieldStudy(
     @Column(nullable = false)
     val name: String,
 
+    val description: String? = null,
+
     @OneToMany(mappedBy = "fieldStudy", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonManagedReference
     val modules: List<Module> = emptyList()
@@ -55,8 +57,9 @@ class FieldStudy(
         id: Long? = this.id,
         department: Department = this.department,
         name: String = this.name,
+        description: String? = this.description,
         modules: List<Module> = this.modules
-    ) = FieldStudy(id, department, name, modules)
+    ) = FieldStudy(id, department, name, description, modules)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

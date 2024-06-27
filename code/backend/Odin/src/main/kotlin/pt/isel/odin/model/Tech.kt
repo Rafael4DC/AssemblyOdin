@@ -34,10 +34,12 @@ class Tech(
     @ManyToOne
     val section: Section,
 
-    val date: LocalDateTime,
+    val started: LocalDateTime,
+
+    val ended: LocalDateTime,
 
     @Column(nullable = false)
-    val summary: String,
+    val summary: String = "",
 
     @ManyToMany(fetch = FetchType.EAGER)
     val missTech: MutableList<User> = mutableListOf()
@@ -58,10 +60,11 @@ class Tech(
         id: Long? = this.id,
         teacher: User = this.teacher,
         section: Section = this.section,
-        date: LocalDateTime = this.date,
+        started: LocalDateTime = this.started,
+        ended: LocalDateTime = this.ended,
         summary: String = this.summary,
         missTech: MutableList<User> = this.missTech
-    ) = Tech(id, teacher, section, date, summary, missTech)
+    ) = Tech(id, teacher, section, started, ended, summary, missTech)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -69,7 +72,8 @@ class Tech(
         return id == other.id &&
             teacher == other.teacher &&
             section == other.section &&
-            date == other.date &&
+            started == other.started &&
+            ended == other.ended &&
             summary == other.summary &&
             missTech == other.missTech
     }
@@ -78,9 +82,11 @@ class Tech(
         var result = id?.hashCode() ?: 0
         result = 31 * result + teacher.hashCode()
         result = 31 * result + section.hashCode()
-        result = 31 * result + date.hashCode()
+        result = 31 * result + started.hashCode()
+        result = 31 * result + ended.hashCode()
         result = 31 * result + summary.hashCode()
         result = 31 * result + missTech.hashCode()
         return result
     }
+
 }

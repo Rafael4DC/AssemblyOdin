@@ -1,5 +1,6 @@
 import {Tech} from "../services/tech/models/Tech";
 import {Voc} from "../services/voc/models/Voc";
+import {TextFieldProps} from "@mui/material";
 
 /**
  * Formated the date String of backend to a more readable date and time string
@@ -89,4 +90,17 @@ export const filterCourses: FilterCoursesFunction = (courses, filter, dateKey) =
                 return true;
         }
     });
+};
+
+export function notStudent(role: string) {
+    return role === 'TEACHER' || role === 'ADMIN';
+}
+
+
+export const commonTextFieldProps: Partial<TextFieldProps> = {
+    fullWidth: true,
+    margin: "normal",
+    InputLabelProps: { shrink: true },
+    InputProps: { style: { color: '#000' } },
+    style: { color: '#000' },
 };

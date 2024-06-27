@@ -4,8 +4,9 @@
 export namespace WebUris {
     export const HOME = '/';
     export const PROFILE = '/profile';
+    export const TIMETABLE = '/timetable';
     export const DEPARTMENTS = '/categories';
-    export const MANAGE_CLASSES = '/manageclasses';
+    export const MANAGE_CLASS = '/manageclasses';
     export const CREATE_SECTION = '/createsection';
     export const SECTION = '/section';
     export const CREATE_VOC = '/VocClass';

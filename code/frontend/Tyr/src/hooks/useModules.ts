@@ -21,8 +21,7 @@ const useModules = () => {
             });
     }, []);
 
-
-    return {modules, error};
+    return { modules, error };
 };
 
 export default useModules;

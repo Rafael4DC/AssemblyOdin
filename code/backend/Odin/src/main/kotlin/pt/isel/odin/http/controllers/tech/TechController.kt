@@ -13,6 +13,7 @@ import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.tech.models.GetTechOutputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechOutputModel
+import pt.isel.odin.http.controllers.tech.models.ScheduleTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechOutputModel
 import pt.isel.odin.http.controllers.tech.models.getAllTechsOutputModel
@@ -76,6 +77,24 @@ class TechController(private val techService: TechService) {
 
             is Failure -> Problem.responseForError(result.value)
         }
+
+    /**
+     * Saves multiple techs.
+     *
+     * @param input The techs to save.
+     * @param authentication The authentication token.
+     *
+     * @return The saved techs.
+     */
+    @PostMapping(Uris.Techs.SAVE_MULTIPLE)
+    fun saveMultiple(@RequestBody input: ScheduleTechInputModel, authentication: Principal?): ResponseEntity<*> {
+        val results = techService.saveMultipleClasses(input, authentication.toEmail())
+        return if (results.all { it is Success }) {
+            ResponseEntity.status(201).body(results.map { (it as Success).value })
+        } else {
+            Problem.responseForError(results.first { it is Failure })
+        }
+    }
 
     /**
      * Updates a tech.

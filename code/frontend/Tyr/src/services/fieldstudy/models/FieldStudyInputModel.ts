@@ -9,4 +9,5 @@ export interface FieldStudyInputModel {
     id?: number;
     name?: string;
     description?: string;
+    department?: number;
 }

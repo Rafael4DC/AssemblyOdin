@@ -90,7 +90,6 @@ class SectionService(
                     sectionRepository.save(
                         section.copy(
                             name = updateSectionInputModel.name,
-                            summary = updateSectionInputModel.summary,
                             module = module,
                             students = studentsInSec
                         )

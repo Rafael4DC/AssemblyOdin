@@ -12,7 +12,8 @@ export interface TechInputModel {
     id?: number;
     teacher?: number;
     section?: number;
-    date?: string;
+    started?: string;
+    ended?: string;
     summary?: string;
     missTech?: number[];
 }

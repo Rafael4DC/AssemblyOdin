@@ -1,5 +1,5 @@
 import {apiRequest} from "../../axios/apiRequest";
-import {CreationUserResult, DeleteUserResult, GetAllUsersResult, GetUserResult} from "./UserResult";
+import {CreationUserResult, DeleteUserResult, GetAllUsersResult, GetUserLogsResult, GetUserResult} from "./UserResult";
 import {UserInputModel} from "./models/UserInputModel";
 
 /**
@@ -16,6 +16,15 @@ export namespace UserService {
      */
     export async function getSession(): Promise<GetUserResult> {
         return apiRequest('get', `${basePath}/session`);
+    }
+
+    /**
+     * Get the current session information with logs
+     *
+     * @returns the current session information with logs
+     */
+    export async function getSessionWithLogs(): Promise<GetUserLogsResult> {
+        return apiRequest('get', `${basePath}/logs`);
     }
 
     /**

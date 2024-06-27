@@ -17,7 +17,6 @@ import pt.isel.odin.model.user.User
  *
  * @property id the section id
  * @property name the section name
- * @property summary the section summary
  * @property module the section [Module]
  * @property students the section [User]
  */
@@ -31,9 +30,6 @@ class Section(
     @Column(nullable = false)
     val name: String,
 
-    @Column(nullable = false)
-    val summary: String,
-
     @ManyToOne
     @JoinColumn(name = "module_id")
     var module: Module? = null,
@@ -46,7 +42,6 @@ class Section(
      *
      * @param id the section id
      * @param name the section name
-     * @param summary the section summary
      * @param module the section [Module]
      * @param students the section [User]
      *
@@ -55,24 +50,21 @@ class Section(
     fun copy(
         id: Long? = this.id,
         name: String = this.name,
-        summary: String = this.summary,
         module: Module? = this.module,
         students: MutableList<User> = this.students
-    ) = Section(id, name, summary, module, students)
+    ) = Section(id, name, module, students)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Section) return false
         return id == other.id &&
             name == other.name &&
-            summary == other.summary &&
             students == other.students
     }
 
     override fun hashCode(): Int {
         var result = id?.hashCode() ?: 0
         result = 31 * result + name.hashCode()
-        result = 31 * result + summary.hashCode()
         result = 31 * result + students.hashCode()
         return result
     }

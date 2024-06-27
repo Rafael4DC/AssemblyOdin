@@ -1,6 +1,13 @@
 import {apiRequest} from '../../axios/apiRequest';
-import {CreationTechResult, DeleteTechResult, GetAllTechsResult, GetTechResult} from "./TechResult";
+import {
+    CreationTechResult,
+    DeleteTechResult,
+    GetAllTechsResult,
+    GetTechResult,
+    ListCreationTechResult
+} from "./TechResult";
 import {TechInputModel} from "./models/TechInputModel";
+import {TechMultiInputModel} from "./models/TechMultiInputModel";
 
 /**
  * Service to manage techs
@@ -38,6 +45,17 @@ export namespace TechService {
      */
     export async function save(techRequest: TechInputModel): Promise<CreationTechResult> {
         return apiRequest('post', `${basePath}/save`, techRequest);
+    }
+
+    /**
+     * Save multiple techs
+     *
+     * @param techRequest the techs to save
+     *
+     * @returns the result of the creation
+     */
+    export async function saveMultiple(techRequest: TechMultiInputModel): Promise<ListCreationTechResult> {
+        return apiRequest('post', `${basePath}/savemultiple`, techRequest);
     }
 
     /**

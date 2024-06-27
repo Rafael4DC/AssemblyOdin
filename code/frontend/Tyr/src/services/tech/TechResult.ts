@@ -19,6 +19,12 @@ export type GetAllTechsResult = Either<Error | Problem, GetAllTechsOutputModel>;
 export type CreationTechResult = Either<Error | Problem, Tech>;
 
 /**
+ * Represents the result of a tech schedule operation.
+ */
+export type ListCreationTechResult = Either<Error | Problem, Tech[]>;
+
+
+/**
  * Represents the result of a tech update operation.
  */
 export type DeleteTechResult = Either<Error | Problem, Tech>;

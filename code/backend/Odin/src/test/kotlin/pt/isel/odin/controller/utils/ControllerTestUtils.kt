@@ -98,7 +98,6 @@ class ControllerTestUtils {
         return sectionRepository.save(
             Section(
                 name = name ?: "Section A",
-                summary = "Summary A",
                 module = module,
                 students = mutableListOf()
             )
@@ -112,7 +111,8 @@ class ControllerTestUtils {
             Tech(
                 teacher = teacher,
                 section = section,
-                date = LocalDateTime.now(),
+                started = LocalDateTime.now(),
+                ended = LocalDateTime.now().plusHours(1),
                 summary = "Tech Summary",
                 missTech = mutableListOf()
             )

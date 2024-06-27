@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size
  *
  * @property id The section id.
  * @property name The section name.
- * @property summary The section summary.
  * @property module The section module.
  * @property students The section students.
  */
@@ -18,10 +17,6 @@ data class UpdateSectionInputModel(
     @NotBlank(message = "Name is required")
     @Size(min = 1, max = 50, message = "Name must have between 1 and 50 characters")
     val name: String,
-
-    @NotBlank(message = "Summary is required")
-    @Size(min = 1, max = 500, message = "Summary must have between 1 and 500 characters")
-    val summary: String,
 
     val module: Long,
 

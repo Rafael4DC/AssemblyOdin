@@ -28,6 +28,8 @@ class Department(
     @Column(nullable = false)
     val name: String,
 
+    val description: String? = null,
+
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonManagedReference
     val fieldsStudy: List<FieldStudy> = emptyList()
@@ -44,8 +46,9 @@ class Department(
     fun copy(
         id: Long? = this.id,
         name: String = this.name,
+        description: String? = this.description,
         fieldsStudy: List<FieldStudy> = this.fieldsStudy
-    ) = Department(id, name, fieldsStudy)
+    ) = Department(id, name, description, fieldsStudy)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

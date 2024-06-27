@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.odin.http.controllers.Uris
+import pt.isel.odin.http.controllers.user.models.GetUserLogsOutputModel
 import pt.isel.odin.http.controllers.user.models.GetUserOutputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserOutputModel
@@ -42,6 +43,20 @@ class UserController(private val userService: UserService) {
     fun getSession(authentication: Principal): ResponseEntity<*> =
         when (val result = userService.getByEmail(authentication.toEmail())) {
             is Success -> responde(GetUserOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
+        }
+
+    /**
+     * Gets the session user with logs.
+     *
+     * @param authentication the authentication token.
+     *
+     * @return Session user info with logs.
+     */
+    @GetMapping(Uris.Users.GET_LOGS)
+    fun getSessionWithLogs(authentication: Principal): ResponseEntity<*> =
+        when (val result = userService.getByEmailAndLogs(authentication.toEmail())) {
+            is Success -> responde(GetUserLogsOutputModel(result.value.first, result.value.second))
             is Failure -> Problem.responseForError(result.value)
         }
 

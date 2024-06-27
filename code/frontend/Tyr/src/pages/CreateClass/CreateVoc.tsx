@@ -1,155 +1,189 @@
-import * as React from "react";
-import {useState} from "react";
-import {Button, Container, Form} from "react-bootstrap";
-import useVocs from "../../hooks/useVocs";
-import {Voc} from "../../services/voc/models/Voc";
-import {useNavigate} from "react-router-dom";
-import {WebUris} from "../../utils/WebUris";
-import useUserInfo from "../../hooks/useUserInfo";
-import useStudents from "../../hooks/useStudents";
-import useSections from "../../hooks/useSections";
-import PROFILE = WebUris.PROFILE;
+import * as React from 'react';
+import { useState } from 'react';
+import {
+    Container,
+    TextField,
+    Button,
+    FormControlLabel,
+    MenuItem,
+    Typography,
+    Box,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Checkbox,
+    List,
+    ListItemButton,
+    ListItemText, InputBase, IconButton, TextFieldProps,
+} from '@mui/material';
+import useCreateVocClass from "../../hooks/useCreateVocClass";
+import { commonTextFieldProps, notStudent } from "../../utils/Utils";
+import { Spinner } from "../../utils/Spinner";
+import { AlertDialog } from "../../utils/AlertDialog";
+import { User } from '../../services/user/models/User';
+import SearchIcon from "@mui/icons-material/Search";
 
 /**
  * Page to create a voc class
  */
 const CreateVocClass = () => {
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const {userInfo} = useUserInfo();
-    const role = userInfo?.role.name;
+    const {
+        vocData,
+        setVocData,
+        state,
+        role,
+        sections,
+        students,
+        handleSubmit,
+        handleSectionChange,
+        handleDateChange,
+        handleStudentChange,
+    } = useCreateVocClass();
 
-    const [vocData, setVocData] = useState<Voc>({
-        description: "",
-        started: "",
-        ended: "",
-        approved: false,
-        section: {id: 1}
-    });
+    const [open, setOpen] = React.useState(false);
+    const [searchQuery, setSearchQuery] = React.useState("");
 
-    const {handleSaveVocClass, error} = useVocs();
-    const {sections} = useSections();
-    const {students} = useStudents();
 
-    const handleSubmit = async (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        await handleSaveVocClass(
-            {
-                description: vocData.description,
-                started: vocData.started,
-                ended: vocData.ended,
-                approved: vocData.approved,
-                user: vocData.user?.id,
-                section: vocData.section.id,
-            }
-        );
-        if (error == null) navigate(PROFILE)
-        else setIsSubmitting(false);
-    };
+    switch (state.type) {
+        case 'loading':
+            return <Spinner />;
 
-    const handleCurriUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            section: {id: Number(e.target.value)},
-        }));
-    };
+        case 'error':
+            return <AlertDialog alert={state.message} />;
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: "started" | "ended") => {
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            [key]: e.target.value,
-        }));
-    };
+        case 'success':
+            const handleStudentSelect = (student: User) => {
+                setVocData({ ...vocData, user: student });
+                handleClose();
+            };
 
-    const handleStudentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            user: {id: Number(e.target.value)},
-        }));
-    };
+            const handleOpen = () => setOpen(true);
+            const handleClose = () => setOpen(false);
 
-    return (
-        <Container>
-            <h1>Create VOC Class</h1>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control
-                        type="text"
-                        required
-                        value={vocData.description}
-                        onChange={(e) => setVocData({...vocData, description: e.target.value})}
-                    />
-                </Form.Group>
+            const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+                setSearchQuery(event.target.value);
+            };
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Start</Form.Label>
-                    <Form.Control
-                        type="datetime-local"
-                        required
-                        value={vocData.started}
-                        onChange={(e) => handleDateChange(e, 'started')}
-                    />
-                </Form.Group>
+            const filteredStudents = students.filter(student =>
+                student.username.toLowerCase().includes(searchQuery.toLowerCase())
+            );
 
-                <Form.Group className="mb-3">
-                    <Form.Label>End</Form.Label>
-                    <Form.Control
-                        type="datetime-local"
-                        required
-                        value={vocData.ended}
-                        onChange={(e) => handleDateChange(e, 'ended')}
-                    />
-                </Form.Group>
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Curricular Unit</Form.Label>
-                    <Form.Select
-                        required
-                        value={vocData.section.id.toString()}
-                        onChange={handleCurriUnitChange}
-                    >
-                        <option>Choose The Curricular Unit</option>
-                        {sections && sections.map(section => (
-                            <option key={section.id} value={section.id}>{section.name}</option>
-                        ))}
-                    </Form.Select>
-                </Form.Group>
-
-                {role === 'TEACHER' && (
-                    <>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Student</Form.Label>
-                            <Form.Select
+            return (
+                <Container>
+                    <Typography variant="h4" component="h1" gutterBottom align={"center"}>
+                        Create VOC Class
+                    </Typography>
+                    <Box sx={{ backgroundColor: 'white', padding: 3, borderRadius: 2, color: '#000' }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Description"
                                 required
-                                value={vocData.user?.id?.toString() || ''}
-                                onChange={handleStudentChange}
-                            >
-                                <option>Choose a Student</option>
-                                {students && students.map(student => (
-                                    <option key={student.id} value={student.id}>{student.username}</option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Check
-                                type="checkbox"
-                                label="Approved"
-                                checked={vocData.approved}
-                                onChange={(e) => setVocData({...vocData, approved: e.target.checked})}
+                                value={vocData.description}
+                                onChange={(e) => setVocData({ ...vocData, description: e.target.value })}
+                                {...commonTextFieldProps}
                             />
-                        </Form.Group>
-                    </>
-                )}
 
-                <Button variant="primary" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : 'Create VOC Class'}
-                </Button>
-            </Form>
-        </Container>
-    );
+                            <TextField
+                                label="Start"
+                                type="datetime-local"
+                                required
+                                value={vocData.started}
+                                onChange={(e) => handleDateChange(e, 'started')}
+                                {...commonTextFieldProps}
+                            />
+
+                            <TextField
+                                label="End"
+                                type="datetime-local"
+                                required
+                                value={vocData.ended}
+                                onChange={(e) => handleDateChange(e, 'ended')}
+                                {...commonTextFieldProps}
+                            />
+
+                            <TextField
+                                select
+                                label="Section"
+                                required
+                                value={vocData.section.id.toString()}
+                                onChange={(e) => handleSectionChange(e)}
+                                {...commonTextFieldProps}
+                            >
+                                <MenuItem value="" sx={{ color: '#000' }}>
+                                    <em>Choose The Section</em>
+                                </MenuItem>
+                                {sections && sections.map(section => (
+                                    <MenuItem key={section.id} value={section.id} sx={{ color: '#000' }}>
+                                        {section.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+
+                            {notStudent(role) && (
+                                <>
+                                <Box marginTop={2}>
+                                    <Button variant="contained" color="primary" onClick={handleOpen}>
+                                        Select Students
+                                    </Button>
+
+                                    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+                                        <DialogTitle sx={{ color: '#000' }}>Select Students</DialogTitle>
+                                        <DialogContent>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                                                <InputBase
+                                                    placeholder="Search students"
+                                                    value={searchQuery}
+                                                    onChange={handleSearchChange}
+                                                    sx={{ flex: 1, paddingLeft: 1, color: '#000' }}
+                                                />
+                                                <IconButton type="submit" sx={{ p: '10px', color: '#000' }} >
+                                                    <SearchIcon />
+                                                </IconButton>
+                                            </Box>
+                                            <List>
+                                                {filteredStudents.map(student => (
+                                                    <ListItemButton
+                                                        key={student.id}
+                                                        sx={{ color: '#000' }}
+                                                        onClick={() => handleStudentSelect(student)}>
+                                                        <ListItemText primary={student.username} sx={{ color: '#000' }} />
+                                                    </ListItemButton>
+                                                ))}
+                                            </List>
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={handleClose} color="primary">
+                                                Cancel
+                                            </Button>
+                                        </DialogActions>
+                                    </Dialog>
+                                </Box>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={vocData.approved}
+                                                onChange={(e) => setVocData({ ...vocData, approved: e.target.checked })}
+                                                style={{ color: '#000' }}
+                                            />
+                                        }
+                                        label="Approved"
+                                        style={{ color: '#000' }}
+                                    />
+                                </>
+                            )}
+
+                            <Box marginTop={2}>
+                                <Button variant="contained" color="primary" type="submit">
+                                    Create VOC Class
+                                </Button>
+                            </Box>
+                        </form>
+                    </Box>
+                </Container>
+            );
+    }
 };
 
 export default CreateVocClass;

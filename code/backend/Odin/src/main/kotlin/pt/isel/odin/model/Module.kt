@@ -32,6 +32,8 @@ class Module(
     @Column(nullable = false)
     val name: String,
 
+    val description: String? = null,
+
     @Column(nullable = true)
     val tier: Int = 1
 ) {
@@ -49,8 +51,9 @@ class Module(
         id: Long? = this.id,
         fieldStudy: FieldStudy = this.fieldStudy,
         name: String = this.name,
+        description: String? = this.description,
         tier: Int = this.tier
-    ) = Module(id, fieldStudy, name, tier)
+    ) = Module(id, fieldStudy, name, description, tier)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

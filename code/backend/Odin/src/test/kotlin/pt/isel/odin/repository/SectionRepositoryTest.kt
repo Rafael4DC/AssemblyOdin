@@ -48,7 +48,6 @@ class SectionRepositoryTest {
         // then: validate the save operation
         assertNotNull(savedSection.id)
         assertEquals(TestData.section1.name, savedSection.name)
-        assertEquals(TestData.section1.summary, savedSection.summary)
     }
 
     @Test
@@ -66,7 +65,6 @@ class SectionRepositoryTest {
         // then: validate the retrieval operation
         assertNotNull(retrievedSection)
         assertEquals(TestData.section2.name, retrievedSection?.name)
-        assertEquals(TestData.section2.summary, retrievedSection?.summary)
     }
 
     @Test
@@ -120,11 +118,10 @@ class SectionRepositoryTest {
         val savedSection = sectionRepository.save(section)
 
         // when: updating the section's name and summary
-        val updatedSection = sectionRepository.save(savedSection.copy(name = "New Name", summary = "New summary."))
+        val updatedSection = sectionRepository.save(savedSection.copy(name = "New Name"))
 
         // then: validate the update operation
         assertEquals("New Name", updatedSection.name)
-        assertEquals("New summary.", updatedSection.summary)
     }
 
     @Test
@@ -157,7 +154,6 @@ class SectionRepositoryTest {
         val savedUser2 = userRepository.save(user2)
         val section = Section(
             name = TestData.section7.name,
-            summary = TestData.section7.summary,
             module = TestData.module6,
             students = mutableListOf(savedUser1, savedUser2)
         )

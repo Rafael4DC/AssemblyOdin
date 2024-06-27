@@ -13,7 +13,6 @@ import {User} from "../../user/models/User";
 export interface Section {
     id?: number;
     name?: string;
-    summary?: string;
     module?: Module;
     students?: User[];
 }

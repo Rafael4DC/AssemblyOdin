@@ -76,7 +76,8 @@ class TechControllerTest {
             Tech(
                 teacher = tech1.teacher,
                 section = tech1.section,
-                date = LocalDateTime.now(),
+                started = LocalDateTime.now(),
+                ended = LocalDateTime.now(),
                 summary = "Tech 2",
                 missTech = mutableListOf()
             )
@@ -91,8 +92,8 @@ class TechControllerTest {
             .responseBody
 
         val expectedTechs = listOf(
-            GetTechOutputModel(tech1).copy(date = result!!.techs[0].date),
-            GetTechOutputModel(tech2).copy(date = result.techs[1].date)
+            GetTechOutputModel(tech1).copy(started = result!!.techs[0].started, ended = result.techs[0].ended),
+            GetTechOutputModel(tech2).copy(started = result.techs[1].started, ended = result.techs[1].ended)
         )
 
         // then: the techs match the expected techs
@@ -108,7 +109,8 @@ class TechControllerTest {
         val input = SaveTechInputModel(
             teacher = teacher.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Tech Summary",
             missTech = emptyList()
         )
@@ -143,7 +145,8 @@ class TechControllerTest {
         val input = SaveTechInputModel(
             teacher = 999,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Invalid Teacher",
             missTech = emptyList()
         )
@@ -165,7 +168,8 @@ class TechControllerTest {
         val input = SaveTechInputModel(
             teacher = teacher.id!!,
             section = 999,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Invalid Section",
             missTech = emptyList()
         )
@@ -188,7 +192,8 @@ class TechControllerTest {
             id = tech.id!!,
             teacher = tech.teacher.id!!,
             section = tech.section.id!!,
-            date = tech.date.toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Updated Summary",
             missTech = emptyList()
         )
@@ -216,7 +221,8 @@ class TechControllerTest {
             id = 999,
             teacher = teacher.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Non-Existent Tech",
             missTech = emptyList()
         )
@@ -239,7 +245,8 @@ class TechControllerTest {
             id = 1,
             teacher = 999,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Invalid Teacher",
             missTech = emptyList()
         )
@@ -262,7 +269,8 @@ class TechControllerTest {
             id = 1,
             teacher = teacher.id!!,
             section = 999,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().toString(),
             summary = "Invalid Section",
             missTech = emptyList()
         )

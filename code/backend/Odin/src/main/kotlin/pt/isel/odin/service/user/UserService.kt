@@ -6,6 +6,7 @@ import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserInputModel
 import pt.isel.odin.model.user.User
 import pt.isel.odin.model.user.UserDomain
+import pt.isel.odin.repository.CreditLogRepository
 import pt.isel.odin.repository.RoleRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.user.error.DeleteUserError
@@ -21,7 +22,8 @@ import pt.isel.odin.utils.success
 class UserService(
     private val userDomain: UserDomain,
     private val userRepository: UserRepository,
-    private val roleRepository: RoleRepository
+    private val roleRepository: RoleRepository,
+    private val creditLogRepository: CreditLogRepository
 ) {
 
     /**
@@ -48,6 +50,21 @@ class UserService(
         userRepository.findByEmail(email)
             .map<GetUserResult> { user -> success(user) }
             .orElse(failure(GetUserError.NotFoundUser))
+
+    /**
+     * Gets a user by its email and logs.
+     *
+     * @param email the user email
+     *
+     * @return the [GetUserResult] if found, [GetUserError.NotFoundUser] otherwise
+     */
+    fun getByEmailAndLogs(email: String): GetUserWithLogsResult {
+        val userOptional = userRepository.findByEmail(email)
+        if (userOptional.isEmpty) return failure(GetUserError.NotFoundUser)
+        val user = userOptional.get()
+        val logs = creditLogRepository.findByUserId(user.id!!)
+        return success(Pair(user, logs.orElse(emptyList())))
+    }
 
     /**
      * Gets all users.

@@ -1,9 +1,21 @@
 import * as React from 'react';
-import {useState} from 'react';
-import {Accordion, Button, Card, Container, Form, Modal} from 'react-bootstrap';
-import {Department} from "../../services/department/models/Department";
-import {FieldStudy} from "../../services/fieldstudy/models/FieldStudy";
-import {Module} from "../../services/module/models/Module";
+import { useState } from 'react';
+import {
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Button,
+    Box,
+    TextField,
+    Modal,
+    CircularProgress,
+    Container,
+    Typography
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Department } from "../../services/department/models/Department";
+import { FieldStudy } from "../../services/fieldstudy/models/FieldStudy";
+import { Module } from "../../services/module/models/Module";
 import useDepartments from "../../hooks/useDepartments";
 
 const DepartmentsManager: React.FC = () => {
@@ -17,6 +29,7 @@ const DepartmentsManager: React.FC = () => {
         handleDeleteModule
     } = useDepartments();
 
+
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [showSubCategoryModal, setShowSubCategoryModal] = useState(false);
     const [showModuleModal, setShowModuleModal] = useState(false);
@@ -29,8 +42,8 @@ const DepartmentsManager: React.FC = () => {
     const [editingSubCategory, setEditingSubCategory] = useState<FieldStudy | null>(null);
     const [editingModule, setEditingModule] = useState<Module | null>(null);
 
-    const handleCategoryEdit = (category: Department) => {
-        setEditingCategory(category);
+    const handleCategoryEdit = (department: Department) => {
+        setEditingCategory(department);
         setShowCategoryModal(true);
     };
 
@@ -76,86 +89,82 @@ const DepartmentsManager: React.FC = () => {
 
     return (
         <Container>
-            <h1>Categories</h1>
-            <Button onClick={() => setShowCategoryModal(true)}>Add Category</Button>
-            <Accordion defaultActiveKey="0">
-                {departments ? departments.map((category: Department, index: number) => (
-                    <Accordion.Item eventKey={index.toString()} key={category.id}>
-                        <Accordion.Header>{category.name}</Accordion.Header>
-                        <Accordion.Body>
-                            <Card.Text>{category.description}</Card.Text>
-                            <Button onClick={() => handleCategoryEdit(category)}>Edit</Button>
-                            <Button variant="danger"
-                                    onClick={() => handleDeleteDepartments(category.id!)}>Delete</Button>
-                            <Button onClick={() => {
-                                setEditingSubCategory({
-                                    id: undefined,
-                                    name: '',
-                                    description: '',
-                                    department: {id: category.id}
-                                });
-                                setShowSubCategoryModal(true);
-                            }}>Add SubCategory</Button>
-                            <Accordion>
-                                {category.fieldsStudy?.map((subCategory, subIndex) => (
-                                    subCategory.department = {id: category.id},
-                                        <Accordion.Item eventKey={subIndex.toString()} key={subCategory.id}>
-                                            <Accordion.Header>{subCategory.name}</Accordion.Header>
-                                            <Accordion.Body>
-                                                <Card.Text>{subCategory.description}</Card.Text>
-                                                <Button onClick={() => handleSubCategoryEdit(subCategory)}>Edit</Button>
-                                                <Button variant="danger"
-                                                        onClick={() => handleDeleteFieldsStudy(subCategory.id!)}>Delete</Button>
-                                                <Button onClick={() => {
-                                                    setEditingModule({
-                                                        id: undefined,
-                                                        name: '',
-                                                        description: '',
-                                                        fieldStudy: {id: subCategory.id}
-                                                    });
-                                                    setShowModuleModal(true);
-                                                }}>Add Module</Button>
-                                                <ul>
-                                                    {subCategory.modules?.map((module) => (
-                                                        module.fieldStudy = {id: subCategory.id},
-                                                            <li key={module.id}>
-                                                                <strong>{module.name}:</strong> {module.description}
-                                                                <Button
-                                                                    onClick={() => handleModuleEdit(module)}>Edit</Button>
-                                                                <Button variant="danger"
-                                                                        onClick={() => handleDeleteModule(module.id!)}>Delete</Button>
-                                                            </li>
-                                                    ))}
-                                                </ul>
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                ))}
+            <Typography variant="h4" gutterBottom sx={{ color: 'black' }}>
+                Categories
+            </Typography>
+            <Button variant="contained" color="primary" onClick={() => setShowCategoryModal(true)}>Add Category</Button>
+            {departments ? departments.map((department: Department, index: number) => (
+                <Accordion key={department.id}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography sx={{ color: 'black' }}>{department.name}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography sx={{ color: 'black' }}>{department.description}</Typography>
+                        <Button onClick={() => handleCategoryEdit(department)}>Edit</Button>
+                        <Button variant="outlined" color="error" onClick={() => handleDeleteDepartments(department.id!)}>Delete</Button>
+                        <Button onClick={() => {
+                            setEditingSubCategory({
+                                id: undefined,
+                                name: '',
+                                description: '',
+                                department: { id: department.id }
+                            });
+                            setShowSubCategoryModal(true);
+                        }}>Add SubCategory</Button>
+                        {department.fieldsStudy?.map((subCategory, subIndex) => (
+                            <Accordion key={subCategory.id}>
+                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                    <Typography sx={{ color: 'black' }}>{subCategory.name}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <Typography sx={{ color: 'black' }}>{subCategory.description}</Typography>
+                                    <Button onClick={() => handleSubCategoryEdit(subCategory)}>Edit</Button>
+                                    <Button variant="outlined" color="error" onClick={() => handleDeleteFieldsStudy(subCategory.id!)}>Delete</Button>
+                                    <Button onClick={() => {
+                                        setEditingModule({
+                                            id: undefined,
+                                            name: '',
+                                            description: '',
+                                            fieldStudy: { id: subCategory.id }
+                                        });
+                                        setShowModuleModal(true);
+                                    }}>Add Module</Button>
+                                    <ul>
+                                        {subCategory.modules?.map((module: Module) => (
+                                            <li key={module.id}>
+                                                <Typography sx={{ color: 'black' }}><strong>{module.name}:</strong> {module.description}</Typography>
+                                                <Button onClick={() => handleModuleEdit(module)}>Edit</Button>
+                                                <Button variant="outlined" color="error" onClick={() => handleDeleteModule(module.id!)}>Delete</Button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </AccordionDetails>
                             </Accordion>
-                        </Accordion.Body>
-                    </Accordion.Item>
-                )) : <p>Loading categories...</p>}
-            </Accordion>
+                        ))}
+                    </AccordionDetails>
+                </Accordion>
+            )) : <Typography sx={{ color: 'black' }}>Loading categories...</Typography>}
             <CategoryModal
                 show={showCategoryModal}
-                category={editingCategory}
+                department={editingCategory}
                 onHide={() => setShowCategoryModal(false)}
                 onSave={handleCategorySave}
                 setCategory={setEditingCategory}
-                loading={loadingCategory}/>
+                loading={loadingCategory} />
             <SubCategoryModal
                 show={showSubCategoryModal}
                 subCategory={editingSubCategory}
                 onHide={() => setShowSubCategoryModal(false)}
                 onSave={handleSubCategorySave}
                 setSubCategory={setEditingSubCategory}
-                loading={loadingSubCategory}/>
+                loading={loadingSubCategory} />
             <ModuleModal
                 show={showModuleModal}
                 module={editingModule}
                 onHide={() => setShowModuleModal(false)}
                 onSave={handleModuleSave}
                 setModule={setEditingModule}
-                loading={loadingModule}/>
+                loading={loadingModule} />
         </Container>
     );
 };
@@ -164,127 +173,128 @@ interface ModalProps {
     show: boolean;
     onHide: () => void;
     onSave: () => void;
-    category?: Department | null;
+    department?: Department | null;
     subCategory?: FieldStudy | null;
     module?: Module | null;
-    setCategory?: (category: Department | null) => void;
+    setCategory?: (department: Department | null) => void;
     setSubCategory?: (subCategory: FieldStudy | null) => void;
     setModule?: (module: Module | null) => void;
     loading?: boolean;
 }
 
-const CategoryModal: React.FC<ModalProps> = ({show, onHide, onSave, category, setCategory, loading}) => (
-    <Modal show={show} onHide={onHide}>
-        <Modal.Header closeButton>
-            <Modal.Title>{category?.id ? 'Edit Category' : 'Add Category'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form>
-                <Form.Group controlId="categoryName">
-                    <Form.Label>Category Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={category?.name || ''}
-                        onChange={(e) => setCategory && setCategory({...category, name: e.target.value})}
-                    />
-                </Form.Group>
-                <Form.Group controlId="categoryDescription">
-                    <Form.Label>Category Description</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={3}
-                        value={category?.description || ''}
-                        onChange={(e) => setCategory && setCategory({...category, description: e.target.value})}
-                    />
-                </Form.Group>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={onHide}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={onSave} disabled={loading}>
-                {loading ? 'Saving...' : 'Save Changes'}
-            </Button>
-        </Modal.Footer>
+const CategoryModal: React.FC<ModalProps> = ({ show, onHide, onSave, department, setCategory, loading }) => (
+    <Modal open={show} onClose={onHide}>
+        <Box sx={{ ...modalStyle, width: 400 }}>
+            <Typography variant="h6" component="h2" sx={{ color: 'black' }}>
+                {department?.id ? 'Edit Category' : 'Add Category'}
+            </Typography>
+            <TextField
+                fullWidth
+                label="Category Name"
+                value={department?.name || ''}
+                onChange={(e) => setCategory && setCategory({ ...department, name: e.target.value })}
+                margin="normal"
+            />
+            <TextField
+                fullWidth
+                label="Category Description"
+                value={department?.description || ''}
+                onChange={(e) => setCategory && setCategory({ ...department, description: e.target.value })}
+                margin="normal"
+                multiline
+                rows={3}
+            />
+            <Box sx={{ mt: 2 }}>
+                <Button variant="outlined" onClick={onHide}>
+                    Close
+                </Button>
+                <Button variant="contained" onClick={onSave} disabled={loading} sx={{ ml: 2 }}>
+                    {loading ? <CircularProgress size={24} /> : 'Save Changes'}
+                </Button>
+            </Box>
+        </Box>
     </Modal>
 );
 
-const SubCategoryModal: React.FC<ModalProps> = ({show, onHide, onSave, subCategory, setSubCategory, loading}) => (
-    <Modal show={show} onHide={onHide}>
-        <Modal.Header closeButton>
-            <Modal.Title>{subCategory?.id ? 'Edit SubCategory' : 'Add SubCategory'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form>
-                <Form.Group controlId="subCategoryName">
-                    <Form.Label>SubCategory Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={subCategory?.name || ''}
-                        onChange={(e) => setSubCategory && setSubCategory({...subCategory, name: e.target.value})}
-                    />
-                </Form.Group>
-                <Form.Group controlId="subCategoryDescription">
-                    <Form.Label>SubCategory Description</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={3}
-                        value={subCategory?.description || ''}
-                        onChange={(e) => setSubCategory && setSubCategory({
-                            ...subCategory,
-                            description: e.target.value
-                        })}
-                    />
-                </Form.Group>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={onHide}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={onSave} disabled={loading}>
-                {loading ? 'Saving...' : 'Save Changes'}
-            </Button>
-        </Modal.Footer>
+const SubCategoryModal: React.FC<ModalProps> = ({ show, onHide, onSave, subCategory, setSubCategory, loading }) => (
+    <Modal open={show} onClose={onHide}>
+        <Box sx={{ ...modalStyle, width: 400 }}>
+            <Typography variant="h6" component="h2" sx={{ color: 'black' }}>
+                {subCategory?.id ? 'Edit SubCategory' : 'Add SubCategory'}
+            </Typography>
+            <TextField
+                fullWidth
+                label="SubCategory Name"
+                value={subCategory?.name || ''}
+                onChange={(e) => setSubCategory && setSubCategory({ ...subCategory, name: e.target.value })}
+                margin="normal"
+            />
+            <TextField
+                fullWidth
+                label="SubCategory Description"
+                value={subCategory?.description || ''}
+                onChange={(e) => setSubCategory && setSubCategory({
+                    ...subCategory,
+                    description: e.target.value
+                })}
+                margin="normal"
+                multiline
+                rows={3}
+            />
+            <Box sx={{ mt: 2 }}>
+                <Button variant="outlined" onClick={onHide}>
+                    Close
+                </Button>
+                <Button variant="contained" onClick={onSave} disabled={loading} sx={{ ml: 2 }}>
+                    {loading ? <CircularProgress size={24} /> : 'Save Changes'}
+                </Button>
+            </Box>
+        </Box>
     </Modal>
 );
 
-const ModuleModal: React.FC<ModalProps> = ({show, onHide, onSave, module, setModule, loading}) => (
-    <Modal show={show} onHide={onHide}>
-        <Modal.Header closeButton>
-            <Modal.Title>{module?.id ? 'Edit Module' : 'Add Module'}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form>
-                <Form.Group controlId="moduleName">
-                    <Form.Label>Module Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        value={module?.name || ''}
-                        onChange={(e) => setModule && setModule({...module, name: e.target.value})}
-                    />
-                </Form.Group>
-                <Form.Group controlId="moduleDescription">
-                    <Form.Label>Module Description</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={3}
-                        value={module?.description || ''}
-                        onChange={(e) => setModule && setModule({...module, description: e.target.value})}
-                    />
-                </Form.Group>
-            </Form>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={onHide}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={onSave} disabled={loading}>
-                {loading ? 'Saving...' : 'Save Changes'}
-            </Button>
-        </Modal.Footer>
+const ModuleModal: React.FC<ModalProps> = ({ show, onHide, onSave, module, setModule, loading }) => (
+    <Modal open={show} onClose={onHide}>
+        <Box sx={{ ...modalStyle, width: 400 }}>
+            <Typography variant="h6" component="h2" sx={{ color: 'black' }}>
+                {module?.id ? 'Edit Module' : 'Add Module'}
+            </Typography>
+            <TextField
+                fullWidth
+                label="Module Name"
+                value={module?.name || ''}
+                onChange={(e) => setModule && setModule({ ...module, name: e.target.value })}
+                margin="normal"
+            />
+            <TextField
+                fullWidth
+                label="Module Description"
+                value={module?.description || ''}
+                onChange={(e) => setModule && setModule({ ...module, description: e.target.value })}
+                margin="normal"
+                multiline
+                rows={3}
+            />
+            <Box sx={{ mt: 2 }}>
+                <Button variant="outlined" onClick={onHide}>
+                    Close
+                </Button>
+                <Button variant="contained" onClick={onSave} disabled={loading} sx={{ ml: 2 }}>
+                    {loading ? <CircularProgress size={24} /> : 'Save Changes'}
+                </Button>
+            </Box>
+        </Box>
     </Modal>
 );
+
+const modalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
 
 export default DepartmentsManager;

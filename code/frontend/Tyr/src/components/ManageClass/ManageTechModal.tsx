@@ -1,6 +1,6 @@
 import {Button, Form, Modal} from "react-bootstrap";
 import * as React from "react";
-import {TechsAttendance} from "../../hooks/useClassManager";
+import {TechsAttendance} from "../../hooks/Refactor/useClassManager";
 
 
 /**
@@ -59,7 +59,7 @@ const ManageTechModal: React.FC<ManageTechModalProps> = (
                         <Form.Label>Class Date</Form.Label>
                         <Form.Control
                             type="datetime-local"
-                            value={selectedClass?.tech.date ? new Date(selectedClass.tech.date).toISOString().slice(0, 16) : ''}
+                            value={selectedClass?.tech.started ? new Date(selectedClass.tech.started).toISOString().slice(0, 16) : ''}
                             onChange={(e) => handleDateChange(e.target.value)}
                         />
                     </Form.Group>

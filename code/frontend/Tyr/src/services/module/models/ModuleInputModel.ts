@@ -9,4 +9,5 @@ export interface ModuleInputModel {
     id?: number;
     name?: string;
     description?: string;
+    fieldStudy?: number;
 }

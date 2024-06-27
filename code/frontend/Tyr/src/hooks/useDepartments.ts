@@ -33,13 +33,20 @@ const useDepartments = () => {
     return {
         departments,
         error,
-        handleSaveDepartments: async (category: Department) => {
+        handleSaveDepartments: async (department: Department) => {
             setError(null);
             try {
-                if (category.id) {
-                    await DepartmentService.update(category);
+                if (department.id) {
+                    await DepartmentService.update({
+                        id: department.id,
+                        name: department.name,
+                        description: department.description
+                    });
                 } else {
-                    await DepartmentService.save(category);
+                    await DepartmentService.save({
+                        name: department.name,
+                        description: department.description
+                    });
                 }
                 const updatedDepartments = await DepartmentService.getAll();
                 if (updatedDepartments instanceof Success) {
@@ -65,14 +72,24 @@ const useDepartments = () => {
                 setError(err);
             }
         },
-        handleSaveFieldsStudy: async (subCategory: FieldStudy) => {
+        handleSaveFieldsStudy: async (fieldStudy: FieldStudy) => {
             setError(null);
             debugger;
             try {
-                if (subCategory.id) {
-                    await FieldStudyService.update(subCategory);
+                if (fieldStudy.id) {
+                    await FieldStudyService.update({
+                        id: fieldStudy.id,
+                        name: fieldStudy.name,
+                        description: fieldStudy.description,
+                        department: fieldStudy.department.id
+
+                    });
                 } else {
-                    await FieldStudyService.save(subCategory);
+                    await FieldStudyService.save({
+                        name: fieldStudy.name,
+                        description: fieldStudy.description,
+                        department: fieldStudy.department.id
+                    });
                 }
                 const updatedDepartments = await DepartmentService.getAll();
                 if (updatedDepartments instanceof Success) {
@@ -102,9 +119,18 @@ const useDepartments = () => {
             setError(null);
             try {
                 if (module.id) {
-                    await ModuleService.update(module);
+                    await ModuleService.update({
+                        id: module.id,
+                        name: module.name,
+                        description: module.description,
+                        fieldStudy: module.fieldStudy.id
+                    });
                 } else {
-                    await ModuleService.save(module);
+                    await ModuleService.save({
+                        name: module.name,
+                        description: module.description,
+                        fieldStudy: module.fieldStudy.id
+                    });
                 }
                 const updatedDepartments = await DepartmentService.getAll();
                 if (updatedDepartments instanceof Success) {

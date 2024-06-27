@@ -96,7 +96,6 @@ class SectionControllerTest {
         val module = testUtils.createModule()
         val input = SaveSectionInputModel(
             name = "Section D",
-            summary = "Summary D",
             module = module.id!!,
             students = emptyList()
         )
@@ -130,7 +129,6 @@ class SectionControllerTest {
         val section = testUtils.createSection()
         val input = SaveSectionInputModel(
             name = section.name,
-            summary = section.summary,
             module = section.module!!.id!!,
             students = emptyList()
         )
@@ -151,7 +149,7 @@ class SectionControllerTest {
         // when: saving a section with an invalid name
         val module = testUtils.createModule()
         val input =
-            SaveSectionInputModel(name = "", summary = "Summary G", module = module.id!!, students = emptyList())
+            SaveSectionInputModel(name = "", module = module.id!!, students = emptyList())
 
         // then: a bad request error is returned
         client.post()
@@ -167,7 +165,7 @@ class SectionControllerTest {
     fun `Save section with invalid module`() {
         // when: saving a section with an invalid module
         val input =
-            SaveSectionInputModel(name = "Section H", summary = "Summary H", module = 999, students = emptyList())
+            SaveSectionInputModel(name = "Section H", module = 999, students = emptyList())
 
         // then: a bad request error is returned
         client.post()
@@ -187,7 +185,6 @@ class SectionControllerTest {
         val input = UpdateSectionInputModel(
             id = section.id!!,
             name = "Updated Section I",
-            summary = "Updated Summary I",
             module = section.module!!.id!!,
             students = emptyList()
         )
@@ -213,7 +210,6 @@ class SectionControllerTest {
         val input = UpdateSectionInputModel(
             id = 999,
             name = "Non-Existent Section",
-            summary = "Non-Existent Summary",
             module = module.id!!,
             students = emptyList()
         )
@@ -235,7 +231,6 @@ class SectionControllerTest {
         val input = UpdateSectionInputModel(
             id = 1,
             name = "",
-            summary = "Updated Summary J",
             module = module.id!!,
             students = emptyList()
         )
@@ -256,7 +251,6 @@ class SectionControllerTest {
         val input = UpdateSectionInputModel(
             id = 1,
             name = "Valid Name",
-            summary = "Updated Summary K",
             module = 999,
             students = emptyList()
         )

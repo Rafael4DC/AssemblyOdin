@@ -1,5 +1,6 @@
 package pt.isel.odin.service.user
 
+import pt.isel.odin.model.CreditLog
 import pt.isel.odin.model.user.User
 import pt.isel.odin.service.user.error.DeleteUserError
 import pt.isel.odin.service.user.error.GetUserError
@@ -13,6 +14,14 @@ import pt.isel.odin.utils.Either
  * @see User
  */
 typealias GetUserResult = Either<GetUserError, User>
+
+/**
+ * Represents the result of a user get with logs operation.
+ *
+ * @see GetUserError
+ * @see Pair
+ */
+typealias GetUserWithLogsResult = Either<GetUserError, Pair<User, List<CreditLog>>>
 
 /**
  * Represents the result of a user get all operations.
