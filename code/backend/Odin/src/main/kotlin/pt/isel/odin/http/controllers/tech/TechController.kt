@@ -13,7 +13,7 @@ import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.tech.models.GetTechOutputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechOutputModel
-import pt.isel.odin.http.controllers.tech.models.ScheduleTechInputModel
+import pt.isel.odin.http.controllers.tech.models.SaveScheduleTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechOutputModel
 import pt.isel.odin.http.controllers.tech.models.getAllTechsOutputModel
@@ -87,7 +87,7 @@ class TechController(private val techService: TechService) {
      * @return The saved techs.
      */
     @PostMapping(Uris.Techs.SAVE_MULTIPLE)
-    fun saveMultiple(@RequestBody input: ScheduleTechInputModel, authentication: Principal?): ResponseEntity<*> {
+    fun saveMultiple(@RequestBody input: SaveScheduleTechInputModel, authentication: Principal?): ResponseEntity<*> {
         val results = techService.saveMultipleClasses(input, authentication.toEmail())
         return if (results.all { it is Success }) {
             ResponseEntity.status(201).body(results.map { (it as Success).value })
@@ -110,6 +110,24 @@ class TechController(private val techService: TechService) {
             is Success -> responde(UpdateTechOutputModel(result.value))
             is Failure -> Problem.responseForError(result.value)
         }
+
+    /**
+     * Updates multiple techs.
+     *
+     * @param input The techs to update.
+     * @param authentication The authentication token.
+     *
+     * @return The updated techs.
+     */
+    @PostMapping(Uris.Techs.UPDATE_MULTIPLE)
+    fun updateMultiple(@RequestBody input: SaveScheduleTechInputModel, authentication: Principal?): ResponseEntity<*> {
+        val results = techService.updateMultipleClasses(input, authentication.toEmail())
+        return if (results.all { it is Success }) {
+            ResponseEntity.status(201).body(results.map { (it as Success).value })
+        } else {
+            Problem.responseForError(results.first { it is Failure })
+        }
+    }
 
     /**
      * Deletes a tech.

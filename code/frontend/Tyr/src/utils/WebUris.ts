@@ -3,16 +3,23 @@
  */
 export namespace WebUris {
     export const HOME = '/';
+
     export const PROFILE = '/profile';
     export const TIMETABLE = '/timetable';
-    export const DEPARTMENTS = '/categories';
-    export const MANAGE_CLASS = '/manageclasses';
-    export const CREATE_SECTION = '/createsection';
+
+    export const DEPARTMENTS = '/depatments';
+    export const MANAGE_DEPARTMENT = '/managedepartments';
+
     export const SECTION = '/section';
-    export const CREATE_VOC = '/VocClass';
+    export const CREATE_SECTION = '/createsection';
+    export const MANAGE_SECTIONS = '/managesections';
+
+    export const CREATE_VOC = '/createvoc';
+    export const MANAGE_VOC = '/managevoc';
+
     export const CREATE_TECH = '/createtech';
-    export const MANAGE_USERS = '/ManageUsers';
-    export const DEPARTMENT_MANAGER = '/CurricularUnitManager';
-    export const FOCUSED = '/Focused';
+    export const MANAGE_TECH = '/managetech';
+
+    export const MANAGE_USERS = '/manageusers';
     export const NAN = '/*';
 }

@@ -3,6 +3,7 @@ import {Either} from "../_utils/Either";
 import {User} from "./models/User";
 import {GetAllUsersOutputModel} from "./models/GetAllUsersOutputModel";
 import {GetUserWithLogsOutputModel} from "./models/GetUserWithLogsOutputModel";
+import {GetAllRolesOutputModel} from "./models/GetAllRolesOutputModel";
 
 /**
  * Represents the result of a user get operation.
@@ -28,3 +29,8 @@ export type CreationUserResult = Either<Error | Problem, User>;
  * Represents the result of a user update operation.
  */
 export type DeleteUserResult = Either<Error | Problem, User>;
+
+/**
+ * Represents the result of get all roles operation.
+ */
+export type GetAllRolesResult = Either<Error | Problem, GetAllRolesOutputModel>;

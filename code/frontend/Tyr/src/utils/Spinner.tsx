@@ -1,12 +1,19 @@
 import * as React from "react";
+import {CircularProgress} from "@mui/material";
+import Box from "@mui/material/Box";
 
 /**
  * Spinner component
  */
 export function Spinner() {
     return (
-        <div className="text-center my-5">
-            <div className="spinner-border" role="status"></div>
-        </div>
+        <Box sx={{
+            paddingTop: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        }}>
+            <CircularProgress sx={{color:'#fff'}}/>
+        </Box>
     );
 }

@@ -81,6 +81,7 @@ class VocService(
                     vocRepository.save(
                         voc.copy(
                             approved = updateVocInputModel.approved,
+                            description = updateVocInputModel.description,
                             user = user,
                             section = section,
                             started = LocalDateTime.parse(updateVocInputModel.started),
@@ -117,7 +118,7 @@ class VocService(
     }
 
     private fun getUser(userId: Long?, email: String): User? {
-        val user = if (userId == null) {
+        val user = if (userId == null || userId == 0L) {
             userRepository.findByEmail(email)
         } else {
             userRepository.findById(userId)

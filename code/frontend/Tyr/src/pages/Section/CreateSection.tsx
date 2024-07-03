@@ -1,15 +1,35 @@
 import * as React from 'react';
 import {
-    Button, Container, MenuItem, TextField, Box, Typography,
-    Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText, InputBase, IconButton, Checkbox
+    Box,
+    Button,
+    Checkbox,
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    InputBase,
+    List,
+    ListItem,
+    ListItemText,
+    MenuItem,
+    TextField,
+    Typography
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import {Spinner} from '../../utils/Spinner';
 import {AlertDialog} from '../../utils/AlertDialog';
-import useCreateSection from "../../hooks/useCreateSection";
+import useCreateSection from "../../hooks/Section/useCreateSection";
 import {commonTextFieldProps} from "../../utils/Utils";
+import {useTheme} from "@mui/material/styles";
 
+/**
+ * Page to create a section
+ */
 const CreateSection = () => {
+    const theme = useTheme();
+    const customColor = theme.palette.custom.main;
     const {
         sectionData,
         state,
@@ -46,7 +66,7 @@ const CreateSection = () => {
 
             return (
                 <Container>
-                    <Typography variant="h4" component="h1" gutterBottom align={"center"}>
+                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color:customColor}}>
                         Create Section
                     </Typography>
                     <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2, color: '#000'}}>

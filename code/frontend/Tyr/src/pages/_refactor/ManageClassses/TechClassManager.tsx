@@ -3,7 +3,6 @@ import * as React from 'react';
 import {toDateTimeStr} from '../../../utils/Utils';
 import {useTechClassManager} from "../../../hooks/Refactor/useTechClassManager";
 import {TechsAttendance} from "../../../hooks/Refactor/useClassManager";
-import ManageTechModal from "../../../components/ManageClass/ManageTechModal";
 
 /**
  * Props for the TechClassManager component
@@ -68,7 +67,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
                     </tbody>
                 </Table>
             </div>
-            <ManageTechModal
+            {/*<ManageTechModal
                 showEditModal={showEditModal}
                 setShowEditModal={setShowEditModal}
                 selectedClass={selectedClass}
@@ -76,7 +75,7 @@ const TechClassManager: React.FC<TechClassManagerProps> = ({classes}) => {
                 handleDateChange={handleDateChange}
                 handleSaveClass={handleSaveClass}
                 loading={loading}
-            />
+            />*/}
         </div>
     );
 };

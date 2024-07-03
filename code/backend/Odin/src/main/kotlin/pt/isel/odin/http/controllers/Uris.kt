@@ -26,6 +26,7 @@ object Uris {
         const val SESSION = "/session"
         const val GET_LOGS = "/logs"
         const val GET_STUDENTS = "/students"
+        const val GET_ROLES = "/roles"
 
         const val LOGOUT = "$PREFIX/logout"
 
@@ -100,6 +101,7 @@ object Uris {
         const val DELETE = "/{id}"
         const val GET_BY_USER = "/user"
         const val SAVE_MULTIPLE = "/savemultiple"
+        const val UPDATE_MULTIPLE = "/updatemultiple"
 
         fun byId(id: Long?) = UriTemplate(GET_BY_ID).expand(id)
     }

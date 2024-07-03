@@ -1,5 +1,6 @@
 package pt.isel.odin.model
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -34,7 +35,7 @@ class Section(
     @JoinColumn(name = "module_id")
     var module: Module? = null,
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     val students: MutableList<User> = mutableListOf()
 ) {
     /**

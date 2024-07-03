@@ -1,177 +1,130 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Paper, Typography, Grid, Button, Dialog, DialogTitle, DialogContent } from '@mui/material';
-import { styled } from '@mui/system';
-import { useTheme } from "@mui/material/styles";
-import { format, startOfWeek, endOfWeek, isWithinInterval, parseISO, differenceInMinutes } from 'date-fns';
-import useMyTechs from "../../hooks/useMyTechs";
-import { Spinner } from "../../utils/Spinner";
+import {useState} from 'react';
+import {Button, Dialog, DialogContent, DialogTitle, Grid, Paper, Typography} from '@mui/material';
+import {styled} from '@mui/system';
+import {useTheme} from "@mui/material/styles";
+import {differenceInMinutes, endOfWeek, format, isWithinInterval, parseISO, startOfWeek} from 'date-fns';
+import useMyTechs from "../../hooks/Tech/useMyTechs";
+import {Spinner} from "../../utils/Spinner";
+import {times, weekDaysShort} from "../../utils/HardCoded";
+import useMyVocs from "../../hooks/Voc/useMyVocs";
+import {DaySlot, EventSlot, Root, TimeSlot} from "../../utils/StyledComponents";
+import {AlertDialog} from "../../utils/AlertDialog";
+import {Voc} from "../../services/voc/models/Voc";
+import {Tech} from "../../services/tech/models/Tech";
+import {MILLISECONDS_IN_A_WEEK} from "../../utils/Utils";
+import TimeTableDialog from "../../components/TimeTable/Dialog/TimeTableDialog";
+import TimeTableGridClass from "../../components/TimeTable/Grid/TimeTableGridClass";
 
-const Root = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.background.default,
-    color: '#fff'
-}));
-
-const TimeSlot = styled('div')(({ theme }) => ({
-    borderBottom: `1px solid white`,
-    borderRight: '1px solid white',
-    height: '50px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0D0D40',
-    color: '#F70088',
-    fontWeight: 'bold',
-}));
-
-const DaySlot = styled(TimeSlot)(({ theme }) => ({
-    backgroundColor: '#F70088',
-    color: '#fff',
-    height: '50px',
-    fontWeight: 'bold',
-    borderRight: '1px solid white',
-}));
-
-const EventSlot = styled('div')<{ color?: string; span?: number }>(({ theme, color, span }) => ({
-    borderBottom: `1px solid white`,
-    borderRight: '1px solid white',
-    height: '50px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: color || '#0D0D40',
-    color: "#fff",
-    fontWeight: 'bold',
-    cursor: 'pointer',
-}));
-
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const times = [
-    '10:00', '11:00', '12:00', '13:00', '14:00',
-    '15:00', '16:00', '17:00', '18:00', '19:00',
-    '20:00', '21:00',
-];
-
+/**
+ * Page to display the timetable
+ */
 const Timetable = () => {
     const theme = useTheme();
+    const customColor = theme.palette.custom.main;
 
-    const { techs } = useMyTechs();
+    const {state: MyTechsState} = useMyTechs();
+    const {state: MyVocsState} = useMyVocs();
 
     const [weekOffset, setWeekOffset] = useState(0);
     const [open, setOpen] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState<any>(null);
+    const [selectedEvent, setSelectedEvent] = useState<any/*Tech | Voc*/>(null);
 
-    if (techs === null) return <Spinner />;
+    switch (true) {
+        case MyTechsState.type === 'loading' || MyVocsState.type === 'loading':
+            return <Spinner/>;
 
-    const currentStartOfWeek = startOfWeek(new Date(), { weekStartsOn: 1 });
-    const currentEndOfWeek = endOfWeek(new Date(), { weekStartsOn: 1 });
+        case MyTechsState.type === 'error':
+            return <AlertDialog alert={MyTechsState.message}/>;
 
-    const handleNextWeek = () => setWeekOffset(weekOffset + 1);
-    const handlePrevWeek = () => setWeekOffset(weekOffset - 1);
+        case MyVocsState.type === 'error':
+            return <AlertDialog alert={MyVocsState.message}/>;
 
-    const filteredEvents = techs.filter(event => {
-        const eventStart = parseISO(event.started);
-        const eventEnd = parseISO(event.ended);
-        const weekStart = startOfWeek(new Date(currentStartOfWeek.getTime() + weekOffset * 7 * 24 * 60 * 60 * 1000), { weekStartsOn: 1 });
-        const weekEnd = endOfWeek(new Date(currentEndOfWeek.getTime() + weekOffset * 7 * 24 * 60 * 60 * 1000), { weekStartsOn: 1 });
+        case MyTechsState.type === 'success' && MyVocsState.type === 'success':
+            const techs = MyTechsState.techs;
+            const vocs = MyVocsState.vocs;
 
-        return isWithinInterval(eventStart, { start: weekStart, end: weekEnd }) ||
-            isWithinInterval(eventEnd, { start: weekStart, end: weekEnd });
-    });
+            const currentWeekStart = startOfWeek(new Date(), {weekStartsOn: 1}).getTime();
+            const currentWeekEnd = endOfWeek(new Date(), {weekStartsOn: 1}).getTime();
 
-    const handleClickOpen = (event: any) => {
-        setSelectedEvent(event);
-        setOpen(true);
-    };
+            const getWeekStart = (weekOffset: number) =>
+                startOfWeek(
+                    new Date(currentWeekStart + weekOffset * MILLISECONDS_IN_A_WEEK), {weekStartsOn: 1}
+                );
+            const getWeekEnd = (weekOffset: number) =>
+                endOfWeek(
+                    new Date(currentWeekEnd + weekOffset * MILLISECONDS_IN_A_WEEK), {weekStartsOn: 1}
+                );
 
-    const handleClose = () => {
-        setOpen(false);
-        setSelectedEvent(null);
-    };
+            const handleNextWeek = () => setWeekOffset(weekOffset + 1);
+            const handlePrevWeek = () => setWeekOffset(weekOffset - 1);
 
-    return (
-        <Root>
-            <Typography variant="h6" align="center" gutterBottom>
-                1º TRIMESTRE - setembro/dezembro 2024 -
-                Week {format(startOfWeek(new Date(currentStartOfWeek.getTime() + weekOffset * 7 * 24 * 60 * 60 * 1000), { weekStartsOn: 1 }), 'MMM dd')} - {format(endOfWeek(new Date(currentEndOfWeek.getTime() + weekOffset * 7 * 24 * 60 * 60 * 1000), { weekStartsOn: 1 }), 'MMM dd')}
-            </Typography>
-            <Grid container justifyContent="center" spacing={2} sx={{ marginBottom: theme.spacing(2) }}>
-                <Grid item>
-                    <Button variant="contained" sx={{color: '#0D0D40'}} onClick={handlePrevWeek}>Previous Week</Button>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="secondary" onClick={handleNextWeek}>Next Week</Button>
-                </Grid>
-            </Grid>
-            <Grid container justifyContent="center" spacing={0}>
-                <Grid item xs={1} sx={{ borderLeft: '1px solid white', borderTop: '1px solid white'}}>
-                    <DaySlot>
-                        <Typography>Time</Typography>
-                    </DaySlot>
-                    {times.map((time, index) => (
-                        <TimeSlot key={index}>
-                            <Typography>{time}</Typography>
-                        </TimeSlot>
-                    ))}
-                </Grid>
-                {days.map((day, dayIndex) => (
-                    <Grid item xs={1.2} key={dayIndex} sx={{borderTop: '1px solid white'}}>
-                        <DaySlot>
-                            <Typography>{day}</Typography>
-                        </DaySlot>
-                        {times.map((time, timeIndex) => {
-                            const event = filteredEvents.find(event => {
-                                const eventStart = parseISO(event.started);
-                                const eventEnd = parseISO(event.ended);
-                                const eventDay = format(eventStart, 'EEE');
-                                const eventTime = format(eventStart, 'HH:mm');
-                                const eventDuration = differenceInMinutes(eventEnd, eventStart) / 60;
+            const allEvents = [...techs, ...vocs];
 
-                                return eventDay === day && eventTime === time;
-                            });
+            const filteredEvents = allEvents.filter(event => {
+                const eventStart = parseISO(event.started);
+                const eventEnd = parseISO(event.ended);
+                const weekStart = getWeekStart(weekOffset);
+                const weekEnd = getWeekEnd(weekOffset);
 
-                            if (event) {
-                                const eventStart = parseISO(event.started);
-                                const eventEnd = parseISO(event.ended);
-                                const span = Math.ceil(differenceInMinutes(eventEnd, eventStart) / 60);
-                                const slots = Array(span).fill(event.section.module.name);
+                return isWithinInterval(eventStart, {start: weekStart, end: weekEnd}) ||
+                    isWithinInterval(eventEnd, {start: weekStart, end: weekEnd});
+            });
 
-                                return (
-                                    <React.Fragment key={timeIndex}>
-                                        {slots.map((slot, index) => (
-                                            <EventSlot
-                                                key={index}
-                                                color={"#FFD700"}
-                                                onClick={() => event && handleClickOpen(event)}
-                                            >
-                                                <Typography>{slot}</Typography>
-                                            </EventSlot>
-                                        ))}
-                                    </React.Fragment>
-                                );
-                            }
+            const handleClickOpen = (event: any) => {
+                setSelectedEvent(event);
+                setOpen(true);
+            };
 
-                            return (
-                                <EventSlot
-                                    key={timeIndex}
-                                />
-                            );
-                        })}
+            const handleClose = () => {
+                setOpen(false);
+                setSelectedEvent(null);
+            };
+
+            return (
+                <Root>
+                    <Typography variant="h6" align="center" gutterBottom sx={{color: customColor}}>
+                        Week {format(getWeekStart(weekOffset), 'MMM dd')}
+                             - {format(getWeekEnd(weekOffset), 'MMM dd')}
+                    </Typography>
+                    <Grid container justifyContent="center" spacing={0}>
+                        <Grid item xs={1} sx={{borderLeft: '1px solid white', borderTop: '1px solid white'}}>
+                            <DaySlot>
+                                <Typography>Time</Typography>
+                            </DaySlot>
+                            {times.map((time, index) => (
+                                <TimeSlot key={index}>
+                                    <Typography>{time}</Typography>
+                                </TimeSlot>
+                            ))}
+                        </Grid>
+                        {weekDaysShort.map((day, dayIndex) => (
+                            <TimeTableGridClass
+                                filteredEvents={filteredEvents}
+                                day={day}
+                                dayIndex={dayIndex}
+                                handleClickOpen={handleClickOpen}
+                            />
+                        ))}
                     </Grid>
-                ))}
-            </Grid>
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{selectedEvent ? selectedEvent.module : ''}</DialogTitle>
-                <DialogContent>
-                    <Typography>Summary: {selectedEvent ? selectedEvent.summary : ''}</Typography>
-                    <Typography>Attended: {selectedEvent ? (selectedEvent.attended ? 'Yes' : 'No') : ''}</Typography>
-                    <Typography>Approved: {selectedEvent ? (selectedEvent.approved ? 'Yes' : 'No') : ''}</Typography>
-                </DialogContent>
-            </Dialog>
-        </Root>
-    );
+                    <Grid container justifyContent="center" spacing={2} sx={{marginTop: 2}}>
+                        <Grid item>
+                            <Button variant="contained" onClick={handlePrevWeek}>Previous Week</Button>
+                        </Grid>
+                        <Grid item>
+                            <Button variant="contained" onClick={handleNextWeek}>Next Week</Button>
+                        </Grid>
+                    </Grid>
+
+                    <TimeTableDialog
+                        open={open}
+                        handleClose={handleClose}
+                        selectedEvent={selectedEvent}
+                    />
+                </Root>
+            );
+    }
 };
 
 export default Timetable;

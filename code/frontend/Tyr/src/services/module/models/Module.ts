@@ -1,4 +1,5 @@
 import {FieldStudy} from "../../fieldstudy/models/FieldStudy";
+import {ModuleInputModel} from "./ModuleInputModel";
 
 /**
  * Module model
@@ -15,4 +16,13 @@ export interface Module {
     description?: string;
     fieldStudy?: FieldStudy;
     tier?: number;
+}
+
+export function moduleToInput(module: Module): ModuleInputModel {
+    return {
+        id: module.id,
+        name: module.name,
+        description: module.description,
+        fieldStudy: module.fieldStudy?.id
+    };
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserInputModel
 import pt.isel.odin.model.user.User
+import pt.isel.odin.model.Role
 import pt.isel.odin.model.user.UserDomain
 import pt.isel.odin.repository.CreditLogRepository
 import pt.isel.odin.repository.RoleRepository
@@ -148,6 +149,13 @@ class UserService(
         /*.map<GetAllUsersResult> { users -> success(users) }
         .orElse(failure(GetUserError.NotFoundUser))*/
     }
+
+    /**
+     * Gets all roles.
+     *
+     * @return the [GetAllRolesResult] with the list of [Role]
+     */
+    fun getRoles(): GetAllRolesResult = success(roleRepository.findAll())
 
     /**
      * Validates the user input.

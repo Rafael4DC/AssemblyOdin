@@ -3,7 +3,7 @@ package pt.isel.odin.service.tech
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
-import pt.isel.odin.http.controllers.tech.models.ScheduleTechInputModel
+import pt.isel.odin.http.controllers.tech.models.SaveScheduleTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
@@ -77,7 +77,7 @@ class TechService(
      * @return the [CreationTechResult] if saved, [SaveUpdateTechError] otherwise
      */
     @Transactional
-    fun saveMultipleClasses(input: ScheduleTechInputModel, email: String): List<CreationTechResult> {
+    fun saveMultipleClasses(input: SaveScheduleTechInputModel, email: String): List<CreationTechResult> {
         val user = getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
         val section = getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
 
@@ -132,6 +132,40 @@ class TechService(
                     )
                 )
             }.orElse(failure(SaveUpdateTechError.NotFoundTech))
+    }
+
+    /**
+     * Updates multiple classes.
+     *
+     * @param input the tech to update
+     * @param email the email of the user
+     *
+     * @return the [CreationTechResult] if updated, [SaveUpdateTechError] otherwise
+     */
+    @Transactional
+    fun updateMultipleClasses(input: SaveScheduleTechInputModel, email: String): List<CreationTechResult> {
+        val user = getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
+        val section = getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
+
+        val results = mutableListOf<CreationTechResult>()
+
+        var current = input.startDate.with(TemporalAdjusters.nextOrSame(input.dayOfWeek))
+        while (!current.isAfter(input.endDate)) {
+            val startDateTime = LocalDateTime.of(current, input.classTime)
+            val endDateTime = startDateTime.plusHours(input.classLengthHours)
+
+            val tech = Tech(
+                teacher = user,
+                section = section,
+                started = startDateTime,
+                ended = endDateTime,
+            )
+
+            results.add(success(techRepository.save(tech)))
+            current = current.plus(1, ChronoUnit.WEEKS)
+        }
+
+        return results
     }
 
     /**

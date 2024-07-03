@@ -16,6 +16,7 @@ import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserOutputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserInputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserOutputModel
+import pt.isel.odin.http.controllers.user.models.getAllRolesOutputModel
 import pt.isel.odin.http.controllers.user.models.getAllUsersOutputModel
 import pt.isel.odin.http.utils.Problem
 import pt.isel.odin.http.utils.responde
@@ -144,6 +145,18 @@ class UserController(private val userService: UserService) {
     fun getStudents(): ResponseEntity<*> =
         when (val result = userService.getStudents()) {
             is Success -> responde(getAllUsersOutputModel(result.value))
+            is Failure -> Problem.responseForError(result.value)
+        }
+
+    /**
+     * Get All Roles.
+     *
+     * @return All Roles.
+     */
+    @GetMapping(Uris.Users.GET_ROLES)
+    fun getRoles(): ResponseEntity<*> =
+        when (val result = userService.getRoles()) {
+            is Success -> responde(getAllRolesOutputModel(result.value))
             is Failure -> Problem.responseForError(result.value)
         }
 }

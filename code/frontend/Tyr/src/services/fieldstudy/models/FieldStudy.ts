@@ -1,5 +1,6 @@
 import {Module} from "../../module/models/Module";
 import {Department} from "../../department/models/Department";
+import {FieldStudyInputModel} from "./FieldStudyInputModel";
 
 /**
  * Field Study model
@@ -16,4 +17,13 @@ export interface FieldStudy {
     description?: string;
     department?: Department;
     modules?: Module[];
+}
+
+export function fieldStudyToInput(fieldStudy: FieldStudy): FieldStudyInputModel {
+    return {
+        id: fieldStudy.id,
+        name: fieldStudy.name,
+        description: fieldStudy.description,
+        department: fieldStudy.department?.id
+    };
 }

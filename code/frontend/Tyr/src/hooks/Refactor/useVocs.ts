@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import {VocService} from '../../services/voc/VocService';
 import {Voc} from "../../services/voc/models/Voc";
 import {Failure, Success} from "../../services/_utils/Either";
-import {VocInputModel} from "../../services/voc/models/VocInputModel";
 
 /**
  * Hook to get the voc classes
@@ -31,13 +30,29 @@ const useVocs = () => {
     return {
         vocs,
         error,
-        handleSaveVocClass: async (vocClass: VocInputModel) => {
+        handleSaveVocClass: async (vocClass: Voc) => {
             setError(null);
+            debugger
             try {
                 if (vocClass.id) {
-                    return await VocService.update(vocClass);
+                    return await VocService.update({
+                        id: vocClass.id,
+                        description: vocClass.description,
+                        started: vocClass.started,
+                        ended: vocClass.ended,
+                        approved: vocClass.approved,
+                        user: vocClass.user.id,
+                        section: vocClass.section.id
+                    });
                 } else {
-                    return await VocService.save(vocClass);
+                    return await VocService.save({
+                        description: vocClass.description,
+                        started: vocClass.started,
+                        ended: vocClass.ended,
+                        approved: vocClass.approved,
+                        user: vocClass.user.id,
+                        section: vocClass.section.id
+                    });
                 }
             } catch (err) {
                 setError(err);

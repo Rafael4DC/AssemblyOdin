@@ -1,6 +1,7 @@
 import {Tech} from "../services/tech/models/Tech";
 import {Voc} from "../services/voc/models/Voc";
 import {TextFieldProps} from "@mui/material";
+import {Problem} from "../services/_utils/Problem";
 
 /**
  * Formated the date String of backend to a more readable date and time string
@@ -100,7 +101,19 @@ export function notStudent(role: string) {
 export const commonTextFieldProps: Partial<TextFieldProps> = {
     fullWidth: true,
     margin: "normal",
-    InputLabelProps: { shrink: true },
-    InputProps: { style: { color: '#000' } },
-    style: { color: '#000' },
+    InputLabelProps: {shrink: true},
+    InputProps: {style: {color: '#000'}},
+    style: {color: '#000'},
 };
+
+export const handleError = (error: Error | Problem) => {
+    if (error instanceof Error) {
+        return error.message;
+    } else if (error instanceof Problem) {
+        return error.title || 'A problem occurred';
+    } else {
+        return 'An unexpected error occurred';
+    }
+};
+
+export const MILLISECONDS_IN_A_WEEK = 7 * 24 * 60 * 60 * 1000;

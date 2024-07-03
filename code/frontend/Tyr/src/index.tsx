@@ -2,14 +2,13 @@ import * as React from 'react';
 import {createRoot} from 'react-dom/client';
 import {App} from './App';
 import {BrowserRouter as Router} from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {SessionProvider} from "./session/SessionProvider";
 import {createTheme, ThemeProvider} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
 declare module '@mui/material/styles' {
     interface Palette {
+        custom: Palette['primary'];
         azulEscuro: Palette['primary'];
         magenta: Palette['primary'];
         cyan: Palette['primary'];
@@ -20,6 +19,7 @@ declare module '@mui/material/styles' {
     }
 
     interface PaletteOptions {
+        custom: PaletteOptions['primary'];
         azulEscuro: PaletteOptions['primary'];
         magenta: PaletteOptions['primary'];
         cyan: PaletteOptions['primary'];
@@ -36,6 +36,12 @@ declare module '@mui/material/styles' {
 const root = createRoot(document.getElementById('main-div'));
 const theme = createTheme({
     palette: {
+        text: {
+            primary: '#000',
+        },
+        custom: {
+            main: '#fff',
+        },
         azulEscuro: {
             main: '#100935',
         },
@@ -59,9 +65,6 @@ const theme = createTheme({
         },
         background: {
             default: '#1b1348',
-        },
-        text: {
-            primary: '#fff',
         },
     },
     typography: {

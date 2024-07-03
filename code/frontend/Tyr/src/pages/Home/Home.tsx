@@ -5,7 +5,7 @@ import videoo from "../../assets/Assembly-Logo_azulEscuro.mp4";
 /**
  * Page to display the home page
  */
-function Home() {
+const Home = () => {
     return (
         <Box
             sx={{
@@ -26,10 +26,10 @@ function Home() {
                 }}
                 src={videoo}
                 autoPlay
-                /*loop*/
                 muted
             />
         </Box>
     );
 }
+
 export default Home;

@@ -1,5 +1,12 @@
 import {apiRequest} from "../../axios/apiRequest";
-import {CreationUserResult, DeleteUserResult, GetAllUsersResult, GetUserLogsResult, GetUserResult} from "./UserResult";
+import {
+    CreationUserResult,
+    DeleteUserResult,
+    GetAllRolesResult,
+    GetAllUsersResult,
+    GetUserLogsResult,
+    GetUserResult
+} from "./UserResult";
 import {UserInputModel} from "./models/UserInputModel";
 
 /**
@@ -87,5 +94,14 @@ export namespace UserService {
      */
     export async function getStudents(): Promise<GetAllUsersResult> {
         return apiRequest('get', `${basePath}/students`);
+    }
+
+    /**
+     * Get all Roles
+     *
+     * @returns all roles
+     */
+    export async function getRoles(): Promise<GetAllRolesResult> {
+        return apiRequest('get', `${basePath}/roles`);
     }
 }

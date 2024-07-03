@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {CSSObject, Theme, styled, useTheme} from '@mui/material/styles';
+import {CSSObject, styled, Theme, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
@@ -21,25 +21,26 @@ import Tooltip from '@mui/material/Tooltip';
 import {WebUris} from "../utils/WebUris";
 import {useSessionData} from "../session/Session";
 import {
-    AccountBoxOutlined, AddCircleOutlineOutlined, CalendarMonthOutlined,
-    Class, ClassOutlined,
-    ManageAccounts,
+    AccountBoxOutlined,
+    AddCircleOutlineOutlined,
+    CalendarMonthOutlined,
+    ClassOutlined,
     ManageAccountsOutlined,
-    ManageHistory, ManageHistoryOutlined,
-    ManageSearch, ManageSearchOutlined,
-    NoteAdd, NoteAddOutlined,
-    School, SchoolOutlined
+    ManageHistory,
+    ManageSearchOutlined,
+    SchoolOutlined
 } from "@mui/icons-material";
+import logo from '../assets/logo_Assembly.png';
 import HOME = WebUris.HOME;
 import PROFILE = WebUris.PROFILE;
 import DEPARTMENTS = WebUris.DEPARTMENTS;
-import MANAGE_CLASSES = WebUris.MANAGE_CLASS;
+import MANAGE_CLASSES = WebUris.MANAGE_VOC;
 import CREATE_SECTION = WebUris.CREATE_SECTION;
 import SECTION = WebUris.SECTION;
 import CREATE_VOC = WebUris.CREATE_VOC;
 import CREATE_TECH = WebUris.CREATE_TECH;
 import TIMETABLE = WebUris.TIMETABLE;
-import logo from '../assets/logo_Assembly.png';
+import MANAGE_SECTIONS = WebUris.MANAGE_SECTIONS;
 
 const drawerWidth = 220;
 
@@ -479,6 +480,41 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                     <>
                         <StyledDivider/>
                         <List>
+                            <Tooltip title="ManageSection" placement="right">
+                                <ListItemButton
+                                    component={Link}
+                                    to={MANAGE_SECTIONS}
+                                    className={linkClass(MANAGE_SECTIONS)}
+                                    sx={!open && {
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{color: azulEscuroMain, justifyContent: !open ? 'center' : ''}}
+                                    >
+                                        <AccountBoxOutlined/>
+                                    </ListItemIcon>
+                                    {!open && (
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                mt: 1,
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                color: azulEscuroMain,
+                                                fontSize: '11px'
+                                            }}
+                                        >
+                                            Mng Sec
+                                        </Typography>
+                                    )}
+                                    {open && <ListItemText primary="Manage Sections" sx={{color: azulEscuroMain}}/>}
+                                </ListItemButton>
+                            </Tooltip>
                             <Tooltip title="Manage Users" placement="right">
                                 <ListItemButton
                                     component={Link}
@@ -517,8 +553,8 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                             <Tooltip title="Manage Departments" placement="right">
                                 <ListItemButton
                                     component={Link}
-                                    to={WebUris.DEPARTMENT_MANAGER}
-                                    className={linkClass(WebUris.DEPARTMENT_MANAGER)}
+                                    to={WebUris.MANAGE_DEPARTMENT}
+                                    className={linkClass(WebUris.MANAGE_DEPARTMENT)}
                                     sx={!open && {
                                         display: 'flex',
                                         flexDirection: 'column',

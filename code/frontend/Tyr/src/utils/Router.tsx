@@ -1,31 +1,33 @@
 import {Route, Routes} from 'react-router-dom';
 import Home from '../pages/Home/Home';
 import * as React from 'react';
-import CurricularUnitManagerFocused from '../pages/_refactor/CurricularUnitManagerFocused/CurricularUnitManagerFocused';
-import ManageClass from '../pages/_refactor/ManageClassses/ManageClasses';
-import ManageUsers from '../pages/_refactor/ManageUsers/ManageUsers';
+import ManageClass from '../pages/Voc/ManageVoc';
+import ManageUsers from '../pages/ManageUsers/ManageUsers';
 import {WebUris} from "./WebUris";
 import Departments from "../pages/Departments/Department";
-import ManageDepartments from "../pages/DepartmentsManager/DepartmentsManager";
-import CreateVoc from "../pages/CreateClass/CreateVoc";
-import CreateTech from "../pages/CreateClass/CreateTech";
+import ManageDepartments from "../pages/Departments/ManageDepartments";
+import CreateVoc from "../pages/Voc/CreateVoc";
+import CreateTech from "../pages/Tech/CreateTech";
 import CreateSection from "../pages/Section/CreateSection";
 import ViewSections from "../pages/Section/ViewSections";
+import Profile from "../pages/Profile/Profile";
+import Timetable from "../pages/TimeTable/TimeTable";
+import ManageSections from "../pages/Section/ManageSections";
+import ManageTech from "../pages/Tech/ManageTech";
 import HOME = WebUris.HOME;
 import PROFILE = WebUris.PROFILE;
 import DEPARTMENTS = WebUris.DEPARTMENTS;
-import MANAGE_CLASS = WebUris.MANAGE_CLASS;
+import MANAGE_CLASS = WebUris.MANAGE_VOC;
 import MANAGE_USERS = WebUris.MANAGE_USERS;
-import FOCUSED = WebUris.FOCUSED;
 import NOTFOUND = WebUris.NAN;
 import CREATE_SECTION = WebUris.CREATE_SECTION;
-import DEPARTMENT_MANAGER = WebUris.DEPARTMENT_MANAGER;
+import DEPARTMENT_MANAGER = WebUris.MANAGE_DEPARTMENT;
 import SECTION = WebUris.SECTION;
 import CREATE_VOC = WebUris.CREATE_VOC;
 import CREATE_TECH = WebUris.CREATE_TECH;
-import Profile from "../pages/Profile/Profile";
+import MANAGE_SECTIONS = WebUris.MANAGE_SECTIONS;
+import MANAGE_TECH = WebUris.MANAGE_TECH;
 import TIMETABLE = WebUris.TIMETABLE;
-import Timetable from "../pages/TimeTable/TimeTable";
 
 /**
  * Router component
@@ -44,11 +46,12 @@ export function AppRoutes() {
             <Route path={CREATE_SECTION} element={<CreateSection/>}/>
             <Route path={CREATE_TECH} element={<CreateTech/>}/>
             <Route path={MANAGE_CLASS} element={<ManageClass/>}/>
+            <Route path={MANAGE_TECH} element={<ManageTech/>}/>
 
+            <Route path={MANAGE_SECTIONS} element={<ManageSections/>}/>
             <Route path={MANAGE_USERS} element={<ManageUsers/>}/>
             <Route path={DEPARTMENT_MANAGER} element={<ManageDepartments/>}/>
 
-            <Route path={FOCUSED} element={<CurricularUnitManagerFocused/>}/>
             <Route path={NOTFOUND} element={<NAN/>}/>
         </Routes>
     )

@@ -3,7 +3,6 @@ import * as React from 'react';
 import {useState} from 'react';
 import {Voc} from '../../../services/voc/models/Voc';
 import {VocService} from "../../../services/voc/VocService";
-import VocApprovalModal from "../../../components/ManageClass/VocApprovalModal";
 import {getDuration, toDateTimeStr} from "../../../utils/Utils";
 
 /**
@@ -96,14 +95,14 @@ const VocClassManager: React.FC<VocClassManagerProps> = ({classes}) => {
                     </tbody>
                 </Table>
             </div>
-            <VocApprovalModal
+            {/*<VocApprovalModal
                 show={showApprovalModal}
                 onHide={() => setShowApprovalModal(false)}
                 voc={selectedVoc}
                 onApproveChange={handleApproveChange}
                 onSave={handleSaveVoc}
                 loading={loading}
-            />
+            />*/}
         </div>
     );
 };
