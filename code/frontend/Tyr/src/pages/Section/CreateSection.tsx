@@ -1,135 +1,103 @@
-import * as React from "react";
-import { useState } from "react";
-import { Button, Container, Form } from "react-bootstrap";
-import useModules from "../../hooks/useModules";
-import useStudents from "../../hooks/useStudents";
-import { useNavigate } from "react-router-dom";
-import { WebUris } from "../../utils/WebUris";
-import PROFILE = WebUris.PROFILE;
-import {SectionService} from "../../services/SectionService";
+import * as React from 'react';
+import {Box, Button, Container, MenuItem, TextField, Typography} from "@mui/material";
+import {Spinner} from '../../utils/Spinner';
+import {AlertDialog} from '../../utils/AlertDialog';
+import useCreateSection from "../../hooks/Section/useCreateSection";
+import {commonTextFieldProps} from "../../utils/Utils";
+import {useTheme} from "@mui/material/styles";
+import CreateDialog from "../../components/Shared/Dialog/CreateDialog";
 
 /**
  * Page to create a section
  */
 const CreateSection = () => {
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const theme = useTheme();
+    const customColor = theme.palette.custom.main;
+    const {
+        state,
+        selectedSection,
+        open,
+        setOpen,
+        searchQuery,
+        setSearchQuery,
+        handleSubmit,
+        handleInputChange,
+        handleModuleChange,
+        handleStudentSelect
+    } = useCreateSection();
 
-    const [sectionData, setSectionData] = useState({
-        name: "",
-        summary: "",
-        module: { id: 1 },
-        students: []
-    });
+    switch (state.type) {
+        case 'loading':
+            return <Spinner/>;
 
-    const { modules } = useModules();
-    const { students } = useStudents();
+        case 'error':
+            return <AlertDialog alert={state.message}/>;
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        try {
-            await SectionService.save({
-                name: sectionData.name,
-                summary: sectionData.summary,
-                module: sectionData.module.id,
-                students: sectionData.students
-            });
-            navigate(PROFILE);
-        } catch (error) {
-            console.error('Error creating section:', error);
-            setIsSubmitting(false);
-        }
-    };
+        case 'success':
+            const {modules, filteredStudents, loading} = state;
 
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setSectionData((prevSectionData) => ({
-            ...prevSectionData,
-            [name]: value,
-        }));
-    };
-
-    const handleModuleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSectionData((prevSectionData) => ({
-            ...prevSectionData,
-            module: { id: Number(e.target.value) },
-        }));
-    };
-
-    const handleStudentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const studentId = Number(e.target.value);
-        setSectionData((prevSectionData) => {
-            const updatedStudents = e.target.checked
-                ? [...prevSectionData.students, studentId]
-                : prevSectionData.students.filter(id => id !== studentId);
-            return {
-                ...prevSectionData,
-                students: updatedStudents
-            };
-        });
-    };
-
-    return (
-        <Container>
-            <h1>Create Section</h1>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="name"
-                        required
-                        value={sectionData.name}
-                        onChange={handleInputChange}
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Summary</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="summary"
-                        required
-                        value={sectionData.summary}
-                        onChange={handleInputChange}
-                    />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Module</Form.Label>
-                    <Form.Select
-                        required
-                        value={sectionData.module.id.toString()}
-                        onChange={handleModuleChange}
-                    >
-                        <option>Choose The Module</option>
-                        {modules && modules.map(module => (
-                            <option key={module.id} value={module.id}>{module.name}</option>
-                        ))}
-                    </Form.Select>
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                    <Form.Label>Students</Form.Label>
-                    {students && students.map(student => (
-                        <Form.Check
-                            key={student.id}
-                            type="checkbox"
-                            label={student.username}
-                            value={student.id}
-                            onChange={handleStudentChange}
-                        />
-                    ))}
-                </Form.Group>
-
-                <Button variant="primary" type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : 'Create Section'}
-                </Button>
-            </Form>
-        </Container>
-    );
+            return (
+                <Container>
+                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color: customColor}}>
+                        Create Section
+                    </Typography>
+                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2}}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Name"
+                                required
+                                name="name"
+                                value={selectedSection.name}
+                                onChange={handleInputChange}
+                                {...commonTextFieldProps}
+                            />
+                            <TextField
+                                label="Module"
+                                select
+                                required
+                                value={selectedSection.module.id.toString()}
+                                onChange={handleModuleChange}
+                                {...commonTextFieldProps}
+                            >
+                                <MenuItem value="0">
+                                    <em>Choose The Module</em>
+                                </MenuItem>
+                                {modules.map(module => (
+                                    <MenuItem key={module.id} value={module.id}>
+                                        {module.name}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <Box marginTop={2}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={loading}
+                                    onClick={() => setOpen(true)}>
+                                    Select Students
+                                </Button>
+                                <CreateDialog
+                                    open={open}
+                                    handleClose={() => setOpen(false)}
+                                    searchQuery={searchQuery}
+                                    setSearchQuery={setSearchQuery}
+                                    filteredStudents={filteredStudents}
+                                    handleStudentSelect={handleStudentSelect}
+                                    selectedStudents={selectedSection.students}
+                                    title={"Select Students"}
+                                    listCheckBox={true}
+                                />
+                            </Box>
+                            <Box marginTop={2}>
+                                <Button variant="contained" color="primary" type="submit" disabled={loading}>
+                                    Create Section
+                                </Button>
+                            </Box>
+                        </form>
+                    </Box>
+                </Container>
+            );
+    }
 };
 
 export default CreateSection;

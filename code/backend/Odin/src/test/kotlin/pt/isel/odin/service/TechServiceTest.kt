@@ -67,7 +67,7 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val tech = Tech(teacher = user, section = createSection(), date = LocalDateTime.now(), summary = "Tech Summary")
+        val tech = Tech(teacher = user, section = createSection(), started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
         techRepository.save(tech)
 
         // when: retrieving the tech by ID
@@ -96,8 +96,8 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val tech1 = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary 1")
-        val tech2 = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary 2")
+        val tech1 = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary 1")
+        val tech2 = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary 2")
         techRepository.save(tech1)
         techRepository.save(tech2)
 
@@ -120,7 +120,8 @@ class TechServiceTest {
         val saveTechInputModel = SaveTechInputModel(
             teacher = user.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Tech Summary",
             missTech = mutableListOf(user.id!!)
         )
@@ -134,7 +135,8 @@ class TechServiceTest {
             id = (result as Success).value.id!!,
             teacher = user,
             section = section,
-            date = LocalDateTime.parse(saveTechInputModel.date),
+            started = LocalDateTime.parse(saveTechInputModel.started),
+            ended = LocalDateTime.parse(saveTechInputModel.ended),
             summary = saveTechInputModel.summary,
             missTech = mutableListOf(user)
         )
@@ -152,7 +154,8 @@ class TechServiceTest {
         val saveTechInputModel = SaveTechInputModel(
             teacher = user.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Tech Summary"
         )
 
@@ -165,7 +168,8 @@ class TechServiceTest {
             id = (result as Success).value.id!!,
             teacher = user,
             section = section,
-            date = LocalDateTime.parse(saveTechInputModel.date),
+            started = LocalDateTime.parse(saveTechInputModel.started),
+            ended = LocalDateTime.parse(saveTechInputModel.ended),
             summary = saveTechInputModel.summary,
             missTech = mutableListOf()
         )
@@ -179,7 +183,8 @@ class TechServiceTest {
         val saveTechInputModel = SaveTechInputModel(
             teacher = 9999,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Tech Summary",
             missTech = emptyList()
         )
@@ -202,7 +207,8 @@ class TechServiceTest {
         val saveTechInputModel = SaveTechInputModel(
             teacher = user.id!!,
             section = 9999,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Tech Summary",
             missTech = emptyList()
         )
@@ -223,13 +229,14 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val existingTech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
+        val existingTech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
         val tech = techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = tech.id!!,
             teacher = user.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
         )
@@ -237,7 +244,8 @@ class TechServiceTest {
             id = tech.id!!,
             teacher = user,
             section = section,
-            date = LocalDateTime.parse(updateTechInputModel.date),
+            started = LocalDateTime.parse(updateTechInputModel.started),
+            ended = LocalDateTime.parse(updateTechInputModel.ended),
             summary = updateTechInputModel.summary
         )
 
@@ -260,7 +268,8 @@ class TechServiceTest {
         val existingTech = Tech(
             teacher = user,
             section = section,
-            date = LocalDateTime.now(),
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
             summary = "Tech Summary",
             missTech = mutableListOf(user)
         )
@@ -269,7 +278,8 @@ class TechServiceTest {
             id = tech.id!!,
             teacher = user.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
         )
@@ -277,7 +287,8 @@ class TechServiceTest {
             id = tech.id!!,
             teacher = user,
             section = section,
-            date = LocalDateTime.parse(updateTechInputModel.date),
+            started = LocalDateTime.parse(updateTechInputModel.started),
+            ended = LocalDateTime.parse(updateTechInputModel.ended),
             summary = updateTechInputModel.summary,
             missTech = mutableListOf()
         )
@@ -301,7 +312,8 @@ class TechServiceTest {
         val existingTech = Tech(
             teacher = user,
             section = section,
-            date = LocalDateTime.now(),
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
             summary = "Tech Summary",
             missTech = mutableListOf()
         )
@@ -310,7 +322,8 @@ class TechServiceTest {
             id = tech.id!!,
             teacher = user.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Updated Tech Summary",
             missTech = listOf(user.id!!)
         )
@@ -318,7 +331,8 @@ class TechServiceTest {
             id = tech.id!!,
             teacher = user,
             section = section,
-            date = LocalDateTime.parse(updateTechInputModel.date),
+            started = LocalDateTime.parse(updateTechInputModel.started),
+            ended = LocalDateTime.parse(updateTechInputModel.ended),
             summary = updateTechInputModel.summary,
             missTech = mutableListOf(user)
         )
@@ -343,7 +357,8 @@ class TechServiceTest {
             id = 1,
             teacher = user.id!!,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
         )
@@ -364,13 +379,14 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val existingTech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
+        val existingTech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
         techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = existingTech.id!!,
             teacher = 9999,
             section = section.id!!,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
         )
@@ -391,13 +407,14 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val existingTech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
+        val existingTech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
         techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = existingTech.id!!,
             teacher = user.id!!,
             section = 9999,
-            date = LocalDateTime.now().toString(),
+            started = LocalDateTime.now().toString(),
+            ended = LocalDateTime.now().plusHours(1).toString(),
             summary = "Updated Tech Summary",
             missTech = emptyList()
         )
@@ -418,7 +435,7 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val tech = Tech(teacher = user, section = section, date = LocalDateTime.now(), summary = "Tech Summary")
+        val tech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
         techRepository.save(tech)
 
         // when: deleting the tech

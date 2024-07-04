@@ -217,6 +217,7 @@ class Problem(
             SaveUpdateModuleError.NotFoundModule to notFoundModule,
             SaveUpdateModuleError.AlreadyExistsModule to alreadyExistsModule,
             SaveUpdateModuleError.NotFoundFieldStudy to notFoundFieldStudy,
+            SaveUpdateModuleError.IncorrectNameModule to nameIncorrect,
 
             /**
              * Section
@@ -226,6 +227,8 @@ class Problem(
             SaveUpdateSectionError.NotFoundSection to notFoundSection,
             SaveUpdateSectionError.AlreadyExistsSection to alreadyExistsSection,
             SaveUpdateSectionError.NotFoundFieldStudy to notFoundFieldStudy,
+            SaveUpdateSectionError.NotFoundModule to notFoundModule,
+            SaveUpdateSectionError.IncorrectNameSection to nameIncorrect,
 
             /**
              * Tech

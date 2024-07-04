@@ -3,6 +3,13 @@ package pt.isel.odin.http.controllers.fieldstudy.models
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
+/**
+ * Represents the input model for updating a field study.
+ *
+ * @property id The field study id.
+ * @property name The field study name.
+ * @property department The department id.
+ */
 data class UpdateFieldStudyInputModel(
     val id: Long,
 

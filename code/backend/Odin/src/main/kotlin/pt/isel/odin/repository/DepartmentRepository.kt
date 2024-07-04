@@ -10,5 +10,12 @@ import java.util.*
  */
 @Repository
 interface DepartmentRepository : JpaRepository<Department, Long> {
+    /**
+     * Finds a department by its name.
+     *
+     * @param name the department name
+     *
+     * @return the [Department] if found, [Optional.empty] otherwise
+     */
     fun findByName(name: String): Optional<Department>
 }

@@ -6,6 +6,14 @@ import jakarta.validation.constraints.Size
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.user.User
 
+/**
+ * Represents the input model for saving a user.
+ *
+ * @property email The user email.
+ * @property username The user username.
+ * @property credits The user credits.
+ * @property role The user role.
+ */
 data class SaveUserInputModel(
     @Email(message = "Invalid email")
     @NotBlank(message = "Email is required")
@@ -20,6 +28,13 @@ data class SaveUserInputModel(
 
     val role: Long
 ) {
+    /**
+     * Converts the [SaveUserInputModel] to a [User].
+     *
+     * @param role The [Role].
+     *
+     * @return The [User].
+     */
     fun toUser(role: Role) = User(
         email = email,
         username = username,

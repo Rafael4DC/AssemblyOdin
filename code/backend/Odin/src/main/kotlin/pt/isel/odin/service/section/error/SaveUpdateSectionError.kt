@@ -8,4 +8,5 @@ sealed class SaveUpdateSectionError {
     data object NotFoundFieldStudy : SaveUpdateSectionError()
     data object NotFoundSection : SaveUpdateSectionError()
     data object NotFoundModule : SaveUpdateSectionError()
+    data object IncorrectNameSection : SaveUpdateSectionError()
 }

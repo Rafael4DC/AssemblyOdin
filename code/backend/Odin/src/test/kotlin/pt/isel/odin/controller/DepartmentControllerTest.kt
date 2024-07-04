@@ -10,13 +10,14 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import pt.isel.odin.controller.utils.Config
+import pt.isel.odin.controller.utils.ControllerTestUtils
+import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.department.models.GetAllDepartmentsOutputModel
 import pt.isel.odin.http.controllers.department.models.GetDepartmentOutputModel
 import pt.isel.odin.http.controllers.department.models.SaveDepartmentInputModel
 import pt.isel.odin.http.controllers.department.models.SaveDepartmentOutputModel
 import pt.isel.odin.http.controllers.department.models.UpdateDepartmentInputModel
 import pt.isel.odin.model.Department
-import pt.isel.odin.repository.DepartmentRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -27,23 +28,20 @@ class DepartmentControllerTest {
     var port: Int = 0
 
     @Autowired
-    lateinit var departmentRepository: DepartmentRepository
+    lateinit var testUtils: ControllerTestUtils
 
-    private val baseUrl get() = "http://localhost:$port/api/department"
-
-    private val client by lazy {
-        WebTestClient.bindToServer().baseUrl(baseUrl).build()
-    }
+    private lateinit var client: WebTestClient
 
     @BeforeEach
     fun setup() {
-        departmentRepository.deleteAll()
+        testUtils.cleanDatabase()
+        client = testUtils.setupClient(port, Uris.Departments.RESOURCE)
     }
 
     @Test
     fun `Get department by ID`() {
         // given: a department
-        val department = departmentRepository.save(Department(name = "Department of Computer Science"))
+        val department = testUtils.createDepartment()
 
         // when: getting the department by its ID
         val result = client.get()
@@ -72,8 +70,8 @@ class DepartmentControllerTest {
     @Test
     fun `Get all departments`() {
         // given: two departments
-        val department1 = departmentRepository.save(Department(name = "Department of Math"))
-        val department2 = departmentRepository.save(Department(name = "Department of Physics"))
+        val department1 = testUtils.createDepartment()
+        val department2 = testUtils.createDepartment()
 
         val expectedDepartments = listOf(
             GetDepartmentOutputModel(department1),
@@ -100,10 +98,10 @@ class DepartmentControllerTest {
 
         // when: saving the department
         val departmentId = client.post()
-            .uri("/save")
+            .uri(Uris.Departments.SAVE)
             .bodyValue(input)
             .exchange()
-            .expectStatus().isOk
+            .expectStatus().isCreated
             .expectBody(SaveDepartmentOutputModel::class.java)
             .returnResult()
             .responseBody
@@ -124,13 +122,13 @@ class DepartmentControllerTest {
     @Test
     fun `Save department with duplicate name`() {
         // given: a department with the same name
-        departmentRepository.save(Department(name = "Existing Department"))
-        val input = SaveDepartmentInputModel(name = "Existing Department")
+        val department = testUtils.createDepartment()
+        val input = SaveDepartmentInputModel(name = department.name)
 
         // when: saving the department
         // then: a conflict error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.Departments.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(409)
@@ -145,7 +143,7 @@ class DepartmentControllerTest {
 
         // then: a bad request error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.Departments.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(400)
@@ -156,12 +154,12 @@ class DepartmentControllerTest {
     @Test
     fun `Update department`() {
         // given: a department
-        val department = departmentRepository.save(Department(name = "Old Department"))
+        val department = testUtils.createDepartment()
         val input = UpdateDepartmentInputModel(id = department.id!!, name = "Updated Department")
 
         // when: updating the department
         val result = client.put()
-            .uri("/update")
+            .uri(Uris.Departments.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isOk
@@ -180,7 +178,7 @@ class DepartmentControllerTest {
 
         // then: a not found error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.Departments.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(404)
@@ -195,7 +193,7 @@ class DepartmentControllerTest {
 
         // then: a bad request error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.Departments.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isBadRequest
@@ -206,7 +204,7 @@ class DepartmentControllerTest {
     @Test
     fun `Delete department`() {
         // given: a department
-        val department = departmentRepository.save(Department(name = "Department to be Deleted"))
+        val department = testUtils.createDepartment()
 
         // when: deleting the department
         val result = client.delete()
@@ -231,5 +229,55 @@ class DepartmentControllerTest {
             .expectStatus().isNotFound
             .expectBody()
             .jsonPath("$.title").isEqualTo("Department Not Found")
+    }
+
+    @Test
+    fun `Delete department that has field of study`() {
+        // given: a department with sections
+        val fieldStudy = testUtils.createFieldStudy()
+        val department = fieldStudy.department
+
+        // when: deleting the department
+        val result = client.delete()
+            .uri("/${department.id}")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(GetDepartmentOutputModel::class.java)
+            .returnResult()
+            .responseBody
+
+        client.get().uri("/${department.id}")
+            .exchange()
+            .expectStatus().isNotFound
+            .expectBody()
+            .jsonPath("$.title").isEqualTo("Department Not Found")
+
+        // then: the department matches the expected department
+        assertEquals(department.name, result!!.name)
+    }
+
+    @Test
+    fun `Delete department that has field of study and modules`() {
+        // given: a department with sections
+        val module = testUtils.createModule()
+        val department = module.fieldStudy.department
+
+        // when: deleting the department
+        val result = client.delete()
+            .uri("/${department.id}")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(GetDepartmentOutputModel::class.java)
+            .returnResult()
+            .responseBody
+
+        client.get().uri("/${department.id}")
+            .exchange()
+            .expectStatus().isNotFound
+            .expectBody()
+            .jsonPath("$.title").isEqualTo("Department Not Found")
+
+        // then: the department matches the expected department
+        assertEquals(department.name, result!!.name)
     }
 }

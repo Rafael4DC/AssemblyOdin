@@ -1,5 +1,6 @@
 package pt.isel.odin.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.boot.CommandLineRunner
@@ -20,18 +21,25 @@ import java.io.File
 
 @Configuration
 @Profile("default")
-class DataInitializer(private val dataPopulationService: DataPopulationService) {
+class DataInitializer(
+    private val dataPopulationService: DataPopulationService,
+    private val rolePopulationService: RolePopulationService
+) {
 
     @Bean
     fun initData(): CommandLineRunner {
         return CommandLineRunner {
-            val dataFilePath = System.getenv("INITIAL_DATA_PATH")
-                ?: "src/main/kotlin/pt/isel/odin/utils/InitialData.json"
+            val dataFilePath = "C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin/src/main/kotlin/pt/isel/odin/utils/InitialData.json"
+                //System.getenv("INITIAL_DATA_PATH") ?: "src/main/kotlin/pt/isel/odin/utils/InitialData.json"
 
             if (dataPopulationService.departmentRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()
                 val data: InitialData = mapper.readValue(File(dataFilePath))
                 dataPopulationService.populateData(data)
+            } else if (rolePopulationService.roleRepository.count() == 0L){
+                val mapper = jacksonObjectMapper()
+                val data: InitialData = mapper.readValue(File(dataFilePath))
+                rolePopulationService.populateRoles(data)
             } else {
                 println("Data already populated")
             }
@@ -44,7 +52,6 @@ class DataPopulationService(
     val departmentRepository: DepartmentRepository,
     private val fieldStudyRepository: FieldStudyRepository,
     private val moduleRepository: ModuleRepository,
-    private val roleRepository: RoleRepository
 ) {
 
     @Transactional
@@ -52,13 +59,29 @@ class DataPopulationService(
         data.departments.forEach { categoryData ->
             val department = departmentRepository.save(Department(name = categoryData.name))
             categoryData.fieldsStudy.forEach { subCategoryData ->
-                val fieldStudy = fieldStudyRepository.save(FieldStudy(department = department, name = subCategoryData.name))
+                val fieldStudy =
+                    fieldStudyRepository.save(FieldStudy(department = department, name = subCategoryData.name))
                 subCategoryData.modules.forEach { moduleData ->
-                    moduleRepository.save(Module(fieldStudy = fieldStudy, name = moduleData.name, tier = moduleData.tier))
+                    moduleRepository.save(
+                        Module(
+                            fieldStudy = fieldStudy,
+                            name = moduleData.name,
+                            tier = moduleData.tier
+                        )
+                    )
                 }
             }
         }
+    }
+}
 
+@Service
+class RolePopulationService(
+    val roleRepository: RoleRepository
+) {
+
+    @Transactional
+    fun populateRoles(data: InitialData) {
         data.roles.forEach { roleData ->
             roleRepository.save(Role(name = roleData.name))
         }

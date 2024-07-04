@@ -1,6 +1,7 @@
 package pt.isel.odin.controller
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -9,15 +10,14 @@ import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import pt.isel.odin.controller.utils.Config
+import pt.isel.odin.controller.utils.ControllerTestUtils
+import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.user.models.GetAllUsersOutputModel
 import pt.isel.odin.http.controllers.user.models.GetUserOutputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.SaveUserOutputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserInputModel
-import pt.isel.odin.model.Role
 import pt.isel.odin.model.user.User
-import pt.isel.odin.repository.RoleRepository
-import pt.isel.odin.repository.UserRepository
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -28,22 +28,20 @@ class UserControllerTest {
     var port: Int = 0
 
     @Autowired
-    lateinit var roleRepository: RoleRepository
+    lateinit var testUtils: ControllerTestUtils
 
-    @Autowired
-    lateinit var userRepository: UserRepository
+    private lateinit var client: WebTestClient
 
-    private val baseUrl get() = "http://localhost:$port/api/users"
-
-    private val client by lazy {
-        WebTestClient.bindToServer().baseUrl(baseUrl).build()
+    @BeforeEach
+    fun setup() {
+        testUtils.cleanDatabase()
+        client = testUtils.setupClient(port, Uris.Users.RESOURCE)
     }
 
     @Test
     fun `Get user by ID`() {
         // given: a user
-        val role = roleRepository.save(Role(name = "ROLE_USER"))
-        val user = userRepository.save(User(email = "test@example.com", username = "testuser", role = role))
+        val user = testUtils.createUser()
 
         // when: getting the user by its ID
         val result = client.get()
@@ -72,9 +70,9 @@ class UserControllerTest {
     @Test
     fun `Get all users`() {
         // given: two users
-        val role = roleRepository.save(Role(name = "ROLE_USER1"))
-        val user1 = userRepository.save(User(email = "test0@example.com", username = "testuser", role = role))
-        val user2 = userRepository.save(User(email = "test1@example.com", username = "testuser", role = role))
+        val role = testUtils.createRole()
+        val user1 = testUtils.createUser(givenRole = role)
+        val user2 = testUtils.createUser("test1@example.com", role)
 
         val expectedUsers = listOf(
             GetUserOutputModel(user1),
@@ -97,15 +95,15 @@ class UserControllerTest {
     @Test
     fun `Save user`() {
         // given: a user
-        val role = roleRepository.save(Role(name = "ROLE_USER2"))
+        val role = testUtils.createRole()
         val input = SaveUserInputModel(email = "newuser@example.com", username = "newuser", role = role.id!!)
 
         // when: saving the user
         val userId = client.post()
-            .uri("/save")
+            .uri(Uris.Users.SAVE)
             .bodyValue(input)
             .exchange()
-            .expectStatus().isOk
+            .expectStatus().isCreated
             .expectBody(SaveUserOutputModel::class.java)
             .returnResult()
             .responseBody
@@ -126,14 +124,13 @@ class UserControllerTest {
     @Test
     fun `Save user with duplicate email`() {
         // given: a user with the same email
-        val role = roleRepository.save(Role(name = "ROLE_USER3"))
-        userRepository.save(User(email = "test3@example.com", username = "testuser", role = role))
-        val input = SaveUserInputModel(email = "test3@example.com", username = "newuser", role = role.id!!)
+        val user = testUtils.createUser()
+        val input = SaveUserInputModel(email = user.email, username = user.username, role = user.role.id!!)
 
         // when: saving the user
         // then: a conflict error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.Users.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(409)
@@ -148,7 +145,7 @@ class UserControllerTest {
 
         // then: a bad request error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.Users.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(400)
@@ -163,7 +160,7 @@ class UserControllerTest {
 
         // then: a bad request error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.Users.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(400)
@@ -178,7 +175,7 @@ class UserControllerTest {
 
         // then: a bad request error is returned
         client.post()
-            .uri("/save")
+            .uri(Uris.Users.SAVE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(400)
@@ -189,13 +186,18 @@ class UserControllerTest {
     @Test
     fun `Update user`() {
         // given: a user
-        val role = roleRepository.save(Role(name = "ROLE_USER4"))
-        val user = userRepository.save(User(email = "test4@example.com", username = "testuser", role = role))
-        val input = UpdateUserInputModel(id = user.id!!, email = "updated4@example.com", username = "updateduser", credits = 100, role = role.id!!)
+        val user = testUtils.createUser()
+        val input = UpdateUserInputModel(
+            id = user.id!!,
+            email = user.email,
+            username = user.username,
+            credits = 100,
+            role = user.role.id!!
+        )
 
         // when: updating the user
         val result = client.put()
-            .uri("/update")
+            .uri(Uris.Users.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isOk
@@ -210,12 +212,18 @@ class UserControllerTest {
     @Test
     fun `Update non-existent user`() {
         // when: updating a non-existent user
-        val role = roleRepository.save(Role(name = "ROLE_USER5"))
-        val input = UpdateUserInputModel(id = 999, email = "updated5@example.com", username = "updateduser", credits = 100, role = role.id!!)
+        val role = testUtils.createRole()
+        val input = UpdateUserInputModel(
+            id = 999,
+            email = "updated5@example.com",
+            username = "updateduser",
+            credits = 100,
+            role = role.id!!
+        )
 
         // then: a not found error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.Users.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isEqualTo(404)
@@ -230,7 +238,7 @@ class UserControllerTest {
 
         // then: a bad request error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.Users.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isBadRequest
@@ -245,7 +253,7 @@ class UserControllerTest {
 
         // then: a bad request error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.Users.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isBadRequest
@@ -256,11 +264,12 @@ class UserControllerTest {
     @Test
     fun `Update user with invalid role`() {
         // when: updating a user with an invalid role
-        val input = UpdateUserInputModel(id = 1, email = "invalid@gmail.com", username = "user", credits = 100, role = 999)
+        val input =
+            UpdateUserInputModel(id = 1, email = "invalid@gmail.com", username = "user", credits = 100, role = 999)
 
         // then: a bad request error is returned
         client.put()
-            .uri("/update")
+            .uri(Uris.Users.UPDATE)
             .bodyValue(input)
             .exchange()
             .expectStatus().isBadRequest
@@ -271,8 +280,7 @@ class UserControllerTest {
     @Test
     fun `Delete user`() {
         // given: a user
-        val role = roleRepository.save(Role(name = "ROLE_USER6"))
-        val user = userRepository.save(User(email = "test6@example.com", username = "testuser", role = role))
+        val user = testUtils.createUser()
 
         // when: deleting the user
         val result = client.delete()

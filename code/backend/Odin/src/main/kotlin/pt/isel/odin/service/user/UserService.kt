@@ -1,11 +1,13 @@
 package pt.isel.odin.service.user
 
 import jakarta.transaction.Transactional
-import org.hibernate.internal.CoreLogging.logger
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserInputModel
+import pt.isel.odin.model.user.User
+import pt.isel.odin.model.Role
 import pt.isel.odin.model.user.UserDomain
+import pt.isel.odin.repository.CreditLogRepository
 import pt.isel.odin.repository.RoleRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.user.error.DeleteUserError
@@ -15,21 +17,22 @@ import pt.isel.odin.utils.failure
 import pt.isel.odin.utils.success
 
 /**
- * Service that handles the user operations.
+ * Service for Users.
  */
 @Service
 class UserService(
     private val userDomain: UserDomain,
     private val userRepository: UserRepository,
-    private val roleRepository: RoleRepository
+    private val roleRepository: RoleRepository,
+    private val creditLogRepository: CreditLogRepository
 ) {
 
     /**
      * Gets a user by its id.
      *
-     * @param id the user id.
+     * @param id the user id
      *
-     * @return a [GetUserResult] with the user or an error.
+     * @return the [GetUserResult] if found, [GetUserError.NotFoundUser] otherwise
      */
     fun getById(id: Long): GetUserResult {
         return userRepository.findById(id)
@@ -40,9 +43,9 @@ class UserService(
     /**
      * Gets a user by its email.
      *
-     * @param email the user email.
+     * @param email the user email
      *
-     * @return a [GetUserResult] with the user or an error.
+     * @return the [GetUserResult] if found, [GetUserError.NotFoundUser] otherwise
      */
     fun getByEmail(email: String): GetUserResult =
         userRepository.findByEmail(email)
@@ -50,23 +53,37 @@ class UserService(
             .orElse(failure(GetUserError.NotFoundUser))
 
     /**
+     * Gets a user by its email and logs.
+     *
+     * @param email the user email
+     *
+     * @return the [GetUserResult] if found, [GetUserError.NotFoundUser] otherwise
+     */
+    fun getByEmailAndLogs(email: String): GetUserWithLogsResult {
+        val userOptional = userRepository.findByEmail(email)
+        if (userOptional.isEmpty) return failure(GetUserError.NotFoundUser)
+        val user = userOptional.get()
+        val logs = creditLogRepository.findByUserId(user.id!!)
+        return success(Pair(user, logs.orElse(emptyList())))
+    }
+
+    /**
      * Gets all users.
      *
-     * @return a [GetAllUsersResult] with the list of users.
+     * @return the [GetAllUsersResult] with the list of [User]
      */
     fun getAll(): GetAllUsersResult = success(userRepository.findAll())
 
     /**
      * Saves a user.
      *
-     * @param saveInputModel the user input model.
+     * @param saveInputModel the user to save
      *
-     * @return a [CreationUserResult] with the result of the User saved or an error.
+     * @return the [CreationUserResult] if saved, [SaveUpdateUserError] otherwise
      */
     @Transactional
     fun save(saveInputModel: SaveUserInputModel): CreationUserResult {
         validateUserInput(saveInputModel.username, saveInputModel.email)?.let { return it }
-        log.info("Validations passed successfully with email: ${saveInputModel.email} and username: ${saveInputModel.username}.")
 
         if (userRepository.findByEmail(saveInputModel.email).isPresent) {
             return failure(SaveUpdateUserError.EmailAlreadyExistsUser)
@@ -81,14 +98,13 @@ class UserService(
     /**
      * Updates a user.
      *
-     * @param updateInputModel the user to update.
+     * @param updateInputModel the user to update
      *
-     * @return a [CreationUserResult] with the result of the User updated or an error.
+     * @return the [CreationUserResult] if updated, [SaveUpdateUserError] otherwise
      */
     @Transactional
     fun update(updateInputModel: UpdateUserInputModel): CreationUserResult {
         validateUserInput(updateInputModel.username, updateInputModel.email)?.let { return it }
-        log.info("Validations passed successfully with email: ${updateInputModel.email} and username: ${updateInputModel.username}.")
 
         val role = roleRepository.findById(updateInputModel.role)
         if (role.isEmpty) return failure(SaveUpdateUserError.RoleIncorrectUser)
@@ -109,11 +125,11 @@ class UserService(
     }
 
     /**
-     * Deletes a user by its id.
+     * Deletes a user.
      *
-     * @param id the user id.
+     * @param id the user id
      *
-     * @return a [DeleteUserResult] with the result of the User deleted or an error.
+     * @return the [DeleteUserResult] if deleted, [DeleteUserError] otherwise
      */
     @Transactional
     fun delete(id: Long): DeleteUserResult =
@@ -123,15 +139,23 @@ class UserService(
                 success(user)
             }.orElse(failure(DeleteUserError.NotFoundUser))
 
+    /**
+     * Gets all students.
+     *
+     * @return the [GetAllUsersResult] with the list of [User]
+     */
     fun getStudents(): GetAllUsersResult {
         return success(userRepository.findUserByRole_NameIs("STUDENT"))
-            /*.map<GetAllUsersResult> { users -> success(users) }
-            .orElse(failure(GetUserError.NotFoundUser))*/
+        /*.map<GetAllUsersResult> { users -> success(users) }
+        .orElse(failure(GetUserError.NotFoundUser))*/
     }
 
-    companion object {
-        private val log = logger(UserService::class.java)
-    }
+    /**
+     * Gets all roles.
+     *
+     * @return the [GetAllRolesResult] with the list of [Role]
+     */
+    fun getRoles(): GetAllRolesResult = success(roleRepository.findAll())
 
     /**
      * Validates the user input.

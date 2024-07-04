@@ -13,13 +13,13 @@ import pt.isel.odin.model.user.User
 import java.time.LocalDateTime
 
 /**
- * Represents the Teoric lectures (TEC) in the system.
+ * Represents the Teoric lectures (tech) in the system.
  *
- * @property id the TEC id
- * @property teacher the teacher that is responsible for the TEC
- * @property section the course that the TEC is about
- * @property date the date of the TEC
- * @property summary the summary of the TEC
+ * @property id the tech id
+ * @property teacher the teacher that is responsible for the tech
+ * @property section the course that the tech is about
+ * @property date the date of the tech
+ * @property summary the summary of the tech
  */
 @Entity
 @Table(name = "tech")
@@ -34,22 +34,37 @@ class Tech(
     @ManyToOne
     val section: Section,
 
-    val date: LocalDateTime,
+    val started: LocalDateTime,
+
+    val ended: LocalDateTime,
 
     @Column(nullable = false)
-    val summary: String,
+    val summary: String = "",
 
     @ManyToMany(fetch = FetchType.EAGER)
     val missTech: MutableList<User> = mutableListOf()
 ) {
+    /**
+     * Creates a copy of the tech with the given values.
+     *
+     * @param id the tech id
+     * @param teacher the teacher that is responsible for the tech
+     * @param section the course that the tech is about
+     * @param date the date of the tech
+     * @param summary the summary of the tech
+     * @param missTech the tech [User]
+     *
+     * @return the new [Tech]
+     */
     fun copy(
         id: Long? = this.id,
         teacher: User = this.teacher,
         section: Section = this.section,
-        date: LocalDateTime = this.date,
+        started: LocalDateTime = this.started,
+        ended: LocalDateTime = this.ended,
         summary: String = this.summary,
         missTech: MutableList<User> = this.missTech
-    ) = Tech(id, teacher, section, date, summary, missTech)
+    ) = Tech(id, teacher, section, started, ended, summary, missTech)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -57,7 +72,8 @@ class Tech(
         return id == other.id &&
             teacher == other.teacher &&
             section == other.section &&
-            date == other.date &&
+            started == other.started &&
+            ended == other.ended &&
             summary == other.summary &&
             missTech == other.missTech
     }
@@ -66,9 +82,11 @@ class Tech(
         var result = id?.hashCode() ?: 0
         result = 31 * result + teacher.hashCode()
         result = 31 * result + section.hashCode()
-        result = 31 * result + date.hashCode()
+        result = 31 * result + started.hashCode()
+        result = 31 * result + ended.hashCode()
         result = 31 * result + summary.hashCode()
         result = 31 * result + missTech.hashCode()
         return result
     }
+
 }

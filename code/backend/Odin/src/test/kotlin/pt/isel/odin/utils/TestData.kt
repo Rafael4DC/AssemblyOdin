@@ -30,13 +30,13 @@ object TestData {
     val module5 = Module(name = "Marketing", fieldStudy = fieldStudy4)
     val module6 = Module(name = "Forensic Science", fieldStudy = fieldStudy5)
 
-    val section1 = Section(name = "Introduction", summary = "This is the introduction section.", module = module1)
-    val section2 = Section(name = "History", summary = "This section covers history.", module = module2)
-    val section3 = Section(name = "Part 1", summary = "This is part 1.", module = module3)
-    val section4 = Section(name = "Part 2", summary = "This is part 2.", module = module4)
-    val section5 = Section(name = "Old Name", summary = "Old summary.", module = module5)
-    val section6 = Section(name = "To be deleted", summary = "This section will be deleted.", module = module6)
-    val section7 = Section(name = "Science", summary = "This section covers science.", module = module6)
+    val section1 = Section(name = "Introduction", module = module1)
+    val section2 = Section(name = "History", module = module2)
+    val section3 = Section(name = "Part 1", module = module3)
+    val section4 = Section(name = "Part 2", module = module4)
+    val section5 = Section(name = "Old Name", module = module5)
+    val section6 = Section(name = "To be deleted", module = module6)
+    val section7 = Section(name = "Science", module = module6)
 
     val role1 = Role(name = "Admin")
     val role2 = Role(name = "User")
@@ -55,16 +55,53 @@ object TestData {
     val user7 = User(email = "support@example.com", username = "support", role = role5)
     val user8 = User(email = "operations@example.com", username = "operations", role = role6)
 
-    val tech1 = Tech(teacher = user1, section = section1, date = LocalDateTime.now(), summary = "Tech summary")
-    val tech2 = Tech(teacher = user1, section = section2, date = LocalDateTime.now(), summary = "Algebra Tech summary")
-    val tech3 = Tech(teacher = user1, section = section3, date = LocalDateTime.now(), summary = "Physics Tech 1")
-    val tech4 = Tech(teacher = user1, section = section4, date = LocalDateTime.now(), summary = "Physics Tech 2")
-    val tech5 = Tech(teacher = user1, section = section5, date = LocalDateTime.now(), summary = "Botany Tech")
-    val tech6 = Tech(teacher = user1, section = section6, date = LocalDateTime.now(), summary = "Organic Chemistry Tech")
+    val tech1 = Tech(
+        teacher = user1,
+        section = section1,
+        started = LocalDateTime.now(),
+        ended = LocalDateTime.now().plusHours(1),
+        summary = "Tech summary"
+    )
+    val tech2 = Tech(
+        teacher = user1,
+        section = section2,
+        started = LocalDateTime.now(),
+        ended = LocalDateTime.now().plusHours(1),
+        summary = "Algebra Tech summary"
+    )
+    val tech3 = Tech(
+        teacher = user1,
+        section = section3,
+        started = LocalDateTime.now(),
+        ended = LocalDateTime.now().plusHours(1),
+        summary = "Physics Tech 1"
+    )
+    val tech4 = Tech(
+        teacher = user1,
+        section = section4,
+        started = LocalDateTime.now(),
+        ended = LocalDateTime.now().plusHours(1),
+        summary = "Physics Tech 2"
+    )
+    val tech5 = Tech(
+        teacher = user1,
+        section = section5,
+        started = LocalDateTime.now(),
+        ended = LocalDateTime.now().plusHours(1),
+        summary = "Botany Tech"
+    )
+    val tech6 =
+        Tech(
+            teacher = user1,
+            section = section6,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Organic Chemistry Tech"
+        )
     val tech7 = Tech(
         teacher = user1,
-        section = section7,
-        date = LocalDateTime.now(),
+        section = section7, started = LocalDateTime.now(),
+        ended = LocalDateTime.now().plusHours(1),
         summary = "History Tech",
         missTech = mutableListOf(user2, user3)
     )

@@ -1,6 +1,7 @@
 package pt.isel.odin.model
 
 import com.fasterxml.jackson.annotation.JsonManagedReference
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -10,6 +11,13 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 
+/**
+ * Represents a department in the system.
+ *
+ * @property id the department id
+ * @property name the department name
+ * @property fieldsStudy the department [FieldStudy]
+ */
 @Entity
 @Table(name = "department")
 class Department(
@@ -20,15 +28,27 @@ class Department(
     @Column(nullable = false)
     val name: String,
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
+    val description: String? = null,
+
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonManagedReference
     val fieldsStudy: List<FieldStudy> = emptyList()
 ) {
+    /**
+     * Creates a copy of the department with the given values.
+     *
+     * @param id the department id
+     * @param name the department name
+     * @param fieldsStudy the department [FieldStudy]
+     *
+     * @return the new [Department]
+     */
     fun copy(
         id: Long? = this.id,
         name: String = this.name,
-        subCategories: List<FieldStudy> = this.fieldsStudy
-    ) = Department(id, name, subCategories)
+        description: String? = this.description,
+        fieldsStudy: List<FieldStudy> = this.fieldsStudy
+    ) = Department(id, name, description, fieldsStudy)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
