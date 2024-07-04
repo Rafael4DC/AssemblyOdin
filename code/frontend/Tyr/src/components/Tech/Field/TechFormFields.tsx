@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Box, MenuItem, TextField } from '@mui/material';
-import { Tech } from '../../../services/tech/models/Tech';
+import {Box, MenuItem, TextField} from '@mui/material';
+import {Tech} from '../../../services/tech/models/Tech';
 import {Section} from "../../../services/section/models/Section";
 import {commonTextFieldProps} from "../../../utils/Utils";
 import {times} from "../../../utils/HardCoded";
@@ -23,6 +23,7 @@ const TechFormFields = (props: TechFormFieldsProps) => {
             <TextField
                 label="Summary"
                 required
+                name="summary"
                 value={techData.summary}
                 onChange={handleInputChange}
                 {...commonTextFieldProps}

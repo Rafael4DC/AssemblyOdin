@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {Failure, Success} from "../../services/_utils/Either";
 import {UserService} from "../../services/user/UserService";
 import {GetUserWithLogsOutputModel} from "../../services/user/models/GetUserWithLogsOutputModel";
-import {Tech} from "../../services/tech/models/Tech";
 import {handleError} from "../../utils/Utils";
 
 const useUserWithLogs = () => {
@@ -18,7 +17,7 @@ const useUserWithLogs = () => {
                 }
             })
             .catch(err => {
-                setState({type: 'error', message: err.message || err });
+                setState({type: 'error', message: err.message || err});
             });
     }, []);
 
@@ -29,7 +28,7 @@ const useUserWithLogs = () => {
 
 type UserWithLogsState =
     | { type: 'loading' }
-    | { type: 'success'; userWithLogs: GetUserWithLogsOutputModel}
+    | { type: 'success'; userWithLogs: GetUserWithLogsOutputModel }
     | { type: 'error'; message: string };
 
 export default useUserWithLogs;

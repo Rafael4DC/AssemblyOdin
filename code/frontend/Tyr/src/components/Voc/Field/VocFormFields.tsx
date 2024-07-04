@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {ChangeEvent} from 'react';
-import { TextField, MenuItem, Box } from '@mui/material';
+import {Box, MenuItem, TextField} from '@mui/material';
 import {commonTextFieldProps} from "../../../utils/Utils";
 import {Voc} from "../../../services/voc/models/Voc";
 import {Section} from "../../../services/section/models/Section";
 import {times} from "../../../utils/HardCoded";
 
 interface VocFormFieldsProps {
-    vocData: Voc;
+    selectedVoc: Voc;
     sections: Section[];
     handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
     handleDateChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -18,7 +18,7 @@ interface VocFormFieldsProps {
 
 const VocFormFields = (props: VocFormFieldsProps) => {
     const {
-        vocData,
+        selectedVoc,
         sections,
         handleInputChange,
         handleDateChange,
@@ -31,7 +31,7 @@ const VocFormFields = (props: VocFormFieldsProps) => {
             label="Description"
             required
             name="description"
-            value={vocData.description}
+            value={selectedVoc.description}
             onChange={handleInputChange}
             {...commonTextFieldProps}
         />
@@ -39,7 +39,7 @@ const VocFormFields = (props: VocFormFieldsProps) => {
             label="Date"
             type="date"
             required
-            value={vocData.started.split('T')[0]}
+            value={selectedVoc.started.split('T')[0]}
             onChange={handleDateChange}
             {...commonTextFieldProps}
         />
@@ -48,10 +48,10 @@ const VocFormFields = (props: VocFormFieldsProps) => {
                 label="Start Time"
                 select
                 required
-                value={vocData.started.split('T')[1]}
+                value={selectedVoc.started.split('T')[1]}
                 onChange={(e) => handleTimeChange(e, 'started')}
                 {...commonTextFieldProps}
-                sx={{ width: '48%' }}
+                sx={{width: '48%'}}
             >
                 {times.map(time => (
                     <MenuItem key={time} value={time}>
@@ -64,10 +64,10 @@ const VocFormFields = (props: VocFormFieldsProps) => {
                 label="End Time"
                 select
                 required
-                value={vocData.ended.split('T')[1]}
+                value={selectedVoc.ended.split('T')[1]}
                 onChange={(e) => handleTimeChange(e, 'ended')}
                 {...commonTextFieldProps}
-                sx={{ width: '48%' }}
+                sx={{width: '48%'}}
             >
                 {times.map(time => (
                     <MenuItem key={time} value={time}>
@@ -77,17 +77,17 @@ const VocFormFields = (props: VocFormFieldsProps) => {
             </TextField>
         </Box>
         <TextField
-            select
             label="Section"
+            select
             required
-            value={vocData.section.id.toString()}
+            value={selectedVoc.section.id.toString()}
             onChange={handleSectionChange}
             {...commonTextFieldProps}
         >
             <MenuItem value="0">
                 <em>Choose The Section</em>
             </MenuItem>
-            {sections && sections.map(section => (
+            {sections.map(section => (
                 <MenuItem key={section.id} value={section.id}>
                     {section.name}
                 </MenuItem>

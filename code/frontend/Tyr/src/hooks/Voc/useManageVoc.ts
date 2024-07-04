@@ -1,61 +1,56 @@
-import {ChangeEvent, useEffect, useState} from 'react';
+import * as React from 'react';
+import {useEffect, useState} from 'react';
 import {VocService} from '../../services/voc/VocService';
 import useSections from '../Section/useSections';
-import useStudents from '../User/useStudents';
-import {Failure, Success} from '../../services/_utils/Either';
-import {Voc} from "../../services/voc/models/Voc";
-import {addWeeks, endOfWeek, isAfter, isBefore, isWithinInterval, parseISO, startOfWeek, subWeeks} from 'date-fns';
+import {Voc, vocToInput} from "../../services/voc/models/Voc";
+import {addWeeks, isAfter, isBefore, isWithinInterval, parseISO, subWeeks} from 'date-fns';
+import {handleError} from "../../utils/Utils";
+import useVocs from "./useVocs";
+import {Section} from "../../services/section/models/Section";
+import useVocForm from "./useVocForm";
+import {Failure, Success} from "../../services/_utils/Either";
 
 type ManageVocState =
     | { type: 'loading' }
-    | { type: 'success'; message: string }
+    | { type: 'success'; filteredVocs: Voc[]; sections: Section[]; loading: boolean }
     | { type: 'error'; message: string };
 
 const useManageVoc = () => {
     const [state, setState] = useState<ManageVocState>({type: 'loading'});
-    const [vocs, setVocs] = useState<Voc[]>([]);
-    const [filteredVocs, setFilteredVocs] = useState<Voc[]>([]);
-    const [selectedVoc, setSelectedVoc] = useState<Voc>(null);
-    const [vocData, setVocData] = useState<Voc>({
-        description: '',
-        started: '',
-        ended: '',
-        section: {id: 1}
-    });
     const [searchQuery, setSearchQuery] = useState('');
     const [filter, setFilter] = useState('all');
-    const {sections, error: sectionsError} = useSections();
-    const {students, error: studentsError} = useStudents();
+    const {
+        selectedVoc,
+        setSelectedVoc,
+        handleInputChange,
+        handleSectionChange,
+        handleTimeChange,
+        handleDateChange
+    } = useVocForm()
+
+    const {state: sectionsState} = useSections();
+    const {state: vocsState, getVocs} = useVocs();
 
     useEffect(() => {
-        const fetchVocs = async () => {
-            try {
-                const vocs = await VocService.getAll();
-                if (vocs instanceof Success) {
-                    setVocs(vocs.value.vocs);
-                } else if (vocs instanceof Failure) {
-                    console.error('Error fetching data:', vocs.value);
-                }
-                setState({type: 'success', message: ''});
-            } catch (error) {
-                setState({type: 'error', message: handleError(error)});
-            }
-        };
-
-        fetchVocs();
-    }, []);
-
-    useEffect(() => {
-        if (sectionsError || studentsError) {
-            setState({type: 'error', message: handleError(sectionsError || studentsError)});
+        switch (true) {
+            case sectionsState.type == 'success' && vocsState.type == 'success':
+                setState({
+                    type: 'success',
+                    filteredVocs: filterVocs(vocsState.vocs),
+                    sections: sectionsState.sections,
+                    loading: false
+                });
+                break;
+            case sectionsState.type == 'error':
+                setState({type: 'error', message: sectionsState.message});
+                break;
+            case vocsState.type == 'error':
+                setState({type: 'error', message: vocsState.message});
+                break;
         }
-    }, [sectionsError, studentsError]);
+    }, [sectionsState, vocsState, searchQuery, filter]);
 
-    useEffect(() => {
-        filterVocs();
-    }, [vocs, searchQuery, filter]);
-
-    const filterVocs = () => {
+    const filterVocs = (vocs: Voc[]) => {
         let result = vocs;
 
         if (searchQuery) {
@@ -67,8 +62,6 @@ const useManageVoc = () => {
         const now = new Date();
         const nextWeek = addWeeks(now, 1);
         const pastWeek = subWeeks(now, 1);
-        const startOfThisWeek = startOfWeek(now);
-        const endOfThisWeek = endOfWeek(now);
 
         if (filter === 'past') {
             result = result.filter(voc => isBefore(parseISO(voc.started), now));
@@ -80,135 +73,62 @@ const useManageVoc = () => {
             result = result.filter(voc => isWithinInterval(parseISO(voc.started), {start: pastWeek, end: now}));
         }
 
-        setFilteredVocs(result);
-    };
-
-    const handleError = (error: any) => {
-        if (error instanceof Error) {
-            return error.message;
-        } else {
-            return 'An unexpected error occurred';
-        }
+        return result
     };
 
     const handleVocClick = (voc: Voc) => {
         setSelectedVoc(voc);
-        setVocData({
-            description: voc.description,
-            started: voc.started,
-            ended: voc.ended,
-            section: {id: voc.section.id},
-        });
-    };
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            [name]: value,
-        }));
-    };
-
-    const handleSectionChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            section: {id: Number(e.target.value)},
-        }));
-    };
-
-    const handleDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const date = e.target.value;
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            started: `${date}T${prevVocData.started.split('T')[1]}`,
-            ended: `${date}T${prevVocData.ended.split('T')[1]}`,
-        }));
-    };
-
-    const handleTimeChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: 'started' | 'ended') => {
-        const time = e.target.value;
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            [key]: `${prevVocData[key].split('T')[0]}T${time}`,
-        }));
-    };
-
-    const handleSubmit = async () => {
-        setState({type: 'loading'});
-        try {
-            await VocService.update({
-                id: selectedVoc.id,
-                description: vocData.description,
-                started: vocData.started,
-                ended: vocData.ended,
-                section: vocData.section.id,
-                approved: selectedVoc.approved,
-                user: selectedVoc.user.id
-            });
-            const updatedVocs = await VocService.getAll();
-            if (updatedVocs instanceof Success) {
-                setVocs(updatedVocs.value.vocs);
-            } else if (updatedVocs instanceof Failure) {
-                console.error('Error fetching data:', updatedVocs.value);
-            }
-            setSelectedVoc(null);
-            setState({type: 'success', message: ''});
-        } catch (error) {
-            setState({type: 'error', message: handleError(error)});
-        }
     };
 
     const handleClose = () => {
         setSelectedVoc(null);
     };
 
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setState(prevState => ({...prevState, loading: true}));
+        VocService.update(vocToInput(selectedVoc))
+            .then(async data => {
+                if (data instanceof Success) {
+                    getVocs()
+                        .then(() => {
+                            setSelectedVoc(null);
+                        })
+                } else if (data instanceof Failure) {
+                    setState({type: 'error', message: handleError(data.value)});
+                }
+            })
+            .catch(err => {
+                setState({type: 'error', message: err.message || err});
+            });
+    };
+
     const handleDeleteVoc = async (id: number) => {
-        setState({type: 'loading'});
-        try {
-            await VocService.deleteById(id);
-            const updatedVocs = await VocService.getAll();
-            if (updatedVocs instanceof Success) {
-                setVocs(updatedVocs.value.vocs);
-            } else if (updatedVocs instanceof Failure) {
-                console.error('Error fetching data:', updatedVocs.value);
-            }
-            setState({type: 'success', message: ''});
-        } catch (error) {
-            setState({type: 'error', message: handleError(error)});
-        }
+        setState(prevState => ({...prevState, loading: true}));
+        VocService.deleteById(id)
+            .then(async () => {
+                getVocs()
+                    .then(() => {
+                        setSelectedVoc(null);
+                    })
+            });
     };
 
     const handleApprovedChange = async (voc: Voc) => {
         const updatedVoc = {...voc, approved: !voc.approved};
-        setState({type: 'loading'});
-        try {
-            await VocService.update({
-                id: updatedVoc.id,
-                description: updatedVoc.description,
-                started: updatedVoc.started,
-                ended: updatedVoc.ended,
-                section: updatedVoc.section.id,
-                approved: updatedVoc.approved,
-                user: updatedVoc.user.id
+        setState(prevState => ({...prevState, loading: true}));
+        VocService.update(vocToInput(updatedVoc))
+            .then(async data => {
+                if (data instanceof Success) {
+                    await getVocs()
+                } else if (data instanceof Failure) {
+                    setState({type: 'error', message: handleError(data.value)});
+                }
             });
-            const updatedVocs = await VocService.getAll();
-            if (updatedVocs instanceof Success) {
-                setVocs(updatedVocs.value.vocs);
-            } else if (updatedVocs instanceof Failure) {
-                console.error('Error fetching data:', updatedVocs.value);
-            }
-            setState({type: 'success', message: ''});
-        } catch (error) {
-            setState({type: 'error', message: handleError(error)});
-        }
     };
 
     return {
-        vocs,
-        sections,
-        students,
         state,
-        vocData,
         selectedVoc,
         handleVocClick,
         handleInputChange,
@@ -219,7 +139,6 @@ const useManageVoc = () => {
         setSearchQuery,
         filter,
         setFilter,
-        filteredVocs,
         handleSubmit,
         handleClose,
         handleDeleteVoc,

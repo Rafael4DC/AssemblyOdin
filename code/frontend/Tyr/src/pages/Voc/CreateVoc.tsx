@@ -4,11 +4,9 @@ import useCreateVoc from "../../hooks/Voc/useCreateVoc";
 import {notStudent} from "../../utils/Utils";
 import {Spinner} from "../../utils/Spinner";
 import {AlertDialog} from "../../utils/AlertDialog";
-import {User} from '../../services/user/models/User';
-import VocCreateDialog from "../../components/Voc/Dialog/VocCreateDialog";
+import CreateDialog from "../../components/Shared/Dialog/CreateDialog";
 import {useTheme} from "@mui/material/styles";
 import VocFormFields from "../../components/Voc/Field/VocFormFields";
-import {useState} from "react";
 
 /**
  * Page to create a voc
@@ -17,23 +15,19 @@ const CreateVoc = () => {
     const theme = useTheme();
     const customColor = theme.palette.custom.main;
     const {
-        vocData,
-        setVocData,
         state,
-        role,
-        sections,
-        students,
+        selectedVoc,
+        open,
+        setOpen,
+        searchQuery,
+        setSearchQuery,
         handleSubmit,
         handleInputChange,
         handleSectionChange,
         handleDateChange,
         handleTimeChange,
-        handleStudentChange,
+        handleStudentSelect
     } = useCreateVoc();
-
-    const [open, setOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-
 
     switch (state.type) {
         case 'loading':
@@ -43,21 +37,7 @@ const CreateVoc = () => {
             return <AlertDialog alert={state.message}/>;
 
         case 'success':
-            const handleStudentSelect = (student: User) => {
-                setVocData({...vocData, user: student});
-                handleClose();
-            };
-
-            const handleOpen = () => setOpen(true);
-            const handleClose = () => setOpen(false);
-
-            const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-                setSearchQuery(event.target.value);
-            };
-
-            const filteredStudents = students.filter(student =>
-                student.username.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            const {sections, userInfo, filteredStudents, loading} = state;
 
             return (
                 <Container>
@@ -67,32 +47,36 @@ const CreateVoc = () => {
                     <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2}}>
                         <form onSubmit={handleSubmit}>
                             <VocFormFields
-                                vocData={vocData}
+                                selectedVoc={selectedVoc}
                                 sections={sections}
                                 handleInputChange={handleInputChange}
                                 handleDateChange={handleDateChange}
                                 handleTimeChange={handleTimeChange}
                                 handleSectionChange={handleSectionChange}
                             />
-                            {notStudent(role) && (
-                                <>
-                                    <Box marginTop={2}>
-                                        <Button variant="contained" color="primary" onClick={handleOpen}>
-                                            Select Students
-                                        </Button>
-                                        <VocCreateDialog
-                                            open={open}
-                                            handleClose={handleClose}
-                                            searchQuery={searchQuery}
-                                            handleSearchChange={handleSearchChange}
-                                            filteredStudents={filteredStudents}
-                                            handleStudentSelect={handleStudentSelect}
-                                        />
-                                    </Box>
-                                </>
+                            {notStudent(userInfo.role.name) && (
+                                <Box marginTop={2}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={loading}
+                                        onClick={() => setOpen(true)}>
+                                        Select Students
+                                    </Button>
+                                    <CreateDialog
+                                        open={open}
+                                        handleClose={() => setOpen(false)}
+                                        searchQuery={searchQuery}
+                                        setSearchQuery={setSearchQuery}
+                                        filteredStudents={filteredStudents}
+                                        handleStudentSelect={handleStudentSelect}
+                                        title={"Select Students"}
+                                        listCheckBox={false}
+                                    />
+                                </Box>
                             )}
                             <Box marginTop={2}>
-                                <Button variant="contained" color="primary" type="submit">
+                                <Button variant="contained" color="primary" type="submit" disabled={loading}>
                                     Create VOC Class
                                 </Button>
                             </Box>

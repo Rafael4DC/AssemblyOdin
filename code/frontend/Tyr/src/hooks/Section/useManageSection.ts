@@ -1,140 +1,99 @@
-import {ChangeEvent, SetStateAction, useEffect, useState} from 'react';
+import * as React from 'react';
+import {useEffect, useState} from 'react';
 import {SectionService} from "../../services/section/SectionService";
-import useModules from "../useModules";
+import useModules from "../Module/useModules";
 import useStudents from "../User/useStudents";
-import {WebUris} from "../../utils/WebUris";
 import {Failure, Success} from "../../services/_utils/Either";
-
-const SECTION = WebUris.SECTION;
+import useSectionForm from "./useSectionForm";
+import {Section, sectionToInput} from "../../services/section/models/Section";
+import useSections from "./useSections";
+import {User} from "../../services/user/models/User";
+import {Module} from "../../services/module/models/Module";
+import {handleError} from "../../utils/Utils";
 
 type ManageSectionsState =
     | { type: 'loading' }
-    | { type: 'success'; message: string }
+    | { type: 'success'; modules: Module[]; filteredStudents: User[]; sections: Section[], loading: boolean }
     | { type: 'error'; message: string };
 
 const useManageSections = () => {
     const [state, setState] = useState<ManageSectionsState>({type: 'loading'});
-    const [sections, setSections] = useState([]);
-    const [selectedSection, setSelectedSection] = useState(null);
-    const [sectionData, setSectionData] =
-        useState({
-                name: "",
-                module: {id: 1},
-                students: []
-            }
-        );
     const [searchQuery, setSearchQuery] = useState("");
-    const {modules, error: modulesError} = useModules();
-    const {students, error: studentsError} = useStudents();
+    const {
+        selectedSection,
+        setSelectedSection,
+        handleInputChange,
+        handleModuleChange,
+        handleStudentSelect
+    } = useSectionForm()
+
+    const {state: modulesState} = useModules();
+    const {state: studentsState} = useStudents();
+    const {state: sectionsState, getSections} = useSections();
 
     useEffect(() => {
-        const fetchSections = async () => {
-            try {
-                const sections = await SectionService.getAll();
-                if (sections instanceof Success) {
-                    setSections(sections.value.sections);
-                } else if (sections instanceof Failure) {
-                    console.error('Error fetching data:', sections.value);
-                }
-                setState({type: 'success', message: ''});
-            } catch (error) {
-                setState({type: 'error', message: handleError(error)});
-            }
-        };
-
-        fetchSections();
-    }, []);
-
-    useEffect(() => {
-        if (modulesError || studentsError) {
-            setState({type: 'error', message: handleError(modulesError || studentsError)});
+        switch (true) {
+            case modulesState.type === 'success' && studentsState.type === 'success' && sectionsState.type === 'success':
+                setState({
+                    type: 'success',
+                    modules: modulesState.modules,
+                    filteredStudents: filteredStudents(studentsState.students),
+                    sections: sectionsState.sections,
+                    loading: false
+                });
+                break;
+            case modulesState.type === 'error':
+                setState({type: 'error', message: modulesState.message});
+                break;
+            case studentsState.type === 'error':
+                setState({type: 'error', message: studentsState.message});
+                break;
+            case sectionsState.type === 'error':
+                setState({type: 'error', message: sectionsState.message});
+                break;
         }
-    }, [modulesError, studentsError]);
+    }, [searchQuery, modulesState, studentsState, sectionsState]);
 
-    const handleError = (error: any) => {
-        if (error instanceof Error) {
-            return error.message;
-        } else {
-            return 'An unexpected error occurred';
-        }
-    };
+    const filteredStudents = (students: User[]) => students.filter(student =>
+        student.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
-    const handleSectionClick = (section: { name: any; module: { id: any; }; students: any[]; }) => {
+    const handleSectionClick = (section: Section) => {
         setSelectedSection(section);
-        setSectionData({
-            name: section.name,
-            module: {id: section.module.id},
-            students: section.students.map(student => student.id)
-        });
-    };
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setSectionData((prevSectionData) => ({
-            ...prevSectionData,
-            [name]: value,
-        }));
-    };
-
-    const handleModuleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setSectionData((prevSectionData) => ({
-            ...prevSectionData,
-            module: {id: Number(e.target.value)},
-        }));
-    };
-
-    const handleStudentSelection = (studentId: number) => {
-        setSectionData((prevSectionData) => ({
-            ...prevSectionData,
-            students: prevSectionData.students.includes(studentId)
-                ? prevSectionData.students.filter(id => id !== studentId)
-                : [...prevSectionData.students, studentId]
-        }));
-    };
-
-    const handleSearchChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setSearchQuery(event.target.value);
-    };
-
-    const handleSubmit = async () => {
-        setState({type: 'loading'});
-        try {
-            await SectionService.update({
-                id: selectedSection.id,
-                name: sectionData.name,
-                module: sectionData.module.id,
-                students: sectionData.students
-            });
-            const updatedSections = await SectionService.getAll();
-            if (updatedSections instanceof Success) {
-                setSections(updatedSections.value.sections);
-            } else if (updatedSections instanceof Failure) {
-                console.error('Error fetching data:', updatedSections.value);
-            }
-            setSelectedSection(null);
-            setState({type: 'success', message: ''});
-        } catch (error) {
-            setState({type: 'error', message: handleError(error)});
-        }
     };
 
     const handleClose = () => {
         setSelectedSection(null);
     };
 
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setState(prevState => ({...prevState, loading: true}));
+        SectionService.update(sectionToInput(selectedSection))
+            .then(async data => {
+                if (data instanceof Success) {
+                    getSections()
+                        .then(() => {
+                            setSelectedSection(null)
+                        });
+                } else if (data instanceof Failure) {
+                    setState({type: 'error', message: handleError(data.value)});
+                }
+            })
+            .catch(err => {
+                setState({type: 'error', message: err.message || err});
+            })
+    };
+
     return {
-        sections,
-        modules,
-        students,
         state,
-        sectionData,
         selectedSection,
+        handleStudentSelect,
         handleSectionClick,
         handleInputChange,
         handleModuleChange,
-        handleStudentSelection,
-        handleSearchChange,
         searchQuery,
+        setSearchQuery,
         handleSubmit,
         handleClose
     };

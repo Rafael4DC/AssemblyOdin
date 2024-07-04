@@ -18,7 +18,7 @@ const useMyVocs = () => {
                 }
             })
             .catch(err => {
-                setState({type: 'error', message: err.message || err });
+                setState({type: 'error', message: err.message || err});
             });
     }, []);
 
@@ -29,7 +29,7 @@ const useMyVocs = () => {
 
 type MyVocsState =
     | { type: 'loading' }
-    | { type: 'success'; vocs: Voc[]}
+    | { type: 'success'; vocs: Voc[] }
     | { type: 'error'; message: string };
 
 

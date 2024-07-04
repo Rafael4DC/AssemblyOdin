@@ -4,8 +4,6 @@ import {
     AccordionDetails,
     AccordionSummary,
     Box,
-    Card,
-    CardContent,
     Container,
     List,
     ListItem,
@@ -16,7 +14,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useTheme} from '@mui/material/styles';
 import {Department} from "../../services/department/models/Department";
 import {Spinner} from "../../utils/Spinner";
-import useDepartments from "../../hooks/useDepartments";
+import useDepartments from "../../hooks/Department/useDepartments";
 import {AlertDialog} from "../../utils/AlertDialog";
 
 /**
@@ -45,14 +43,14 @@ const Departments = () => {
                     </Typography>
                     <Box sx={{backgroundColor: customColor}}>
                         {departments.map((department: Department) => (
-                            <Accordion key={department.id} sx={{boxShadow:'none'}}>
+                            <Accordion key={department.id} sx={{boxShadow: 'none'}}>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon/>}
                                     sx={{bgcolor: magenta}}
                                 >
                                     <Typography sx={{color: 'white'}}>{department.name}</Typography>
                                 </AccordionSummary>
-                                <AccordionDetails >
+                                <AccordionDetails>
                                     <Typography sx={{color: magenta}}>
                                         {department.description}
                                     </Typography>

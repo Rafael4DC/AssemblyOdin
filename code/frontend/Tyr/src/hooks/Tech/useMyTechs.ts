@@ -22,7 +22,7 @@ const useMyTechs = () => {
                 }
             })
             .catch(err => {
-                setState({type: 'error', message: err.message || err });
+                setState({type: 'error', message: err.message || err});
             });
     }, []);
 
@@ -33,7 +33,7 @@ const useMyTechs = () => {
 
 type MyTechsState =
     | { type: 'loading' }
-    | { type: 'success'; techs: Tech[]}
+    | { type: 'success'; techs: Tech[] }
     | { type: 'error'; message: string };
 
 

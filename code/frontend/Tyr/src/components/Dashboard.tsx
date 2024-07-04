@@ -166,7 +166,7 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                     {!open && (
                         <Typography variant="h6" noWrap component="div">
                             <Link to={HOME} style={{textDecoration: 'none', color: '#fff'}}>
-                                <img src={logo} alt="Assembly" style={{height: '74px'}}/>
+                                <img src={logo} alt="Assembly" style={{height: '42px'}}/>
                             </Link>
                         </Typography>
                     )}
@@ -177,7 +177,7 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                     {open && (
                         <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
                             <Link to={HOME} style={{textDecoration: 'none', color: 'inherit'}}>
-                                <img src={logo} alt="Assembly" style={{height: '54px'}}/>
+                                <img src={logo} alt="Assembly" style={{height: '35px'}}/>
                             </Link>
                         </Typography>
                     )}

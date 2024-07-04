@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 
 const useGenericSearch = (items: any[], searchKey: string) => {
     const [searchQuery, setSearchQuery] = useState<string>("");
@@ -16,7 +16,7 @@ const useGenericSearch = (items: any[], searchKey: string) => {
         }
     }, [searchQuery, items, searchKey]);
 
-    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
     };
 

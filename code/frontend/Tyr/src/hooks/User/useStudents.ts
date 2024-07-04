@@ -2,26 +2,33 @@ import {useEffect, useState} from "react";
 import {User} from "../../services/user/models/User";
 import {UserService} from "../../services/user/UserService";
 import {Failure, Success} from "../../services/_utils/Either";
+import {handleError} from "../../utils/Utils";
 
 const useStudents = () => {
-    const [students, setStudents] = useState<User[] | null>(null);
-    const [error, setError] = useState<Error | null>(null);
+    const [state, setState] = useState<StudentsState>({type: 'loading'});
 
     useEffect(() => {
         UserService.getStudents()
             .then(data => {
                 if (data instanceof Success) {
-                    setStudents(data.value.users);
+                    setState({type: 'success', students: data.value.users})
                 } else if (data instanceof Failure) {
-                    console.error('Error fetching data:', data.value);
+                    setState({type: 'error', message: handleError(data.value)});
                 }
             })
             .catch(err => {
-                setError(err);
+                setState({type: 'error', message: err.message || err});
             });
     }, []);
 
-    return {students, error};
+    return {
+        state
+    };
 };
+
+type StudentsState =
+    | { type: 'loading' }
+    | { type: 'success'; students: User[] }
+    | { type: 'error'; message: string };
 
 export default useStudents;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from "@mui/material/Box";
-import videoo from "../../assets/Assembly-Logo_azulEscuro.mp4";
+import assemblyIntro from "../../assets/Assembly-Intro.mp4";
 
 /**
  * Page to display the home page
@@ -24,7 +24,7 @@ const Home = () => {
                     height: '100%',
                     objectFit: 'cover'
                 }}
-                src={videoo}
+                src={assemblyIntro}
                 autoPlay
                 muted
             />

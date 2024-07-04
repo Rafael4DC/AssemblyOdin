@@ -5,130 +5,72 @@ import {Success} from '../../services/_utils/Either';
 import useSections from "../Section/useSections";
 import {TechService} from "../../services/tech/TechService";
 import {WebUris} from "../../utils/WebUris";
+import {initTech, techToInput, techToTechMultiInput} from "../../services/tech/models/Tech";
+import useTechForm from "./useTechForm";
+import {Section} from "../../services/section/models/Section";
+import {handleError} from "../../utils/Utils";
+import TIMETABLE = WebUris.TIMETABLE;
 
 type CreateTechClassState =
     | { type: 'loading' }
-    | { type: 'success'; message: string }
+    | { type: 'success'; sections: Section[]; loading: boolean }
     | { type: 'error'; message: string };
 
 const useCreateTech = () => {
     const navigate = useNavigate();
+
     const [state, setState] = useState<CreateTechClassState>({type: 'loading'});
     const [isMultiple, setIsMultiple] = useState(false);
+    const {
+        selectedTech,
+        handleInputChange,
+        handleSectionChange,
+        handleDateChange,
+        handleTimeChange,
+        handleMultiChange
+    } = useTechForm(initTech());
 
-    const [techData, setTechData] = useState({
-        section: {id: 0},
-        started: '',
-        ended: '',
-        summary: '',
-        startDate: '',
-        endDate: '',
-        classTime: '',
-        classLengthHours: '',
-        dayOfWeek: ''
-    });
-
-    const {sections, error} = useSections();
+    const {state: sectionsState} = useSections();
 
     useEffect(() => {
-        if (state.type === 'loading' && sections !== null) {
-            setState({type: 'success', message: ''});
-        } else if (error) {
-            setState({type: 'error', message: handleError(error)});
+        switch (true) {
+            case sectionsState.type === 'success':
+                setState({type: 'success', sections: sectionsState.sections, loading: false});
+                break;
+            case sectionsState.type === 'error':
+                setState({type: 'error', message: sectionsState.message});
+                break;
         }
-    }, [error, state.type, sections]);
-
-    const handleError = (error: any) => {
-        if (error instanceof Error) {
-            return error.message;
-        } else {
-            return 'An unexpected error occurred';
-        }
-    };
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setState({type: 'loading'});
-        debugger;
-        try {
-            const res = isMultiple ?
-                await TechService.saveMultiple({
-                    section: techData.section.id,
-                    startDate: techData.startDate,
-                    endDate: techData.endDate,
-                    classTime: techData.classTime,
-                    classLengthHours: Number(techData.classLengthHours),
-                    dayOfWeek: techData.dayOfWeek.toUpperCase(),
-                }) :
-                await TechService.save({
-                    section: techData.section.id,
-                    started: techData.started,
-                    ended: techData.ended,
-                    summary: techData.summary,
-                });
-            if (res instanceof Success) {
-                navigate(WebUris.TIMETABLE);
-            } else {
-                const errorMessage = handleError(res);
-                setState({type: 'error', message: errorMessage});
-            }
-        } catch (error) {
-            setState({type: 'error', message: handleError(error)});
-        }
-    };
-
-    const handleSectionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setTechData(prevTechData => ({
-            ...prevTechData,
-            section: {id: Number(e.target.value)}
-        }));
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setTechData(prevTechData => ({
-            ...prevTechData,
-            [name]: value
-        }));
-    };
-
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const date = e.target.value;
-        setTechData(prevTechData => ({
-            ...prevTechData,
-            started: `${date}T${prevTechData.started.split('T')[1]}`,
-            ended: `${date}T${prevTechData.ended.split('T')[1]}`,
-        }));
-    };
-
-    const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: "started" | "ended") => {
-        const time = e.target.value;
-        setTechData(prevTechData => ({
-            ...prevTechData,
-            [key]: `${prevTechData[key].split('T')[0]}T${time}`,
-        }));
-    };
-
-    const handleMultiChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setTechData(prevTechData => ({
-            ...prevTechData,
-            [name]: value
-        }));
-    };
+    }, [sectionsState]);
 
     const toggleMultiple = () => {
         setIsMultiple(!isMultiple);
     };
 
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setState(prevState => ({...prevState, loading: true}));
+        try {
+            debugger;
+            const data = isMultiple ?
+                await TechService.saveMultiple(techToTechMultiInput(selectedTech)) :
+                await TechService.save(techToInput(selectedTech));
+            if (data instanceof Success) {
+                navigate(TIMETABLE);
+            } else {
+                setState({type: 'error', message: handleError(data.value)});
+            }
+        } catch (err) {
+            setState({type: 'error', message: err.message || err});
+        }
+    };
+
     return {
-        techData,
-        setTechData,
         state,
-        sections,
+        selectedTech,
         handleSubmit,
         handleSectionChange,
-        handleChange,
+        handleInputChange,
         handleMultiChange,
         handleDateChange,
         handleTimeChange,

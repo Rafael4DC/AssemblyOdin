@@ -1,7 +1,6 @@
 import * as React from "react";
 import {Box, Button, CircularProgress, Modal, TextField, Typography} from "@mui/material";
 import {modalStyle} from "../../../utils/HardCoded";
-import {Module} from "../../../services/module/models/Module";
 import {FieldStudy} from "../../../services/fieldstudy/models/FieldStudy";
 
 /**

@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {UserService} from '../../services/user/UserService';
 import {User} from '../../services/user/models/User';
 import {Failure, Success} from "../../services/_utils/Either";
+import {handleError} from "../../utils/Utils";
 
 /**
  * Hook to get the user info
@@ -9,24 +10,30 @@ import {Failure, Success} from "../../services/_utils/Either";
  * @returns the user info
  */
 const useUserInfo = () => {
-    const [userInfo, setUserInfo] = useState<User | null>(null);
-    const [error, setError] = useState<Error | null>(null);
+    const [state, setState] = useState<UserInfoState>({type: 'loading'});
 
     useEffect(() => {
         UserService.getSession()
             .then(data => {
                 if (data instanceof Success) {
-                    setUserInfo(data.value);
+                    setState({type: 'success', userInfo: data.value})
                 } else if (data instanceof Failure) {
-                    console.error('Error fetching data:', data.value);
+                    setState({type: 'error', message: handleError(data.value)});
                 }
             })
             .catch(err => {
-                setError(err);
+                setState({type: 'error', message: err.message || err});
             });
     }, []);
 
-    return {userInfo, error};
+    return {
+        state
+    };
 };
+
+type UserInfoState =
+    | { type: 'loading' }
+    | { type: 'success'; userInfo: User }
+    | { type: 'error'; message: string };
 
 export default useUserInfo;

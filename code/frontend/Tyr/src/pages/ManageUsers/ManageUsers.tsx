@@ -1,5 +1,4 @@
 import * as React from "react";
-import {useState} from "react";
 import {
     Box,
     Button,
@@ -17,14 +16,14 @@ import {
     ListItem,
     MenuItem,
     Select,
-    SelectChangeEvent,
     TextField,
     Typography
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import useManageUsers from "../../hooks/User/useManageUsers";
-import {User} from "../../services/user/models/User";
 import {useTheme} from "@mui/material/styles";
+import {Spinner} from "../../utils/Spinner";
+import {AlertDialog} from "../../utils/AlertDialog";
 
 /**
  * Page to manage users
@@ -34,65 +33,40 @@ const ManageUsers = () => {
     const customColor = theme.palette.custom.main;
     const {
         state,
-        roles,
-        users,
+        selectedUser,
+        handleInputChange,
+        handleRoleChange,
         searchQuery,
-        handleSearchChange,
-        handleUserUpdate,
-        handleUserDelete
+        setSearchQuery,
+        handleSubmit,
+        handleOpenEdit,
+        handleCloseEdit
     } = useManageUsers();
-
-    const [selectedUser, setSelectedUser] = useState<User | null>(null);
-
-    const handleOpenEdit = (user: User) => setSelectedUser(user);
-    const handleCloseEdit = () => setSelectedUser(null);
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (selectedUser) {
-            const {name, value} = e.target;
-            setSelectedUser({...selectedUser, [name]: value});
-        }
-    };
-
-    const handleRoleChange = (e: SelectChangeEvent<number>) => {
-        if (selectedUser) {
-            const roleId = e.target.value as number;
-            const selectedRole = roles.find(role => role.id === roleId);
-            if (selectedRole) {
-                setSelectedUser({...selectedUser, role: selectedRole});
-            }
-        }
-    };
-
-    const handleSave = () => {
-        if (selectedUser) {
-            handleUserUpdate(selectedUser);
-            handleCloseEdit();
-        }
-    };
 
     switch (state.type) {
         case 'loading':
-            return <div>Loading...</div>;
+            return <Spinner/>;
 
         case 'error':
-            return <div>Error: {state.message}</div>;
+            return <AlertDialog alert={state.message}/>;
 
         case 'success':
+            const {filteredUsers, roles, loading} = state;
+
             return (
                 <Container>
-                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color:customColor}}>
+                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color: customColor}}>
                         Manage Users
                     </Typography>
-                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2, color: '#000'}}>
+                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2}}>
                         <Box sx={{display: 'flex', alignItems: 'center', marginBottom: 2}}>
                             <InputBase
                                 placeholder="Search users"
                                 value={searchQuery}
-                                onChange={(e) => handleSearchChange(e.target.value)}
-                                sx={{flex: 1, paddingLeft: 1, color: '#000'}}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                sx={{flex: 1, paddingLeft: 1}}
                             />
-                            <IconButton sx={{p: '10px', color: '#000'}}>
+                            <IconButton sx={{p: '10px'}}>
                                 <SearchIcon/>
                             </IconButton>
                         </Box>
@@ -101,11 +75,11 @@ const ManageUsers = () => {
                             <Grid item xs={3}>Email</Grid>
                             <Grid item xs={2}>Credits</Grid>
                             <Grid item xs={2}>Role</Grid>
-                            <Grid item xs={2}>Actions</Grid>
+                            <Grid item xs={2}>Action</Grid>
                         </Grid>
                         <List>
-                            {users.map(user => (
-                                <ListItem key={user.id} sx={{color: '#000'}}>
+                            {filteredUsers.map(user => (
+                                <ListItem key={user.id}>
                                     <Grid container spacing={2} alignItems="center">
                                         <Grid item xs={3}>
                                             <Typography noWrap>{user.username}</Typography>
@@ -121,10 +95,8 @@ const ManageUsers = () => {
                                             <Typography noWrap>{user.role?.name || ''}</Typography>
                                         </Grid>
                                         <Grid item xs={1}>
-                                            <Button onClick={() => handleOpenEdit(user)}>Edit</Button>
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                            <Button onClick={() => handleUserDelete(user.id)}>Delete</Button>
+                                            <Button onClick={() => handleOpenEdit(user)}
+                                                    disabled={loading}>Edit</Button>
                                         </Grid>
                                     </Grid>
                                 </ListItem>
@@ -133,7 +105,7 @@ const ManageUsers = () => {
                     </Box>
                     {selectedUser && (
                         <Dialog open={Boolean(selectedUser)} onClose={handleCloseEdit} fullWidth maxWidth="sm">
-                            <DialogTitle sx={{color: '#000'}}>Edit User</DialogTitle>
+                            <DialogTitle>Edit User</DialogTitle>
                             <DialogContent sx={{padding: 3}}>
                                 <TextField
                                     label="Username"
@@ -143,9 +115,6 @@ const ManageUsers = () => {
                                     onChange={handleInputChange}
                                     fullWidth
                                     margin="dense"
-                                    sx={{color: '#000'}}
-                                    InputLabelProps={{sx: {color: '#000'}}}
-                                    InputProps={{sx: {color: '#000'}}}
                                 />
                                 <TextField
                                     label="Email"
@@ -155,9 +124,6 @@ const ManageUsers = () => {
                                     onChange={handleInputChange}
                                     fullWidth
                                     margin="dense"
-                                    sx={{color: '#000'}}
-                                    InputLabelProps={{sx: {color: '#000'}}}
-                                    InputProps={{sx: {color: '#000'}}}
                                 />
                                 <TextField
                                     label="Credits"
@@ -167,22 +133,17 @@ const ManageUsers = () => {
                                     onChange={handleInputChange}
                                     fullWidth
                                     margin="dense"
-                                    sx={{color: '#000'}}
-                                    InputLabelProps={{sx: {color: '#000'}}}
-                                    InputProps={{sx: {color: '#000'}}}
                                 />
                                 <FormControl fullWidth margin="dense">
-                                    <InputLabel id="role-label" sx={{color: '#000'}}>Role</InputLabel>
+                                    <InputLabel id="role-label">Role</InputLabel>
                                     <Select
                                         labelId="role-label"
                                         name="role"
                                         value={selectedUser.role?.id || ''}
                                         onChange={handleRoleChange}
-                                        sx={{color: '#000'}}
-                                        inputProps={{sx: {color: '#000'}}}
                                     >
                                         {roles.map(role => (
-                                            <MenuItem key={role.id} value={role.id} sx={{color: '#000'}}>
+                                            <MenuItem key={role.id} value={role.id}>
                                                 {role.name}
                                             </MenuItem>
                                         ))}
@@ -193,7 +154,7 @@ const ManageUsers = () => {
                                 <Button onClick={handleCloseEdit} color="primary">
                                     Cancel
                                 </Button>
-                                <Button onClick={handleSave} color="primary">
+                                <Button onClick={handleSubmit} color="primary" disabled={loading}>
                                     Save
                                 </Button>
                             </DialogActions>

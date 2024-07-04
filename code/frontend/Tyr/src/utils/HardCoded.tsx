@@ -1,5 +1,3 @@
-import {Theme} from "@mui/material/styles";
-
 export const times = [
     '10:00', '11:00', '12:00', '13:00', '14:00',
     '15:00', '16:00', '17:00', '18:00', '19:00',
@@ -7,6 +5,8 @@ export const times = [
 ];
 
 export const weekDaysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+export const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export const modalStyle = {
     position: 'absolute' as 'absolute',

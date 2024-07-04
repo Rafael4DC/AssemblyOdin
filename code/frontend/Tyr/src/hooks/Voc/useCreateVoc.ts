@@ -1,121 +1,108 @@
 import * as React from 'react';
-import {ChangeEvent, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import useSections from "../Section/useSections";
 import useStudents from "../User/useStudents";
-import useVocs from "../Refactor/useVocs";
-import {Voc} from "../../services/voc/models/Voc";
+import {initVoc, vocToInput} from "../../services/voc/models/Voc";
 import useUserInfo from "../User/useUserInfo";
 import {Success} from "../../services/_utils/Either";
 import {WebUris} from "../../utils/WebUris";
-import PROFILE = WebUris.PROFILE;
+import {User} from "../../services/user/models/User";
+import {VocService} from "../../services/voc/VocService";
+import {handleError} from "../../utils/Utils";
+import {Section} from "../../services/section/models/Section";
+import useVocForm from "./useVocForm";
+import TIMETABLE = WebUris.TIMETABLE;
 
 type CreateVocClassState =
     | { type: 'loading' }
-    | { type: 'success'; message: string }
+    | { type: 'success'; sections: Section[]; userInfo: User; filteredStudents: User[]; loading: boolean }
     | { type: 'error'; message: string };
 
 const useCreateVoc = () => {
     const navigate = useNavigate();
+
     const [state, setState] = useState<CreateVocClassState>({type: 'loading'});
-    const {userInfo} = useUserInfo();
-    const role = userInfo?.role.name;
+    const [searchQuery, setSearchQuery] = useState("");
+    const [open, setOpen] = useState(false);
+    const {
+        selectedVoc,
+        setSelectedVoc,
+        handleInputChange,
+        handleSectionChange,
+        handleDateChange,
+        handleTimeChange,
+    } = useVocForm(initVoc())
 
-    const [vocData, setVocData] = useState<Voc>({
-        description: "",
-        started: new Date().toISOString().split('T')[0] + 'T10:00',
-        ended: new Date().toISOString().split('T')[0] + 'T11:00',
-        user: {id: 0},
-        approved: false,
-        section: {id: 0},
-    });
-
-    const {handleSaveVocClass, error} = useVocs();
-    const {sections} = useSections();
-    const {students} = useStudents();
+    const {state: userInfoState} = useUserInfo();
+    const {state: sectionsState} = useSections();
+    const {state: studentsState} = useStudents();
 
     useEffect(() => {
-        if (state.type === 'loading' && sections !== null && students !== null) {
-            setState({type: 'success', message: ''});
-        } else if (error) {
-            setState({type: 'error', message: handleError(error)});
+        switch (true) {
+            case userInfoState.type === 'success' && sectionsState.type === 'success' && studentsState.type === 'success':
+                setState({
+                    type: 'success',
+                    sections: sectionsState.sections,
+                    userInfo: userInfoState.userInfo,
+                    filteredStudents: filteredStudents(studentsState.students),
+                    loading: false
+                });
+                break;
+            case userInfoState.type === 'error':
+                setState({type: 'error', message: userInfoState.message});
+                break;
+            case sectionsState.type === 'error':
+                setState({type: 'error', message: sectionsState.message});
+                break;
+            case studentsState.type === 'error':
+                setState({type: 'error', message: studentsState.message});
+                break;
         }
-    }, [error, state.type, sections, students]);
+    }, [searchQuery, userInfoState, sectionsState, studentsState]);
 
-    const handleError = (error: any) => {
-        if (error instanceof Error) {
-            return error.message;
-        } else {
-            return 'An unexpected error occurred';
-        }
+    const filteredStudents = (students: User[]) => students.filter(student =>
+        student.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleStudentSelect = (student: User) => {
+        setSelectedVoc({...selectedVoc, user: student});
+        setOpen(false);
     };
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        setState({type: 'loading'});
-
-        const res = await handleSaveVocClass(vocData);
-        if (res instanceof Success) {
-            navigate(PROFILE);
-        } else {
-            const errorMessage = handleError(res);
-            setState({type: 'error', message: errorMessage});
+        setState(prevState => ({...prevState, loading: true}));
+        try {
+            let data;
+            if (selectedVoc.id) {
+                data = await VocService.update(vocToInput(selectedVoc));
+            } else {
+                data = await VocService.save(vocToInput(selectedVoc));
+            }
+            if (data instanceof Success) {
+                navigate(TIMETABLE);
+            } else {
+                setState({type: 'error', message: handleError(data.value)});
+            }
+        } catch (err) {
+            setState({type: 'error', message: err.message || err});
         }
-    };
-
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            [name]: value,
-        }));
-    };
-
-
-    const handleSectionChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            section: {id: Number(e.target.value)},
-        }));
-    };
-
-    const handleDateChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        const date = e.target.value;
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            started: `${date}T${prevVocData.started.split('T')[1]}`,
-            ended: `${date}T${prevVocData.ended.split('T')[1]}`,
-        }));
-    };
-
-    const handleTimeChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, key: "started" | "ended") => {
-        const time = e.target.value;
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            [key]: `${prevVocData[key].split('T')[0]}T${time}`,
-        }));
-    };
-
-    const handleStudentChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        setVocData((prevVocData) => ({
-            ...prevVocData,
-            user: {id: Number(e.target.value)},
-        }));
     };
 
     return {
-        vocData,
-        setVocData,
         state,
-        role,
-        sections,
-        students,
+        selectedVoc,
+        open,
+        setOpen,
+        searchQuery,
+        setSearchQuery,
         handleSubmit,
         handleInputChange,
         handleSectionChange,
         handleDateChange,
         handleTimeChange,
-        handleStudentChange,
+        handleStudentSelect
     };
 };
 

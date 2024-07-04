@@ -1,17 +1,9 @@
 import * as React from 'react';
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Button,
-    Container,
-    Typography,
-} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Box, Button, Container, Typography,} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Department} from '../../services/department/models/Department';
 import {Module} from '../../services/module/models/Module';
-import useManageDepartments from '../../hooks/useManageDepartments';
+import useManageDepartments from '../../hooks/Department/useManageDepartments';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -65,7 +57,7 @@ const ManageDepartments = () => {
                     </Typography>
                     <Box sx={{backgroundColor: customColor}}>
                         {departments?.map((department: Department) => (
-                            <Accordion key={department.id} sx={{boxShadow:'none'}}>
+                            <Accordion key={department.id} sx={{boxShadow: 'none'}}>
                                 <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                     <Typography>{department.name}</Typography>
                                 </AccordionSummary>

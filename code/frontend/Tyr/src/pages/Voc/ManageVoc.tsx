@@ -25,11 +25,7 @@ const ManageVoc = () => {
     const theme = useTheme();
     const customColor = theme.palette.custom.main;
     const {
-        vocs,
-        sections,
-        students,
         state,
-        vocData,
         selectedVoc,
         handleVocClick,
         handleInputChange,
@@ -42,7 +38,6 @@ const ManageVoc = () => {
         setFilter,
         searchQuery,
         setSearchQuery,
-        filteredVocs,
         handleDeleteVoc,
         handleApprovedChange
     } = useManageVoc();
@@ -55,6 +50,7 @@ const ManageVoc = () => {
             return <AlertDialog alert={state.message}/>;
 
         case 'success':
+            const {filteredVocs, sections} = state;
             return (
                 <Container>
                     <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color: customColor}}>
@@ -63,7 +59,7 @@ const ManageVoc = () => {
                     <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2}}>
                         <Box display="flex" justifyContent="space-between" marginBottom={2}>
                             <TextField
-                                label="Search by student"
+                                label="Search by stu"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 InputProps={{
@@ -94,11 +90,11 @@ const ManageVoc = () => {
                             handleVocClick={handleVocClick}
                             handleDeleteVoc={handleDeleteVoc}
                             handleApprovedChange={handleApprovedChange}
+                            loading={state.loading}
                         />
                         {selectedVoc && (
                             <VocMngDialog
                                 selectedVoc={selectedVoc}
-                                vocData={vocData}
                                 sections={sections}
                                 handleInputChange={handleInputChange}
                                 handleDateChange={handleDateChange}
@@ -106,6 +102,7 @@ const ManageVoc = () => {
                                 handleSectionChange={handleSectionChange}
                                 handleClose={handleClose}
                                 handleSubmit={handleSubmit}
+                                loading={state.loading}
                             />
                         )}
                     </Box>

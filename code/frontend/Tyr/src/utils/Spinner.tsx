@@ -13,7 +13,7 @@ export function Spinner() {
             flexDirection: 'column',
             alignItems: 'center',
         }}>
-            <CircularProgress sx={{color:'#fff'}}/>
+            <CircularProgress sx={{color: '#fff'}}/>
         </Box>
     );
 }

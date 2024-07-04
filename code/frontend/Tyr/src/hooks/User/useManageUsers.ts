@@ -1,86 +1,89 @@
+import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {UserService} from "../../services/user/UserService";
-import {Failure, Success} from "../../services/_utils/Either";
-import {User} from "../../services/user/models/User";
+import {User, userToInput} from "../../services/user/models/User";
 import {Role} from "../../services/user/models/Role";
+import UseRoles from "./useRoles";
+import UseUsers from "./useUsers";
+import useUserForm from "./useUserForm";
+import {Failure, Success} from "../../services/_utils/Either";
+import {handleError} from "../../utils/Utils";
 
 type ManageUsersState =
     | { type: 'loading' }
-    | { type: 'success'; users: User[] }
+    | { type: 'success'; filteredUsers: User[]; roles: Role[]; loading: boolean }
     | { type: 'error'; message: string };
 
 const useManageUsers = () => {
     const [state, setState] = useState<ManageUsersState>({type: 'loading'});
-    const [users, setUsers] = useState<User[]>([]);
-    const [roles, setRoles] = useState<Role[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const {
+        selectedUser,
+        setSelectedUser,
+        handleInputChange,
+        handleRoleChange
+    } = useUserForm();
+
+    const {state: usersState, getUsers} = UseUsers()
+    const {state: rolesState} = UseRoles()
 
     useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const data = await UserService.getAll();
-                if (data instanceof Success) {
-                    setUsers(data.value.users);
-                    const dataRoles = await UserService.getRoles();
-                    if (dataRoles instanceof Success) {
-                        setRoles(dataRoles.value.roles);
-                        setState({type: 'success', users: data.value.users});
-                    } else if (dataRoles instanceof Failure) {
-                        console.error('Error fetching roles:', dataRoles.value);
-                    }
-                } else if (data instanceof Failure) {
-                    console.error('Error fetching data:', data.value);
-                }
-            } catch (error) {
-                setState({type: 'error', message: 'Failed to fetch users'});
-            }
-        };
-
-        fetchUsers();
-    }, []);
-
-    const handleSearchChange = (query: string) => {
-        setSearchQuery(query);
-    };
-
-    const handleUserUpdate = async (user: User) => {
-        try {
-            await UserService.update({
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                credits: user.credits,
-                role: user.role.id
-            });
-            setUsers((prevUsers) =>
-                prevUsers.map((u) => (u.id === user.id ? {...u, ...user} : u))
-            );
-        } catch (error) {
-            setState({type: 'error', message: 'Failed to update user'});
+        switch (true) {
+            case usersState.type === 'success' && rolesState.type === 'success':
+                setState({
+                    type: 'success',
+                    filteredUsers: filteredUsers(usersState.users),
+                    roles: rolesState.roles,
+                    loading: false
+                });
+                break;
+            case usersState.type === 'error':
+                setState({type: 'error', message: usersState.message});
+                break;
+            case rolesState.type === 'error':
+                setState({type: 'error', message: rolesState.message});
+                break;
         }
-    };
+    }, [usersState, rolesState, searchQuery]);
 
-    const handleUserDelete = async (userId: number) => {
-        try {
-            await UserService.deleteById(userId);
-            setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-        } catch (error) {
-            setState({type: 'error', message: 'Failed to delete user'});
-        }
-    };
-
-    const filteredUsers = users.filter((user) =>
+    const filteredUsers = (users: User[]) => users.filter((user) =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleOpenEdit = (user: User) => setSelectedUser(user);
+    const handleCloseEdit = () => {
+        setSelectedUser(null)
+    };
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setState(prevState => ({...prevState, loading: true}));
+        UserService.update(userToInput(selectedUser))
+            .then(async data => {
+                if (data instanceof Success) {
+                    getUsers()
+                        .then(() => {
+                            handleCloseEdit();
+                        })
+                } else if (data instanceof Failure) {
+                    setState({type: 'error', message: handleError(data.value)});
+                }
+            })
+            .catch(err => {
+                setState({type: 'error', message: err.message || err});
+            })
+    };
+
     return {
         state,
-        roles,
-        users: filteredUsers,
+        selectedUser,
+        handleInputChange,
+        handleRoleChange,
         searchQuery,
-        handleSearchChange,
-        handleUserUpdate,
-        handleUserDelete
+        setSearchQuery,
+        handleSubmit,
+        handleOpenEdit,
+        handleCloseEdit
     };
 };
 

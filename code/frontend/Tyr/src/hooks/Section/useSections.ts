@@ -2,26 +2,38 @@ import {useEffect, useState} from "react";
 import {Section} from "../../services/section/models/Section";
 import {SectionService} from "../../services/section/SectionService";
 import {Failure, Success} from "../../services/_utils/Either";
+import {handleError} from "../../utils/Utils";
 
 const useSections = () => {
-    const [sections, setSections] = useState<Section[] | null>(null);
-    const [error, setError] = useState<Error | null>(null);
+    const [state, setState] = useState<SectionsState>({type: 'loading'});
 
-    useEffect(() => {
+    const getSections = async () => {
         SectionService.getAll()
             .then(data => {
                 if (data instanceof Success) {
-                    setSections(data.value.sections);
+                    setState({type: 'success', sections: data.value.sections})
                 } else if (data instanceof Failure) {
-                    console.error('Error fetching data:', data.value);
+                    setState({type: 'error', message: handleError(data.value)});
                 }
             })
             .catch(err => {
-                setError(err);
+                setState({type: 'error', message: err.message || err});
             });
+    }
+
+    useEffect(() => {
+        getSections()
     }, []);
 
-    return {sections, error};
+    return {
+        state,
+        getSections
+    };
 };
+
+type SectionsState =
+    | { type: 'loading' }
+    | { type: 'success'; sections: Section[] }
+    | { type: 'error'; message: string };
 
 export default useSections;

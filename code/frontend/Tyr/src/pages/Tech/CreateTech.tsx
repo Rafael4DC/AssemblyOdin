@@ -6,7 +6,7 @@ import {Button, Container, FormControlLabel, MenuItem, Switch, TextField} from "
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import {commonTextFieldProps} from "../../utils/Utils";
-import {times} from "../../utils/HardCoded";
+import {times, weekDays} from "../../utils/HardCoded";
 import TechFormFields from "../../components/Tech/Field/TechFormFields";
 import {useTheme} from "@mui/material/styles";
 
@@ -17,12 +17,11 @@ const CreateTech = () => {
     const theme = useTheme();
     const customColor = theme.palette.custom.main;
     const {
-        techData,
         state,
-        sections,
+        selectedTech,
         handleSubmit,
         handleSectionChange,
-        handleChange,
+        handleInputChange,
         handleMultiChange,
         handleDateChange,
         handleTimeChange,
@@ -38,12 +37,14 @@ const CreateTech = () => {
             return <AlertDialog alert={state.message}/>;
 
         case 'success':
+            const {sections, loading} = state;
+
             return (
                 <Container>
-                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color:customColor}}>
+                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color: customColor}}>
                         Create Tech Class
                     </Typography>
-                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2, color: '#000'}}>
+                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2}}>
                         <form onSubmit={handleSubmit}>
                             <FormControlLabel
                                 control={<Switch checked={isMultiple} onChange={toggleMultiple}/>}
@@ -56,7 +57,7 @@ const CreateTech = () => {
                                         type="date"
                                         name="startDate"
                                         required
-                                        value={techData.startDate}
+                                        value={selectedTech.startDate}
                                         onChange={handleMultiChange}
                                         {...commonTextFieldProps}
                                     />
@@ -65,7 +66,7 @@ const CreateTech = () => {
                                         type="date"
                                         name="endDate"
                                         required
-                                        value={techData.endDate}
+                                        value={selectedTech.endDate}
                                         onChange={handleMultiChange}
                                         {...commonTextFieldProps}
                                     />
@@ -74,12 +75,12 @@ const CreateTech = () => {
                                         select
                                         name="classTime"
                                         required
-                                        value={techData.classTime}
+                                        value={selectedTech.classTime}
                                         onChange={handleMultiChange}
                                         {...commonTextFieldProps}
                                     >
                                         {times.map(time => (
-                                            <MenuItem key={time} value={time} sx={{color: '#000'}}>
+                                            <MenuItem key={time} value={time}>
                                                 {time}
                                             </MenuItem>
                                         ))}
@@ -89,7 +90,7 @@ const CreateTech = () => {
                                         type="number"
                                         name="classLengthHours"
                                         required
-                                        value={techData.classLengthHours}
+                                        value={selectedTech.classLengthHours}
                                         onChange={handleMultiChange}
                                         {...commonTextFieldProps}
                                     />
@@ -98,29 +99,46 @@ const CreateTech = () => {
                                         select
                                         name="dayOfWeek"
                                         required
-                                        value={techData.dayOfWeek}
+                                        value={selectedTech.dayOfWeek}
                                         onChange={handleMultiChange}
                                         {...commonTextFieldProps}
                                     >
-                                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
+                                        {weekDays.map(day => (
                                             <MenuItem key={day} value={day} sx={{color: '#000'}}>
                                                 {day}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                    <TextField
+                                        select
+                                        label="Section"
+                                        required
+                                        value={selectedTech.section?.id.toString()}
+                                        onChange={handleSectionChange}
+                                        {...commonTextFieldProps}
+                                    >
+                                        <MenuItem value="0">
+                                            <em>Choose The Section</em>
+                                        </MenuItem>
+                                        {sections && sections.map(section => (
+                                            <MenuItem key={section.id} value={section.id}>
+                                                {section.name}
                                             </MenuItem>
                                         ))}
                                     </TextField>
                                 </>
                             ) : (
                                 <TechFormFields
-                                    techData={techData}
+                                    techData={selectedTech}
                                     sections={sections}
-                                    handleInputChange={handleChange}
+                                    handleInputChange={handleInputChange}
                                     handleDateChange={handleDateChange}
                                     handleTimeChange={handleTimeChange}
                                     handleSectionChange={handleSectionChange}
                                 />
                             )}
                             <Box marginTop={2}>
-                                <Button variant="contained" color="primary" type="submit">
+                                <Button variant="contained" color="primary" type="submit" disabled={loading}>
                                     Create Tech Class
                                 </Button>
                             </Box>

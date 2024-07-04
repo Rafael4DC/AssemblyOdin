@@ -1,4 +1,5 @@
 import {Role} from "./Role";
+import {UserInputModel} from "./UserInputModel";
 
 /**
  * User model
@@ -15,6 +16,16 @@ export interface User {
     username?: string;
     role?: Role;
     credits?: number;
+}
+
+export function userToInput(user: User): UserInputModel {
+    return {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        role: user.role.id,
+        credits: user.credits,
+    }
 }
 
 /**

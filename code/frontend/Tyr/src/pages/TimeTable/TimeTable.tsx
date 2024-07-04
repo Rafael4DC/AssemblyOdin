@@ -1,17 +1,14 @@
 import * as React from 'react';
 import {useState} from 'react';
-import {Button, Dialog, DialogContent, DialogTitle, Grid, Paper, Typography} from '@mui/material';
-import {styled} from '@mui/system';
+import {Button, Grid, Typography} from '@mui/material';
 import {useTheme} from "@mui/material/styles";
-import {differenceInMinutes, endOfWeek, format, isWithinInterval, parseISO, startOfWeek} from 'date-fns';
+import {endOfWeek, format, isWithinInterval, parseISO, startOfWeek} from 'date-fns';
 import useMyTechs from "../../hooks/Tech/useMyTechs";
 import {Spinner} from "../../utils/Spinner";
 import {times, weekDaysShort} from "../../utils/HardCoded";
 import useMyVocs from "../../hooks/Voc/useMyVocs";
-import {DaySlot, EventSlot, Root, TimeSlot} from "../../utils/StyledComponents";
+import {DaySlot, Root, TimeSlot} from "../../utils/StyledComponents";
 import {AlertDialog} from "../../utils/AlertDialog";
-import {Voc} from "../../services/voc/models/Voc";
-import {Tech} from "../../services/tech/models/Tech";
 import {MILLISECONDS_IN_A_WEEK} from "../../utils/Utils";
 import TimeTableDialog from "../../components/TimeTable/Dialog/TimeTableDialog";
 import TimeTableGridClass from "../../components/TimeTable/Grid/TimeTableGridClass";
@@ -85,7 +82,7 @@ const Timetable = () => {
                 <Root>
                     <Typography variant="h6" align="center" gutterBottom sx={{color: customColor}}>
                         Week {format(getWeekStart(weekOffset), 'MMM dd')}
-                             - {format(getWeekEnd(weekOffset), 'MMM dd')}
+                        - {format(getWeekEnd(weekOffset), 'MMM dd')}
                     </Typography>
                     <Grid container justifyContent="center" spacing={0}>
                         <Grid item xs={1} sx={{borderLeft: '1px solid white', borderTop: '1px solid white'}}>

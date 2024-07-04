@@ -12,18 +12,10 @@ import {
     InputBase,
     ListItem,
     MenuItem,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
     TextField,
     Typography
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
 import {Spinner} from '../../utils/Spinner';
 import {AlertDialog} from '../../utils/AlertDialog';
 import {commonTextFieldProps} from "../../utils/Utils";
@@ -31,6 +23,7 @@ import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
 import useManageSections from "../../hooks/Section/useManageSection";
 import {useTheme} from "@mui/material/styles";
+import SectionTableContainer from "../../components/Section/Table/SectionTableContainer";
 
 /**
  * Page to manage sections
@@ -39,18 +32,14 @@ const ManageSections = () => {
     const theme = useTheme();
     const customColor = theme.palette.custom.main;
     const {
-        sections,
-        modules,
-        students,
         state,
-        sectionData,
         selectedSection,
+        handleStudentSelect,
         handleSectionClick,
         handleInputChange,
         handleModuleChange,
-        handleStudentSelection,
-        handleSearchChange,
         searchQuery,
+        setSearchQuery,
         handleSubmit,
         handleClose
     } = useManageSections();
@@ -63,43 +52,21 @@ const ManageSections = () => {
             return <AlertDialog alert={state.message}/>;
 
         case 'success':
-            const filteredStudents = students.filter(student =>
-                student.username.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            const {sections, modules, filteredStudents, loading} = state;
 
             return (
                 <Container>
-                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color:customColor}}>
+                    <Typography variant="h4" component="h1" gutterBottom align={"center"} sx={{color: customColor}}>
                         Manage Sections
                     </Typography>
-                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2, color: '#000'}}>
-                        <TableContainer component={Paper}>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell sx={{color: '#000'}}>Section Name</TableCell>
-                                        <TableCell sx={{color: '#000'}}>Module</TableCell>
-                                        <TableCell sx={{color: '#000'}}>Edit</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {sections.map(section => (
-                                        <TableRow key={section.id}>
-                                            <TableCell sx={{color: '#000'}}>{section.name}</TableCell>
-                                            <TableCell sx={{color: '#000'}}>{section.module.name}</TableCell>
-                                            <TableCell sx={{color: '#000'}}>
-                                                <IconButton onClick={() => handleSectionClick(section)}>
-                                                    <EditIcon sx={{color: '#000'}}/>
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                    <Box sx={{backgroundColor: 'white', padding: 3, borderRadius: 2}}>
+                        <SectionTableContainer
+                            sections={sections}
+                            handleSectionClick={handleSectionClick}
+                        />
                         {selectedSection && (
                             <Dialog open={!!selectedSection} onClose={handleClose} fullWidth maxWidth="sm">
-                                <DialogTitle sx={{color: '#000'}}>Edit Section</DialogTitle>
+                                <DialogTitle>Edit Section</DialogTitle>
                                 <DialogContent>
                                     <form onSubmit={handleSubmit}>
                                         <TextField
@@ -107,38 +74,36 @@ const ManageSections = () => {
                                             type="text"
                                             name="name"
                                             required
-                                            value={sectionData.name}
+                                            value={selectedSection.name}
                                             onChange={handleInputChange}
                                             {...commonTextFieldProps}
-                                            sx={{color: '#000'}}
                                         />
                                         <TextField
                                             label="Module"
                                             select
                                             name="module"
                                             required
-                                            value={sectionData.module.id.toString()}
+                                            value={selectedSection.module.id.toString()}
                                             onChange={handleModuleChange}
                                             {...commonTextFieldProps}
-                                            sx={{color: '#000'}}
                                         >
-                                            <MenuItem value="" sx={{color: '#000'}}>
-                                                <em style={{color: '#000'}}>Choose The Module</em>
+                                            <MenuItem value="">
+                                                <em>Choose The Module</em>
                                             </MenuItem>
                                             {modules.map(module => (
-                                                <MenuItem key={module.id} value={module.id} sx={{color: '#000'}}>
+                                                <MenuItem key={module.id} value={module.id}>
                                                     {module.name}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
                                         <Box sx={{display: 'flex', alignItems: 'center', marginBottom: 2}}>
                                             <InputBase
-                                                placeholder="Search students"
+                                                placeholder="Search filteredStudents"
                                                 value={searchQuery}
-                                                onChange={handleSearchChange}
-                                                sx={{flex: 1, paddingLeft: 1, color: '#000'}}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                sx={{flex: 1, paddingLeft: 1}}
                                             />
-                                            <IconButton sx={{p: '10px', color: '#000'}}>
+                                            <IconButton sx={{p: '10px'}}>
                                                 <SearchIcon/>
                                             </IconButton>
                                         </Box>
@@ -146,9 +111,8 @@ const ManageSections = () => {
                                             {filteredStudents.map(student => (
                                                 <ListItem key={student.id} sx={{color: '#000'}}>
                                                     <Checkbox
-                                                        checked={sectionData.students.includes(student.id)}
-                                                        onChange={() => handleStudentSelection(student.id)}
-                                                        sx={{color: '#000'}}
+                                                        checked={selectedSection.students.some(stu => stu.id === student.id)}
+                                                        onChange={() => handleStudentSelect(student)}
                                                     />
                                                     <ListItemText primary={student.username} sx={{color: '#000'}}/>
                                                 </ListItem>
@@ -157,10 +121,10 @@ const ManageSections = () => {
                                     </form>
                                 </DialogContent>
                                 <DialogActions>
-                                    <Button onClick={handleClose} color="primary" sx={{color: '#000'}}>
+                                    <Button onClick={handleClose} color="primary">
                                         Cancel
                                     </Button>
-                                    <Button onClick={handleSubmit} color="primary" sx={{color: '#000'}}>
+                                    <Button onClick={handleSubmit} color="primary" disabled={loading}>
                                         Save Changes
                                     </Button>
                                 </DialogActions>

@@ -23,11 +23,12 @@ const VocTableContainer = (props: VocTableContainerProps) => {
         filteredVocs,
         handleVocClick,
         handleDeleteVoc,
-        handleApprovedChange
+        handleApprovedChange,
+        loading
     } = props;
 
     return (
-        <TableContainer component={Paper} sx={{ border: '1px solid rgba(0, 0, 0, 0.2)', boxShadow:'none'}}>
+        <TableContainer component={Paper} sx={{border: '1px solid rgba(0, 0, 0, 0.2)', boxShadow: 'none'}}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -51,6 +52,7 @@ const VocTableContainer = (props: VocTableContainerProps) => {
                                 <Checkbox
                                     checked={voc.approved}
                                     onChange={() => handleApprovedChange(voc)}
+                                    disabled={loading}
                                 />
                             </TableCell>
                             <TableCell>
@@ -76,6 +78,7 @@ interface VocTableContainerProps {
     handleVocClick: (voc: Voc) => void;
     handleDeleteVoc: (id: number) => Promise<void>;
     handleApprovedChange: (voc: Voc) => Promise<void>;
+    loading: boolean;
 }
 
 export default VocTableContainer;

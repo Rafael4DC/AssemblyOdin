@@ -3,6 +3,9 @@ import {Box, Button, CircularProgress, Modal, TextField, Typography} from "@mui/
 import {modalStyle} from "../../../utils/HardCoded";
 import {Department} from "../../../services/department/models/Department";
 
+/**
+ * Modal to add or edit a department
+ */
 const DepartmentModal = (props: DepartmentModalProps) => {
     const {
         show,

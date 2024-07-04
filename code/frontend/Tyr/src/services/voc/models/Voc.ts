@@ -1,5 +1,6 @@
 import {User} from "../../user/models/User";
 import {Section} from "../../section/models/Section";
+import {VocInputModel} from "./VocInputModel";
 
 /**
  * Voc model
@@ -20,4 +21,29 @@ export interface Voc {
     section?: Section,
     started?: string,
     ended?: string,
+}
+
+export function vocToInput(voc: Voc): VocInputModel {
+    return {
+        id: voc.id,
+        description: voc.description,
+        approved: voc.approved,
+        user: voc.user.id,
+        section: voc.section.id,
+        started: voc.started,
+        ended: voc.ended,
+    }
+}
+
+export function initVoc(): Voc {
+    const date = new Date().toISOString().split('T')[0]
+
+    return {
+        description: "",
+        started: date + 'T10:00',
+        ended: date + 'T11:00',
+        user: {id: 0},
+        approved: false,
+        section: {id: 0},
+    }
 }
