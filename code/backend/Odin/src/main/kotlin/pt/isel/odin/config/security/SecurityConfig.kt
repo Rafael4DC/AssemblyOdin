@@ -3,6 +3,7 @@ package pt.isel.odin.config.security
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
@@ -10,10 +11,11 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import pt.isel.odin.config.spring.service.OAuth2UserService
-import pt.isel.odin.service.interfaces.UserService
+import pt.isel.odin.service.user.UserService
 
 @Configuration
 @EnableWebSecurity
+@Profile("default")
 class SecurityConfig(
     private val userService: UserService,
     private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler

@@ -1,11 +1,16 @@
 import * as React from 'react';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './utils/Router';
+import {AppRoutes} from './utils/Router';
+import Layout from "./components/Layout";
 
 
+/**
+ * Application component
+ */
 export function App() {
-  return (
-    <RouterProvider router={router} />
-  );
+    return (
+        <Layout>
+            <AppRoutes/>
+        </Layout>
+    );
 }
 

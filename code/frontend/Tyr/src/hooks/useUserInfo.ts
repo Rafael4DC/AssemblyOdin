@@ -1,22 +1,53 @@
-import { useEffect, useState } from 'react';
-import { UserService } from '../services/UserService';
-import { User } from '../model/User';
+import {useEffect, useState} from 'react';
+import {UserService} from '../services/UserService';
+import {User} from '../model/User';
+import {Tech} from "../model/Tech";
+import {Voc} from "../model/Voc";
+import {TechService} from "../services/TechService";
+import {VocService} from "../services/VocService";
 
-const useUserInfo = (id: number) => {
-  const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+/**
+ * Hook to get the user info
+ *
+ * @returns the user info, error and handles to save and delete a user info
+ */
+const useUserInfo = () => {
+    const [userInfo, setUserInfo] = useState<User | null>(null);
+    const [userTechs, setUserTechs] = useState<Tech[]>([]);
+    const [userVocs, setUserVocs] = useState<Voc[]>([]);
+    const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    UserService.getSession()
-      .then(data => {
-        setUserInfo(data);
-      })
-      .catch(err => {
-        setError(err);
-      });
-  }, []);
+    useEffect(() => {
+        UserService.getSession()
+            .then(data => {
+                setUserInfo(data);
+            })
+            .catch(err => {
+                setError(err);
+            });
+    }, []);
 
-  return { userInfo, error };
+    useEffect(() => {
+        TechService.getTechsByUser()
+            .then(data => {
+                setUserTechs(data.techs);
+            })
+            .catch(err => {
+                setError(err);
+            });
+    }, []);
+
+    useEffect(() => {
+        VocService.getVocsByUser()
+            .then(data => {
+                setUserVocs(data.vocs);
+            })
+            .catch(err => {
+                setError(err);
+            });
+    }, []);
+
+    return {userInfo, userTechs, userVocs, error};
 };
 
 export default useUserInfo;

@@ -1,13 +1,19 @@
-import { useEffect, useState } from 'react';
-import { UserService } from '../services/UserService';
+import {useEffect, useState} from 'react';
+import {UserService} from '../services/UserService';
 import {User} from "../model/User";
 
+
+/**
+ * Hook to get the users
+ *
+ * @returns the users, error and handles to save and delete a user
+ */
 const useUsers = () => {
     const [users, setUsers] = useState<User[] | null>(null);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<Error | null>(null);
 
     const handleEditUserClick = (user: User) => {
@@ -16,35 +22,47 @@ const useUsers = () => {
     };
 
     const filteredUsers = searchTerm
-      ? users.filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
-      : users;
+        ? users?.filter(user => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
+        : users;
 
     const handleSaveUser = async (user: User) => {
         setError(null);
         try {
-            let result;
-            if (user.id) {
-                result = await UserService.update(user);
-            } else {
-                result = await UserService.save(user);
-            }
+            setIsSubmitting(true);
+            const result = await UserService.save(user)
+
+            setUsers(prevUsers => {
+                const updatedUsers = prevUsers ? [...prevUsers] : [];
+                const userIndex = updatedUsers.findIndex(u => u.id === user.id);
+                if (userIndex > -1) {
+                    updatedUsers[userIndex] = result;
+                } else {
+                    updatedUsers.push(result);
+                }
+                return updatedUsers;
+            });
+
+            setIsSubmitting(false);
             setShowEditModal(false);
-            return result;
         } catch (err) {
+            setIsSubmitting(false);
             setError(err);
         }
-    }
+    };
 
-    const handleDeleteUser= async (id: number) => {
+    const handleDeleteUser = async (id: number) => {
         setError(null);
         try {
+            setIsSubmitting(true);
             await UserService.delete(id);
+            setUsers(prevUsers => prevUsers?.filter(user => user.id !== id) || null);
+            setIsSubmitting(false);
+            setShowEditModal(false);
         } catch (err) {
+            setIsSubmitting(false);
             setError(err);
         }
-    }
-
-
+    };
 
     useEffect(() => {
         UserService.getAll()
@@ -55,7 +73,6 @@ const useUsers = () => {
                 setError(err);
             });
     }, []);
-
 
     return {
         filteredUsers,
@@ -68,7 +85,9 @@ const useUsers = () => {
         handleSaveUser,
         handleDeleteUser,
         handleEditUserClick,
-        setSelectedUser
+        setSelectedUser,
+        isSubmitting,
+        setIsSubmitting
     };
 };
 

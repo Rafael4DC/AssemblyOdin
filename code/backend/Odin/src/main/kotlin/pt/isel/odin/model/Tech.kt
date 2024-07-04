@@ -1,22 +1,23 @@
 package pt.isel.odin.model
 
 import jakarta.persistence.Column
-import jakarta.persistence.Convert
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
-import kotlinx.datetime.LocalDate
-import pt.isel.odin.utils.LocalDateConverter
+import pt.isel.odin.model.user.User
+import java.time.LocalDateTime
 
 /**
  * Represents the Teoric lectures (TEC) in the system.
  *
  * @property id the TEC id
  * @property teacher the teacher that is responsible for the TEC
- * @property curricularUnit the course that the TEC is about
+ * @property section the course that the TEC is about
  * @property date the date of the TEC
  * @property summary the summary of the TEC
  */
@@ -28,22 +29,46 @@ class Tech(
     val id: Long? = null,
 
     @ManyToOne
-    val teacher: User? = null,
+    val teacher: User,
 
     @ManyToOne
-    val curricularUnit: CurricularUnit? = null,
+    val section: Section,
 
-    @Convert(converter = LocalDateConverter::class)
-    val date: LocalDate? = null,
+    val date: LocalDateTime,
 
     @Column(nullable = false)
-    val summary: String? = null
-)
+    val summary: String,
 
-fun Tech.copy(
-    id: Long? = this.id,
-    teacher: User? = this.teacher,
-    curricularUnit: CurricularUnit? = this.curricularUnit,
-    date: LocalDate? = this.date,
-    summary: String? = this.summary
-) = Tech(id, teacher, curricularUnit, date, summary)
+    @ManyToMany(fetch = FetchType.EAGER)
+    val missTech: MutableList<User> = mutableListOf()
+) {
+    fun copy(
+        id: Long? = this.id,
+        teacher: User = this.teacher,
+        section: Section = this.section,
+        date: LocalDateTime = this.date,
+        summary: String = this.summary,
+        missTech: MutableList<User> = this.missTech
+    ) = Tech(id, teacher, section, date, summary, missTech)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Tech) return false
+        return id == other.id &&
+            teacher == other.teacher &&
+            section == other.section &&
+            date == other.date &&
+            summary == other.summary &&
+            missTech == other.missTech
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + teacher.hashCode()
+        result = 31 * result + section.hashCode()
+        result = 31 * result + date.hashCode()
+        result = 31 * result + summary.hashCode()
+        result = 31 * result + missTech.hashCode()
+        return result
+    }
+}

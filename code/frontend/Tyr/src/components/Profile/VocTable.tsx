@@ -1,77 +1,64 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Button, Table } from 'react-bootstrap';
-import { VocClass } from '../../model/VocClass';
+import {useState} from 'react';
+import {Table} from 'react-bootstrap';
+import {Voc} from "../../model/Voc";
+import {filterCourses, FilterOptions, getDuration} from "../../utils/Utils";
+import {fixedRowHeight, scrollableTableStyle} from "./TecTable";
 
-
-
-
-
-enum FilterOptions {
-  Happened = 'Happened',
-  ToHappen = 'To Happen',
-  Upcoming = 'Upcoming (Next Week)'
-}
-
-
-const maxRows = 5;
-const fixedRowHeight = '60px';
-const tableMaxHeight = maxRows * parseInt(fixedRowHeight, 10);
-
-const scrollableTableStyle: React.CSSProperties = {
-  maxHeight: `${tableMaxHeight}px`,
-  overflowY: 'auto',
-};
-
+/**
+ * Props for the VocTable component
+ *
+ * @param courses - the voc courses
+ */
 interface VocTableProps {
-  courses: VocClass[];
+    courses: Voc[];
 }
 
-const VocTable : React.FC<VocTableProps> = ({courses}) => {
-  const [filter, setFilter] = useState(FilterOptions.Happened);
+/**
+ * Table to show the voc courses
+ */
+const VocTable: React.FC<VocTableProps> = ({courses}) => {
+    const [filter, setFilter] = useState(FilterOptions.Upcoming);
 
-  const handleEditClick = (course: VocClass) => {
-    console.log('Edit course:', course);
-  };
+    const filteredCourses = filterCourses(courses, filter, 'started');
 
-  const renderCourseRow = (course: VocClass) => (
-    <tr key={course.description + course.date} style={{ height: fixedRowHeight }}>
-      <td>{course.description}</td>
-      <td>{course.date.toLocaleDateString()}</td>
-      <td>{course.approved ? '✓' : '—'}</td>
-    </tr>
-  );
-
-  return (
-    <div>
-      <h3>Voc Courses</h3>
-      <select
-        className="form-select mb-3"
-        value={filter}
-        onChange={(e) => setFilter(e.target.value as FilterOptions)}
-      >
-        {Object.values(FilterOptions).map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-      <div style={scrollableTableStyle}>
-      <Table striped bordered hover responsive>
-        <thead>
-        <tr style={{ height: fixedRowHeight }}>
-          <th>Name</th>
-          <th>Date</th>
-          <th>Approved</th>
+    const renderCourseRow = (course: Voc) => (
+        <tr key={course.description + course.started} style={{height: fixedRowHeight}}>
+            <td>{course.description}</td>
+            <td>{getDuration(course.started, course.ended)}</td>
+            <td>{course.approved ? '✓' : '—'}</td>
         </tr>
-        </thead>
-        <tbody>
-        {courses.map(renderCourseRow)}
-        </tbody>
-      </Table>
-      </div>
-    </div>
-  );
-}
+    );
 
+    return (
+        <div>
+            <h3>Voc Courses</h3>
+            <select
+                className="form-select mb-3"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value as FilterOptions)}
+            >
+                {Object.values(FilterOptions).map((option) => (
+                    <option key={option} value={option}>
+                        {option}
+                    </option>
+                ))}
+            </select>
+            <div style={scrollableTableStyle}>
+                <Table striped bordered hover responsive>
+                    <thead>
+                    <tr style={{height: fixedRowHeight}}>
+                        <th>Name</th>
+                        <th>Length</th>
+                        <th>Approved</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {filteredCourses.map(renderCourseRow)}
+                    </tbody>
+                </Table>
+            </div>
+        </div>
+    );
+}
 export default VocTable;

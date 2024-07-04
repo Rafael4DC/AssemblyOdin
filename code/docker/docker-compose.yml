@@ -1,17 +1,45 @@
-version: '3.8'
+version: '3.9'
 
 services:
   postgresdb:
     build:
       context: ./DB/
-      dockerfile: Dockerfile-db  # Specify the name of your Dockerfile here
+      dockerfile: Dockerfile-db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: pass123  # Ensure this environment variable is set
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data
+      POSTGRES_PASSWORD: pass123
     ports:
       - "5432:5432"
+    networks:
+      - backend-network
 
-#volumes: uncomment when data persistence is wanted
-#  postgres_data:
+  backend:
+    build:
+      context: ../backend/Odin
+      dockerfile: Dockerfile-backend
+    env_file:
+      - .env
+    depends_on:
+      - postgresdb
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+      - frontend-network
+
+  frontend:
+    build:
+      context: ../frontend/Tyr
+      dockerfile: Dockerfile-frontend
+    env_file:
+      - .env
+    ports:
+      - "1337:1337"
+    networks:
+      - frontend-network
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge

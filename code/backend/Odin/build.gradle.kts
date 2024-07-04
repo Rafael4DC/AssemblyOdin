@@ -31,10 +31,15 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDateTimeVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("org.postgresql:postgresql")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    runtimeOnly("com.h2database:h2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -42,6 +47,15 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = "17"
     }
+}
+
+// Disable KtLint tasks during Docker build
+if (System.getenv("DISABLE_KTLINT") != null) {
+    tasks.named("test").configure { enabled = false }
+    tasks.named("ktlintTestSourceSetCheck").configure { enabled = false }
+    tasks.named("ktlintKotlinScriptCheck").configure { enabled = false }
+    tasks.named("ktlintCheck").configure { enabled = false }
+    tasks.named("ktlintFormat").configure { enabled = false }
 }
 
 tasks.withType<Test> {

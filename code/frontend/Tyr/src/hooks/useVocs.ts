@@ -1,15 +1,20 @@
-import { useEffect, useState } from 'react';
-import { VocService } from '../services/VocService';
-import {VocClass} from "../model/VocClass";
+import {useEffect, useState} from 'react';
+import {VocService} from '../services/VocService';
+import {Voc, VocRequest} from "../model/Voc";
 
+/**
+ * Hook to get the voc classes
+ *
+ * @returns the voc classes, error and handles to save and delete a voc class
+ */
 const useVocs = () => {
-    const [vocs, setVocs] = useState<VocClass[] | null>(null);
+    const [vocs, setVocs] = useState<Voc[] | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
         VocService.getAll()
             .then(data => {
-                setVocs(data);
+                setVocs(data.vocs);
             })
             .catch(err => {
                 setError(err);
@@ -20,7 +25,7 @@ const useVocs = () => {
     return {
         vocs,
         error,
-        handleSaveVocClass: async (vocClass: VocClass) => {
+        handleSaveVocClass: async (vocClass: VocRequest) => {
             setError(null);
             try {
                 if (vocClass.id) {

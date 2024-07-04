@@ -1,4 +1,3 @@
-
 /**
  * Enhanced wrapper function for making API calls using Fetch API.
  *
@@ -31,7 +30,9 @@ async function makeApiRequest(method: string, url: string, data?: any) {
             return;
         }
 
-        return await response.json();
+        if (method != 'delete') {
+            return await response.json();
+        }
     } catch (error) {
         console.error('API Request Failed:', error);
         throw error;
