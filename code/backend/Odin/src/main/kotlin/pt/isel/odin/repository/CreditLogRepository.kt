@@ -9,7 +9,7 @@ import java.util.Optional
  * Repository for Credit logs.
  */
 @Repository
-interface CreditLogRepository : JpaRepository<CreditLog, Long>{
+interface CreditLogRepository : JpaRepository<CreditLog, Long> {
     /**
      * Finds all logs by user id.
      *

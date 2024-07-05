@@ -4,12 +4,12 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class UpdateScheduleTechInputModel (
+data class UpdateScheduleTechInputModel(
     val teacher: Long? = null,
     val section: Long,
     val startDate: LocalDate,
     val endDate: LocalDate,
     val classTime: LocalTime,
     val classLengthHours: Long,
-    val dayOfWeek: DayOfWeek,
+    val dayOfWeek: DayOfWeek
 )

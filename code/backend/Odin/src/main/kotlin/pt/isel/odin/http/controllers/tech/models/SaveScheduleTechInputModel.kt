@@ -15,12 +15,12 @@ import java.time.LocalTime
  * @property classLengthHours The class length in hours.
  * @property dayOfWeek The day of the week.
  */
-data class SaveScheduleTechInputModel (
+data class SaveScheduleTechInputModel(
     val teacher: Long? = null,
     val section: Long,
     val startDate: LocalDate,
     val endDate: LocalDate,
     val classTime: LocalTime,
     val classLengthHours: Long,
-    val dayOfWeek: DayOfWeek,
+    val dayOfWeek: DayOfWeek
 )

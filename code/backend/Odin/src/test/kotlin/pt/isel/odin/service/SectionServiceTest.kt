@@ -240,7 +240,7 @@ class SectionServiceTest {
         )
         val updatedSection = existingSection.copy(
             id = section.id!!,
-            name = updateSectionInputModel.name,
+            name = updateSectionInputModel.name
         )
 
         // when: updating the section
@@ -270,7 +270,7 @@ class SectionServiceTest {
         val updateSectionInputModel = UpdateSectionInputModel(
             id = section.id!!,
             name = existingSection.name,
-            module = module.id!!,
+            module = module.id!!
         )
         val updatedSection = existingSection.copy(
             id = section.id!!,

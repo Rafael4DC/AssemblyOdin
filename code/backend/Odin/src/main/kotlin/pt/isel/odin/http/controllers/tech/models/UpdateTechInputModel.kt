@@ -20,9 +20,9 @@ data class UpdateTechInputModel(
 
     val section: Long,
 
-    val started : String,
+    val started: String,
 
-    val ended : String,
+    val ended: String,
 
     @NotBlank(message = "Summary is required")
     @Size(min = 1, max = 50, message = "Summary must have between 1 and 50 characters")

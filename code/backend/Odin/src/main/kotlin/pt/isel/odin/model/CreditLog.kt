@@ -34,7 +34,7 @@ class CreditLog(
 
     @ManyToOne(fetch = FetchType.EAGER)
     val user: User
-){
+) {
     fun copy(
         id: Long? = this.id,
         description: String = this.description,

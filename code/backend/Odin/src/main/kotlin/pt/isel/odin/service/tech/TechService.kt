@@ -2,8 +2,8 @@ package pt.isel.odin.service.tech
 
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.SaveScheduleTechInputModel
+import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.model.Role
 import pt.isel.odin.model.Section
@@ -92,7 +92,7 @@ class TechService(
                 teacher = user,
                 section = section,
                 started = startDateTime,
-                ended = endDateTime,
+                ended = endDateTime
             )
 
             results.add(success(techRepository.save(tech)))
@@ -158,7 +158,7 @@ class TechService(
                 teacher = user,
                 section = section,
                 started = startDateTime,
-                ended = endDateTime,
+                ended = endDateTime
             )
 
             results.add(success(techRepository.save(tech)))
