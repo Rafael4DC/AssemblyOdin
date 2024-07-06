@@ -15,9 +15,9 @@ import pt.isel.odin.model.Department
 data class ProcessedLog(
     val username: String,
     val email: String,
-    val type: String,
-    val timestamp: List<LocalDateTime>,
-    val machienName: String
+    val pointValue: Int,
+    val timestamp: List<Pair<LocalDateTime,LocalDateTime>>,
+    val machineName: String
 ) {
     /*fun copy(
         id: Long? = this.username,

@@ -28,8 +28,7 @@ class DataInitializer(
     @Bean
     fun initData(): CommandLineRunner {
         return CommandLineRunner {
-            val dataFilePath = "C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin/src/main/kotlin/pt/isel/odin/utils/InitialData.json"
-            // System.getenv("INITIAL_DATA_PATH") ?: "src/main/kotlin/pt/isel/odin/utils/InitialData.json"
+            val dataFilePath =  System.getenv("INITIAL_DATA_PATH") ?: "code\\backend\\Odin\\src\\main\\kotlin\\pt\\isel\\odin\\utils\\InitialData.json"
 
             if (dataPopulationService.departmentRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()

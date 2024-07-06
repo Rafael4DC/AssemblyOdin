@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Repository
 import pt.isel.odin.heimdallMiddleware.models.BaseLog
-import pt.isel.odin.heimdallMiddleware.models.BaseLogModel
+import pt.isel.odin.heimdallMiddleware.models.BaseLogInputModel
 import pt.isel.odin.heimdallMiddleware.models.ProcessedLog
 
 @Repository
@@ -15,8 +15,8 @@ class MongoRepo(
     @Value("\${spring.data.mongodb.collection-processed}") private val processedCollection: String
 ) {
 
-    fun findAllUnprocessedLogs(): List<BaseLogModel> {
-        return mongoTemplate.findAll(BaseLogModel::class.java, unprocessedCollection)
+    fun findAllUnprocessedLogs(): List<BaseLogInputModel> {
+        return mongoTemplate.findAll(BaseLogInputModel::class.java, preprocessedCollection)
     }
 
     fun findAllPreprocessedLogs(): List<BaseLog> {
