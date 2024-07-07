@@ -16,7 +16,7 @@ class MongoRepo(
 ) {
 
     fun findAllUnprocessedLogs(): List<BaseLogInputModel> {
-        return mongoTemplate.findAll(BaseLogInputModel::class.java, preprocessedCollection)
+        return mongoTemplate.findAll(BaseLogInputModel::class.java, unprocessedCollection)
     }
 
     fun findAllPreprocessedLogs(): List<BaseLog> {

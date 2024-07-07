@@ -14,30 +14,44 @@ import java.time.format.DateTimeFormatter
  */
 
 enum class LogType {
-    Logon,
+    Login,
     Logout,
     Lock
 }
 
 
 data class BaseLogInputModel(
+    val _id: String,
     val identifier: String,
     val type: String,
     val timestamp: String,
     val machineName: String
 )
 
-private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
 data class BaseLog(
+    val _id: String,
     val identifier: String,
     val type: LogType,
     val timestamp: LocalDateTime,
     val machineName: String
 ) {
     constructor(inputModel: BaseLogInputModel) : this(
+        inputModel._id,
         inputModel.identifier,
         LogType.valueOf(inputModel.type),
-        Instant.parse(inputModel.timestamp).toLocalDateTime(TimeZone.UTC), //LocalDateTime.parse(inputModel.timestamp,formatter),
+        dtParser(inputModel.timestamp),
         inputModel.machineName
     )
 }
+
+fun dtParser(timestamp: String): LocalDateTime {
+    val instant = Instant.parse(timestamp)
+    return instant.toLocalDateTime(TimeZone.UTC)
+}
+
+
+data class LogPair(
+    val logon: BaseLog,
+    val logout: BaseLog
+)

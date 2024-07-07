@@ -2,6 +2,7 @@ package pt.isel.odin.heimdallMiddleware.models
 
 import kotlinx.datetime.LocalDateTime
 import pt.isel.odin.model.Department
+import pt.isel.odin.model.user.User
 
 /**
  * Represents the output model for getting a department.
@@ -13,10 +14,9 @@ import pt.isel.odin.model.Department
  * @constructor Creates a [GetDepartmentOutputModel] from a [Department].
  */
 data class ProcessedLog(
-    val username: String,
-    val email: String,
+    val user: User,
     val pointValue: Int,
-    val timestamp: List<Pair<LocalDateTime,LocalDateTime>>,
+    val timestamp: Pair<LocalDateTime,LocalDateTime>,
     val machineName: String
 ) {
     /*fun copy(
