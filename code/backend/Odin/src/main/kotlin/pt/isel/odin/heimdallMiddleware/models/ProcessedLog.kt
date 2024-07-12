@@ -31,7 +31,7 @@ data class ProcessedLog(
         result = 31 * result + value
         result = 31 * result + date.hashCode()
         result = 31 * result + user.hashCode()
-        return result
+        return result   
     }
 
     override fun equals(other: Any?): Boolean {
