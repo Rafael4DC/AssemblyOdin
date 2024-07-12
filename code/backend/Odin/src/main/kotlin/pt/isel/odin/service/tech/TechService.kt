@@ -135,40 +135,6 @@ class TechService(
     }
 
     /**
-     * Updates multiple classes.
-     *
-     * @param input the tech to update
-     * @param email the email of the user
-     *
-     * @return the [CreationTechResult] if updated, [SaveUpdateTechError] otherwise
-     */
-    @Transactional
-    fun updateMultipleClasses(input: SaveScheduleTechInputModel, email: String): List<CreationTechResult> {
-        val user = getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
-        val section = getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
-
-        val results = mutableListOf<CreationTechResult>()
-
-        var current = input.startDate.with(TemporalAdjusters.nextOrSame(input.dayOfWeek))
-        while (!current.isAfter(input.endDate)) {
-            val startDateTime = LocalDateTime.of(current, input.classTime)
-            val endDateTime = startDateTime.plusHours(input.classLengthHours)
-
-            val tech = Tech(
-                teacher = user,
-                section = section,
-                started = startDateTime,
-                ended = endDateTime
-            )
-
-            results.add(success(techRepository.save(tech)))
-            current = current.plus(1, ChronoUnit.WEEKS)
-        }
-
-        return results
-    }
-
-    /**
      * Deletes a tech by its id.
      *
      * @param id the tech id

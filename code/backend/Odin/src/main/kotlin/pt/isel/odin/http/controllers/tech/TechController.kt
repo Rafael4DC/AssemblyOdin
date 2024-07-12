@@ -112,24 +112,6 @@ class TechController(private val techService: TechService) {
         }
 
     /**
-     * Updates multiple techs.
-     *
-     * @param input The techs to update.
-     * @param authentication The authentication token.
-     *
-     * @return The updated techs.
-     */
-    @PostMapping(Uris.Techs.UPDATE_MULTIPLE)
-    fun updateMultiple(@RequestBody input: SaveScheduleTechInputModel, authentication: Principal?): ResponseEntity<*> {
-        val results = techService.updateMultipleClasses(input, authentication.toEmail())
-        return if (results.all { it is Success }) {
-            ResponseEntity.status(201).body(results.map { (it as Success).value })
-        } else {
-            Problem.responseForError(results.first { it is Failure })
-        }
-    }
-
-    /**
      * Deletes a tech.
      *
      * @param id The tech id.
