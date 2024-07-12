@@ -1,6 +1,5 @@
 package pt.isel.odin.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.springframework.boot.CommandLineRunner
@@ -29,14 +28,13 @@ class DataInitializer(
     @Bean
     fun initData(): CommandLineRunner {
         return CommandLineRunner {
-            val dataFilePath = "C:/Users/draga/Desktop/ISEL/6Semestre/PS/AssemblyOdin/code/backend/Odin/src/main/kotlin/pt/isel/odin/utils/InitialData.json"
-                //System.getenv("INITIAL_DATA_PATH") ?: "src/main/kotlin/pt/isel/odin/utils/InitialData.json"
+            val dataFilePath =  System.getenv("INITIAL_DATA_PATH") ?: "code\\backend\\Odin\\src\\main\\kotlin\\pt\\isel\\odin\\utils\\InitialData.json"
 
             if (dataPopulationService.departmentRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()
                 val data: InitialData = mapper.readValue(File(dataFilePath))
                 dataPopulationService.populateData(data)
-            } else if (rolePopulationService.roleRepository.count() == 0L){
+            } else if (rolePopulationService.roleRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()
                 val data: InitialData = mapper.readValue(File(dataFilePath))
                 rolePopulationService.populateRoles(data)
@@ -51,7 +49,7 @@ class DataInitializer(
 class DataPopulationService(
     val departmentRepository: DepartmentRepository,
     private val fieldStudyRepository: FieldStudyRepository,
-    private val moduleRepository: ModuleRepository,
+    private val moduleRepository: ModuleRepository
 ) {
 
     @Transactional

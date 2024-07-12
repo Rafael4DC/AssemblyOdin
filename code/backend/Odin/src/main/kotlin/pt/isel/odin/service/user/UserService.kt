@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.user.models.SaveUserInputModel
 import pt.isel.odin.http.controllers.user.models.UpdateUserInputModel
-import pt.isel.odin.model.user.User
 import pt.isel.odin.model.Role
+import pt.isel.odin.model.user.User
 import pt.isel.odin.model.user.UserDomain
 import pt.isel.odin.repository.CreditLogRepository
 import pt.isel.odin.repository.RoleRepository

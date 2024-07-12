@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.odin.http.controllers.Uris
 import pt.isel.odin.http.controllers.tech.models.GetTechOutputModel
+import pt.isel.odin.http.controllers.tech.models.SaveScheduleTechInputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechOutputModel
-import pt.isel.odin.http.controllers.tech.models.SaveScheduleTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechOutputModel
 import pt.isel.odin.http.controllers.tech.models.getAllTechsOutputModel

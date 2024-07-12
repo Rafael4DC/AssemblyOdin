@@ -88,5 +88,4 @@ class Tech(
         result = 31 * result + missTech.hashCode()
         return result
     }
-
 }

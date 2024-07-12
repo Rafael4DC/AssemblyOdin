@@ -20,8 +20,8 @@ data class GetTechOutputModel(
     val id: Long,
     val teacher: GetUserOutputModel,
     val section: GetSectionOutputModel,
-    val started : String,
-    val ended : String,
+    val started: String,
+    val ended: String,
     val summary: String,
     val missTech: List<GetUserOutputModel>
 ) {

@@ -100,7 +100,8 @@ object TestData {
         )
     val tech7 = Tech(
         teacher = user1,
-        section = section7, started = LocalDateTime.now(),
+        section = section7,
+        started = LocalDateTime.now(),
         ended = LocalDateTime.now().plusHours(1),
         summary = "History Tech",
         missTech = mutableListOf(user2, user3)
