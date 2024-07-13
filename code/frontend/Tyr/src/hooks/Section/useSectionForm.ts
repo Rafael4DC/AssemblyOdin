@@ -2,6 +2,12 @@ import {ChangeEvent, useState} from 'react';
 import {Section} from "../../services/section/models/Section";
 import {User} from "../../services/user/models/User";
 
+/**
+ * Hook to manage the section form
+ *
+ * @param initSection the initial section
+ * @returns the state and functions to manage the section form
+ */
 const useSectionForm = (initSection?: Section) => {
     const [selectedSection, setSelectedSection] = useState<Section | null>(initSection || null);
 

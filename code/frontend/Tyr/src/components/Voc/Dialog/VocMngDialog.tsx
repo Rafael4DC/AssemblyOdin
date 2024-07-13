@@ -48,6 +48,19 @@ const VocMngDialog = (props: VocDialogProps) => {
     )
 }
 
+/**
+ * Props for the VocMngDialog component
+ *
+ * @param selectedVoc - the selected voc to edit
+ * @param sections - list of sections to display
+ * @param handleInputChange - function to handle input change
+ * @param handleDateChange - function to handle date change
+ * @param handleTimeChange - function to handle time change
+ * @param handleSectionChange - function to handle section change
+ * @param handleClose - function to close the dialog
+ * @param handleSubmit - function to handle form submission
+ * @param loading - boolean to show loading state
+ */
 interface VocDialogProps {
     selectedVoc: Voc;
     sections: Section[];

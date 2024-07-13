@@ -22,7 +22,6 @@ const CreateTech = () => {
         handleSubmit,
         handleSectionChange,
         handleInputChange,
-        handleMultiChange,
         handleDateChange,
         handleTimeChange,
         isMultiple,
@@ -58,7 +57,7 @@ const CreateTech = () => {
                                         name="startDate"
                                         required
                                         value={selectedTech.startDate}
-                                        onChange={handleMultiChange}
+                                        onChange={handleInputChange}
                                         {...commonTextFieldProps}
                                     />
                                     <TextField
@@ -67,7 +66,7 @@ const CreateTech = () => {
                                         name="endDate"
                                         required
                                         value={selectedTech.endDate}
-                                        onChange={handleMultiChange}
+                                        onChange={handleInputChange}
                                         {...commonTextFieldProps}
                                     />
                                     <TextField
@@ -76,7 +75,7 @@ const CreateTech = () => {
                                         name="classTime"
                                         required
                                         value={selectedTech.classTime}
-                                        onChange={handleMultiChange}
+                                        onChange={handleInputChange}
                                         {...commonTextFieldProps}
                                     >
                                         {times.map(time => (
@@ -91,7 +90,7 @@ const CreateTech = () => {
                                         name="classLengthHours"
                                         required
                                         value={selectedTech.classLengthHours}
-                                        onChange={handleMultiChange}
+                                        onChange={handleInputChange}
                                         {...commonTextFieldProps}
                                     />
                                     <TextField
@@ -100,7 +99,7 @@ const CreateTech = () => {
                                         name="dayOfWeek"
                                         required
                                         value={selectedTech.dayOfWeek}
-                                        onChange={handleMultiChange}
+                                        onChange={handleInputChange}
                                         {...commonTextFieldProps}
                                     >
                                         {weekDays.map(day => (

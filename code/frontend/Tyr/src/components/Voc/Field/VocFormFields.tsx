@@ -6,16 +6,9 @@ import {Voc} from "../../../services/voc/models/Voc";
 import {Section} from "../../../services/section/models/Section";
 import {times} from "../../../utils/HardCoded";
 
-interface VocFormFieldsProps {
-    selectedVoc: Voc;
-    sections: Section[];
-    handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    handleDateChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    handleTimeChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: string) => void;
-    handleSectionChange: (e: ChangeEvent<HTMLInputElement>) => void;
-
-}
-
+/**
+ * Form fields for the voc class
+ */
 const VocFormFields = (props: VocFormFieldsProps) => {
     const {
         selectedVoc,
@@ -95,5 +88,26 @@ const VocFormFields = (props: VocFormFieldsProps) => {
         </TextField>
     </>
 }
+
+/**
+ * Props for the VocFormFields component
+ *
+ * @param selectedVoc - the selected voc to edit
+ * @param sections - list of sections to display
+ * @param handleInputChange - function to handle input change
+ * @param handleDateChange - function to handle date change
+ * @param handleTimeChange - function to handle time change
+ * @param handleSectionChange - function to handle section change
+ */
+interface VocFormFieldsProps {
+    selectedVoc: Voc;
+    sections: Section[];
+    handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleDateChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    handleTimeChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, key: string) => void;
+    handleSectionChange: (e: ChangeEvent<HTMLInputElement>) => void;
+
+}
+
 
 export default VocFormFields;

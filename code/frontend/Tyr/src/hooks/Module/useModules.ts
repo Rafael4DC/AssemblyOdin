@@ -4,6 +4,19 @@ import {ModuleService} from "../../services/module/ModuleService";
 import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the modules
+ */
+type ModulesState =
+    | { type: 'loading' }
+    | { type: 'success'; modules: Module[] }
+    | { type: 'error'; message: string };
+
+/**
+ * Hook to get the modules
+ *
+ * @returns the sate with the modules
+ */
 const useModules = () => {
     const [state, setState] = useState<ModulesState>({type: 'loading'});
 
@@ -25,10 +38,5 @@ const useModules = () => {
         state
     };
 };
-
-type ModulesState =
-    | { type: 'loading' }
-    | { type: 'success'; modules: Module[] }
-    | { type: 'error'; message: string };
 
 export default useModules;

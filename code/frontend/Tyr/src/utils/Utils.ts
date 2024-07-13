@@ -97,6 +97,9 @@ export function notStudent(role: string) {
     return role === 'TEACHER' || role === 'ADMIN';
 }
 
+export function notAdmin(role: string) {
+    return role === 'TEACHER' || role === 'STUDENT';
+}
 
 export const commonTextFieldProps: Partial<TextFieldProps> = {
     fullWidth: true,

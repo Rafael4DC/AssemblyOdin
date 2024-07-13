@@ -1,13 +1,9 @@
 import * as React from 'react';
-import {CSSObject, styled, Theme, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -17,7 +13,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import {Link} from 'react-router-dom';
-import Tooltip from '@mui/material/Tooltip';
+
 import {WebUris} from "../utils/WebUris";
 import {useSessionData} from "../session/Session";
 import {
@@ -31,6 +27,9 @@ import {
     SchoolOutlined
 } from "@mui/icons-material";
 import logo from '../assets/logo_Assembly.png';
+import {AppBar, Drawer, DrawerHeader, StyledDivider} from "../utils/StyledComponents";
+import {useTheme} from "@mui/material/styles";
+import {Tooltip} from "@mui/material";
 import HOME = WebUris.HOME;
 import PROFILE = WebUris.PROFILE;
 import DEPARTMENTS = WebUris.DEPARTMENTS;
@@ -41,85 +40,13 @@ import CREATE_VOC = WebUris.CREATE_VOC;
 import CREATE_TECH = WebUris.CREATE_TECH;
 import TIMETABLE = WebUris.TIMETABLE;
 import MANAGE_SECTIONS = WebUris.MANAGE_SECTIONS;
+import MANAGE_TECH = WebUris.MANAGE_TECH;
+import MANAGE_VOC = WebUris.MANAGE_VOC;
+import {notAdmin, notStudent} from "../utils/Utils";
 
-const drawerWidth = 220;
-
-const openedMixin = (theme: Theme): CSSObject => ({
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-});
-
-const DrawerHeader = styled('div')(({theme}) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-}));
-
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    backgroundColor: '#fff', // Use theme background color
-    color: theme.palette.text.primary, // Use theme text color
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
-
-const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
-    ({theme, open}) => ({
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
-            ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
-        }),
-    }),
-);
-
-const StyledDivider = styled(Divider)(({theme}) => ({
-    margin: theme.spacing(1, 0),
-    backgroundColor: theme.palette.azulEscuro.main, // Dark grey color for divider
-    height: 2, // Increase the thickness
-}));
-
+/**
+ * Dashboard App Bar and Drawer
+ */
 export default function Dashboard({children}: { children: React.ReactNode }) {
     const theme = useTheme();
     const azulEscuroMain = theme.palette.azulEscuro.main;
@@ -136,8 +63,12 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
     };
 
     const handleLogout = () => {
-        // Handle the logout functionality here
-        console.log("Logging out...");
+        fetch('http://localhost:8080/logout', {
+            method: 'POST',
+            credentials: 'same-origin',
+        }).then(() => {
+            window.location.href = '/';
+        })
     };
 
     const linkClass = (path: string) =>
@@ -221,76 +152,80 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                             {open && <ListItemText primary="Profile" sx={{color: azulEscuroMain}}/>}
                         </ListItemButton>
                     </Tooltip>
-                    <Tooltip title="Timetable" placement="right">
-                        <ListItemButton
-                            component={Link}
-                            to={TIMETABLE}
-                            className={linkClass(TIMETABLE)}
-                            sx={!open && {
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                            }}
-                        >
-                            <ListItemIcon
-                                sx={{color: azulEscuroMain, justifyContent: !open ? 'center' : ''}}
-                            >
-                                <CalendarMonthOutlined/>
-                            </ListItemIcon>
-                            {!open && (
-                                <Typography
-                                    variant="caption"
-                                    sx={{
-                                        mt: 1,
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        color: azulEscuroMain,
-                                        fontSize: '11px'
+                    {notAdmin(role) && (
+                        <>
+                            <Tooltip title="Timetable" placement="right">
+                                <ListItemButton
+                                    component={Link}
+                                    to={TIMETABLE}
+                                    className={linkClass(TIMETABLE)}
+                                    sx={!open && {
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        textAlign: 'center',
                                     }}
                                 >
-                                    Timetable
-                                </Typography>
-                            )}
-                            {open && <ListItemText primary="Timetable" sx={{color: azulEscuroMain}}/>}
-                        </ListItemButton>
-                    </Tooltip>
-                    <Tooltip title="Departments" placement="right">
-                        <ListItemButton
-                            component={Link}
-                            to={DEPARTMENTS}
-                            className={linkClass(DEPARTMENTS)}
-                            sx={!open && {
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                textAlign: 'center',
-                            }}
-                        >
-                            <ListItemIcon
-                                sx={{color: azulEscuroMain, justifyContent: !open ? 'center' : ''}}
-                            >
-                                <SchoolOutlined/>
-                            </ListItemIcon>
-                            {!open && (
-                                <Typography
-                                    variant="caption"
-                                    sx={{
-                                        mt: 1,
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        color: azulEscuroMain,
-                                        fontSize: '11px'
+                                    <ListItemIcon
+                                        sx={{color: azulEscuroMain, justifyContent: !open ? 'center' : ''}}
+                                    >
+                                        <CalendarMonthOutlined/>
+                                    </ListItemIcon>
+                                    {!open && (
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                mt: 1,
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                color: azulEscuroMain,
+                                                fontSize: '11px'
+                                            }}
+                                        >
+                                            Timetable
+                                        </Typography>
+                                    )}
+                                    {open && <ListItemText primary="Timetable" sx={{color: azulEscuroMain}}/>}
+                                </ListItemButton>
+                            </Tooltip>
+                            <Tooltip title="Departments" placement="right">
+                                <ListItemButton
+                                    component={Link}
+                                    to={DEPARTMENTS}
+                                    className={linkClass(DEPARTMENTS)}
+                                    sx={!open && {
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        textAlign: 'center',
                                     }}
                                 >
-                                    Departs
-                                </Typography>
-                            )}
-                            {open && <ListItemText primary="Departments" sx={{color: azulEscuroMain}}/>}
-                        </ListItemButton>
-                    </Tooltip>
+                                    <ListItemIcon
+                                        sx={{color: azulEscuroMain, justifyContent: !open ? 'center' : ''}}
+                                    >
+                                        <SchoolOutlined/>
+                                    </ListItemIcon>
+                                    {!open && (
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                mt: 1,
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                color: azulEscuroMain,
+                                                fontSize: '11px'
+                                            }}
+                                        >
+                                            Departs
+                                        </Typography>
+                                    )}
+                                    {open && <ListItemText primary="Departments" sx={{color: azulEscuroMain}}/>}
+                                </ListItemButton>
+                            </Tooltip>
+                        </>
+                    )}
                     <Tooltip title="Create VOC" placement="right">
                         <ListItemButton
                             component={Link}
@@ -328,7 +263,7 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                     </Tooltip>
                 </List>
 
-                {(role === 'TEACHER' || role === 'ADMIN') && (
+                {notStudent(role) && (
                     <>
                         <StyledDivider/>
                         <List>
@@ -437,11 +372,11 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                                     {open && <ListItemText primary="Create Tech" sx={{color: azulEscuroMain}}/>}
                                 </ListItemButton>
                             </Tooltip>
-                            <Tooltip title="Manage Class" placement="right">
+                            <Tooltip title="Manage Tech" placement="right">
                                 <ListItemButton
                                     component={Link}
-                                    to={MANAGE_CLASSES}
-                                    className={linkClass(MANAGE_CLASSES)}
+                                    to={MANAGE_TECH}
+                                    className={linkClass(MANAGE_TECH)}
                                     sx={!open && {
                                         display: 'flex',
                                         flexDirection: 'column',
@@ -466,10 +401,45 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
                                                 fontSize: '11px'
                                             }}
                                         >
-                                            Mng Class
+                                            Mng Tech
                                         </Typography>
                                     )}
-                                    {open && <ListItemText primary="Manage Class" sx={{color: azulEscuroMain}}/>}
+                                    {open && <ListItemText primary="Manage Tech" sx={{color: azulEscuroMain}}/>}
+                                </ListItemButton>
+                            </Tooltip>
+                            <Tooltip title="Manage Voc" placement="right">
+                                <ListItemButton
+                                    component={Link}
+                                    to={MANAGE_VOC}
+                                    className={linkClass(MANAGE_VOC)}
+                                    sx={!open && {
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{color: azulEscuroMain, justifyContent: !open ? 'center' : ''}}
+                                    >
+                                        <ManageHistory/>
+                                    </ListItemIcon>
+                                    {!open && (
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                mt: 1,
+                                                whiteSpace: 'nowrap',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                color: azulEscuroMain,
+                                                fontSize: '11px'
+                                            }}
+                                        >
+                                            Mng Voc
+                                        </Typography>
+                                    )}
+                                    {open && <ListItemText primary="Manage Voc" sx={{color: azulEscuroMain}}/>}
                                 </ListItemButton>
                             </Tooltip>
                         </List>

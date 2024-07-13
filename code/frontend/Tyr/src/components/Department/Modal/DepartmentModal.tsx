@@ -51,6 +51,16 @@ const DepartmentModal = (props: DepartmentModalProps) => {
     )
 }
 
+/**
+ * Props for the DepartmentModal component
+ *
+ * @param show - boolean to show the modal
+ * @param onHide - function to close the modal
+ * @param department - the department to edit
+ * @param setDepartment - function to set the department
+ * @param onSave - function to save the department
+ * @param loading - boolean to disable the button
+ */
 interface DepartmentModalProps {
     show: boolean;
     onHide: () => void;

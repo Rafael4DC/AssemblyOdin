@@ -22,6 +22,9 @@ import {useTheme} from "@mui/material/styles";
 import {AlertDialog} from "../../utils/AlertDialog";
 import {Department} from "../../services/department/models/Department";
 
+/**
+ * Page to view all sections
+ */
 const ViewSections = () => {
     const theme = useTheme();
     const customColor = theme.palette.custom.main;

@@ -5,6 +5,14 @@ import {Tech} from "../../services/tech/models/Tech";
 import {handleError} from "../../utils/Utils";
 
 /**
+ * State for the tech classes
+ */
+type MyTechsState =
+    | { type: 'loading' }
+    | { type: 'success'; techs: Tech[] }
+    | { type: 'error'; message: string };
+
+/**
  * Hook to get the tech classes
  *
  * @returns the tech classes, error and handles to save and delete a tech class
@@ -30,11 +38,5 @@ const useMyTechs = () => {
         state
     };
 };
-
-type MyTechsState =
-    | { type: 'loading' }
-    | { type: 'success'; techs: Tech[] }
-    | { type: 'error'; message: string };
-
 
 export default useMyTechs;

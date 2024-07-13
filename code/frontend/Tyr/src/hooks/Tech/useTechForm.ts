@@ -1,7 +1,12 @@
-import * as React from 'react';
 import {ChangeEvent, useState} from 'react';
 import {Tech} from "../../services/tech/models/Tech";
 
+/**
+ * Hook to manage the tech form
+ *
+ * @param initTech the initial tech
+ * @returns the state and functions to manage the tech form
+ */
 const useTechForm = (initTech?: Tech) => {
     const [selectedTech, setSelectedTech] = useState<Tech | null>(initTech || null);
 
@@ -37,23 +42,13 @@ const useTechForm = (initTech?: Tech) => {
         }));
     };
 
-    const handleMultiChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
-        setSelectedTech(prevTech => ({
-            ...prevTech,
-            [name]: value
-        }));
-    };
-
-
     return {
         selectedTech,
         setSelectedTech,
         handleInputChange,
         handleSectionChange,
         handleDateChange,
-        handleTimeChange,
-        handleMultiChange
+        handleTimeChange
     };
 };
 

@@ -1,6 +1,12 @@
 import {ChangeEvent, useState} from 'react';
 import {Voc} from "../../services/voc/models/Voc";
 
+/**
+ * Hook to manage the voc form
+ *
+ * @param initVoc the initial voc
+ * @returns the state and functions to manage the voc form
+ */
 const useVocForm = (initVoc?: Voc) => {
     const [selectedVoc, setSelectedVoc] = useState<Voc | null>(initVoc || null);
 

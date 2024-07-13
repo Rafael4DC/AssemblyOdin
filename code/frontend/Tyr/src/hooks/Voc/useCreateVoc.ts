@@ -14,11 +14,19 @@ import {Section} from "../../services/section/models/Section";
 import useVocForm from "./useVocForm";
 import TIMETABLE = WebUris.TIMETABLE;
 
+/**
+ * State for the creation voc class
+ */
 type CreateVocClassState =
     | { type: 'loading' }
     | { type: 'success'; sections: Section[]; userInfo: User; filteredStudents: User[]; loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to create a voc class
+ *
+ * @returns the state and the functions to create a voc class
+ */
 const useCreateVoc = () => {
     const navigate = useNavigate();
 

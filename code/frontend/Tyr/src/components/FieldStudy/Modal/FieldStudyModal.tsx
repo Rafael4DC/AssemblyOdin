@@ -54,6 +54,16 @@ const FieldStudyModal = (props: FieldStudyModalProps) => {
     )
 }
 
+/**
+ * Props for the FieldStudyModal component
+ *
+ * @param show - boolean to show the modal
+ * @param onHide - function to close the modal
+ * @param fieldStudy - the field study to edit
+ * @param setFieldStudy - function to set the field study
+ * @param onSave - function to save the field study
+ * @param loading - boolean to disable the button
+ */
 interface FieldStudyModalProps {
     show: boolean;
     onHide: () => void;

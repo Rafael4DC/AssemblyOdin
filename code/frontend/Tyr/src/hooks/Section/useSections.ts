@@ -4,6 +4,19 @@ import {SectionService} from "../../services/section/SectionService";
 import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the sections
+ */
+type SectionsState =
+    | { type: 'loading' }
+    | { type: 'success'; sections: Section[] }
+    | { type: 'error'; message: string };
+
+/**
+ * Hook to get the sections
+ *
+ * @returns the state with the sections
+ */
 const useSections = () => {
     const [state, setState] = useState<SectionsState>({type: 'loading'});
 
@@ -30,10 +43,5 @@ const useSections = () => {
         getSections
     };
 };
-
-type SectionsState =
-    | { type: 'loading' }
-    | { type: 'success'; sections: Section[] }
-    | { type: 'error'; message: string };
 
 export default useSections;

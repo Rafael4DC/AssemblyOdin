@@ -74,6 +74,19 @@ const CreateDialog = (props: CreateDialogProps) => {
     )
 }
 
+/**
+ * Props for the CreateDialog component
+ *
+ * @param open - boolean to show the dialog
+ * @param handleClose - function to close the dialog
+ * @param searchQuery - the search query
+ * @param setSearchQuery - function to set the search query
+ * @param filteredStudents - the filtered students
+ * @param handleStudentSelect - function to select a student
+ * @param selectedStudents - the selected students
+ * @param title - the title of the dialog
+ * @param listCheckBox - boolean to show checkboxes
+ */
 interface CreateDialogProps {
     open: boolean;
     handleClose: () => void;
