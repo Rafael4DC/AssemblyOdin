@@ -16,7 +16,7 @@ import pt.isel.odin.model.user.User
 data class ProcessedLog(
     val user: User,
     val pointValue: Int,
-    val timestamp: Pair<LocalDateTime,LocalDateTime>,
+    val timestamp: Pair<LocalDateTime, LocalDateTime>,
     val machineName: String
 ) {
     /*fun copy(
@@ -31,7 +31,7 @@ data class ProcessedLog(
         result = 31 * result + value
         result = 31 * result + date.hashCode()
         result = 31 * result + user.hashCode()
-        return result   
+        return result
     }
 
     override fun equals(other: Any?): Boolean {

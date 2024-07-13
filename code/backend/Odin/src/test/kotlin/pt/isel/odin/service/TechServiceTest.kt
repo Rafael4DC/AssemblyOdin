@@ -67,7 +67,13 @@ class TechServiceTest {
         roleRepository.save(role)
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
-        val tech = Tech(teacher = user, section = createSection(), started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
+        val tech = Tech(
+            teacher = user,
+            section = createSection(),
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary"
+        )
         techRepository.save(tech)
 
         // when: retrieving the tech by ID
@@ -96,8 +102,20 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val tech1 = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary 1")
-        val tech2 = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary 2")
+        val tech1 = Tech(
+            teacher = user,
+            section = section,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary 1"
+        )
+        val tech2 = Tech(
+            teacher = user,
+            section = section,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary 2"
+        )
         techRepository.save(tech1)
         techRepository.save(tech2)
 
@@ -229,7 +247,13 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val existingTech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
+        val existingTech = Tech(
+            teacher = user,
+            section = section,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary"
+        )
         val tech = techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = tech.id!!,
@@ -379,7 +403,13 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val existingTech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
+        val existingTech = Tech(
+            teacher = user,
+            section = section,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary"
+        )
         techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = existingTech.id!!,
@@ -407,7 +437,13 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val existingTech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
+        val existingTech = Tech(
+            teacher = user,
+            section = section,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary"
+        )
         techRepository.save(existingTech)
         val updateTechInputModel = UpdateTechInputModel(
             id = existingTech.id!!,
@@ -435,7 +471,13 @@ class TechServiceTest {
         val user = User(email = "teacher@example.com", username = "teacher", role = role)
         userRepository.save(user)
         val section = createSection()
-        val tech = Tech(teacher = user, section = section, started = LocalDateTime.now(), ended = LocalDateTime.now().plusHours(1), summary = "Tech Summary")
+        val tech = Tech(
+            teacher = user,
+            section = section,
+            started = LocalDateTime.now(),
+            ended = LocalDateTime.now().plusHours(1),
+            summary = "Tech Summary"
+        )
         techRepository.save(tech)
 
         // when: deleting the tech

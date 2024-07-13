@@ -4,10 +4,7 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import pt.isel.odin.http.controllers.voc.models.SaveVocInputModel
 import pt.isel.odin.http.controllers.voc.models.UpdateVocInputModel
-import pt.isel.odin.model.Section
 import pt.isel.odin.model.Voc
-import pt.isel.odin.model.user.User
-import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.repository.VocRepository
 import pt.isel.odin.service.ServiceUtils
@@ -57,8 +54,10 @@ class VocService(
      */
     @Transactional
     fun save(saveVocInputModel: SaveVocInputModel, email: String): CreationVocResult {
-        val user = serviceUtils.getUser(saveVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
-        val section = serviceUtils.getSection(saveVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
+        val user =
+            serviceUtils.getUser(saveVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
+        val section =
+            serviceUtils.getSection(saveVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
 
         return success(vocRepository.save(saveVocInputModel.toVoc(user, section)))
     }
@@ -73,8 +72,10 @@ class VocService(
      */
     @Transactional
     fun update(updateVocInputModel: UpdateVocInputModel, email: String): CreationVocResult {
-        val user = serviceUtils.getUser(updateVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
-        val section = serviceUtils.getSection(updateVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
+        val user =
+            serviceUtils.getUser(updateVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
+        val section =
+            serviceUtils.getSection(updateVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
 
         return vocRepository.findById(updateVocInputModel.id)
             .map<CreationVocResult> { voc ->

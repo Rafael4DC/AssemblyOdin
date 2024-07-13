@@ -6,10 +6,7 @@ import pt.isel.odin.http.controllers.tech.models.SaveScheduleTechInputModel
 import pt.isel.odin.http.controllers.tech.models.SaveTechInputModel
 import pt.isel.odin.http.controllers.tech.models.UpdateTechInputModel
 import pt.isel.odin.model.Role
-import pt.isel.odin.model.Section
 import pt.isel.odin.model.Tech
-import pt.isel.odin.model.user.User
-import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.TechRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.service.ServiceUtils
@@ -61,8 +58,10 @@ class TechService(
      */
     @Transactional
     fun save(saveTechInputModel: SaveTechInputModel, email: String): CreationTechResult {
-        val user = serviceUtils.getUser(saveTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
-        val section = serviceUtils.getSection(saveTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
+        val user =
+            serviceUtils.getUser(saveTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
+        val section =
+            serviceUtils.getSection(saveTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
 
         val studentsMissTech = userRepository.findAllById(saveTechInputModel.missTech)
 
@@ -79,8 +78,10 @@ class TechService(
      */
     @Transactional
     fun saveMultipleClasses(input: SaveScheduleTechInputModel, email: String): List<CreationTechResult> {
-        val user = serviceUtils.getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
-        val section = serviceUtils.getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
+        val user =
+            serviceUtils.getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
+        val section =
+            serviceUtils.getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
 
         val results = mutableListOf<CreationTechResult>()
 
@@ -113,8 +114,10 @@ class TechService(
      */
     @Transactional
     fun update(updateTechInputModel: UpdateTechInputModel, email: String): CreationTechResult {
-        val user = serviceUtils.getUser(updateTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
-        val section = serviceUtils.getSection(updateTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
+        val user = serviceUtils.getUser(updateTechInputModel.teacher, email)
+            ?: return failure(SaveUpdateTechError.NotFoundUser)
+        val section =
+            serviceUtils.getSection(updateTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
 
         val studentsMissTech = userRepository.findAllById(updateTechInputModel.missTech)
 
@@ -151,7 +154,8 @@ class TechService(
             }.orElse(failure(DeleteTechError.NotFoundTech))
 
     fun getByUser(email: String): GetAllTechsResult {
-        val user = serviceUtils.getUser(email = email) ?: return failure(GetTechError.NotFoundUser) // Diferenciar Teacher de Student
+        val user = serviceUtils.getUser(email = email)
+            ?: return failure(GetTechError.NotFoundUser) // Diferenciar Teacher de Student
         val optionalTech =
             if (Role.RoleEnum.valueOf(user.role.name!!) == Role.RoleEnum.TEACHER) {
                 techRepository.findByTeacher(user)

@@ -2,7 +2,6 @@ package pt.isel.odin.controller
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -246,31 +245,6 @@ class ModuleControllerTest {
     }
 
     @Test
-    @Disabled
-    fun `Delete module`() {
-        // given: a module
-        val module = testUtils.createModule()
-
-        // when: deleting the module
-        val result = client.delete()
-            .uri("/${module.id}")
-            .exchange()
-            .expectStatus().isOk
-            .expectBody(GetModuleOutputModel::class.java)
-            .returnResult()
-            .responseBody
-
-        client.get().uri("/${module.id}")
-            .exchange()
-            .expectStatus().isNotFound
-            .expectBody()
-            .jsonPath("$.title").isEqualTo("Module Not Found")
-
-        // then: the module matches the expected module
-        assertEquals(module.name, result!!.name)
-    }
-
-    @Test
     fun `Delete module - not found`() {
         // when: deleting a non-existent module
         // then: a not found error is returned
@@ -280,31 +254,5 @@ class ModuleControllerTest {
             .expectStatus().isNotFound
             .expectBody()
             .jsonPath("$.title").isEqualTo("Module Not Found")
-    }
-
-    @Test
-    @Disabled
-    fun `Delete module that has section`() {
-        // given: a module
-        val section = testUtils.createSection()
-        val module = section.module!!
-
-        // when: deleting the module
-        val result = client.delete()
-            .uri("/${module.id}")
-            .exchange()
-            .expectStatus().isOk
-            .expectBody(GetModuleOutputModel::class.java)
-            .returnResult()
-            .responseBody
-
-        client.get().uri("/${module.id}")
-            .exchange()
-            .expectStatus().isNotFound
-            .expectBody()
-            .jsonPath("$.title").isEqualTo("Module Not Found")
-
-        // then: the module matches the expected module
-        assertEquals(module.name, result!!.name)
     }
 }

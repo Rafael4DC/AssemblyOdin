@@ -23,10 +23,8 @@ class OAuth2LoginSuccessHandler : SavedRequestAwareAuthenticationSuccessHandler(
         if (savedRequest != null) {
             val res = savedRequest.redirectUrl.replaceFirst("/api/users/session?continue", "")
             redirectStrategy.sendRedirect(request, response, res)
-        }
-        else{
+        } else {
             super.onAuthenticationSuccess(request, response, authentication)
         }
-
     }
 }

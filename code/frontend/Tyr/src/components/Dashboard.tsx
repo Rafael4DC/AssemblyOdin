@@ -30,10 +30,10 @@ import logo from '../assets/logo_Assembly.png';
 import {AppBar, Drawer, DrawerHeader, StyledDivider} from "../utils/StyledComponents";
 import {useTheme} from "@mui/material/styles";
 import {Tooltip} from "@mui/material";
+import {notAdmin, notStudent} from "../utils/Utils";
 import HOME = WebUris.HOME;
 import PROFILE = WebUris.PROFILE;
 import DEPARTMENTS = WebUris.DEPARTMENTS;
-import MANAGE_CLASSES = WebUris.MANAGE_VOC;
 import CREATE_SECTION = WebUris.CREATE_SECTION;
 import SECTION = WebUris.SECTION;
 import CREATE_VOC = WebUris.CREATE_VOC;
@@ -42,7 +42,6 @@ import TIMETABLE = WebUris.TIMETABLE;
 import MANAGE_SECTIONS = WebUris.MANAGE_SECTIONS;
 import MANAGE_TECH = WebUris.MANAGE_TECH;
 import MANAGE_VOC = WebUris.MANAGE_VOC;
-import {notAdmin, notStudent} from "../utils/Utils";
 
 /**
  * Dashboard App Bar and Drawer

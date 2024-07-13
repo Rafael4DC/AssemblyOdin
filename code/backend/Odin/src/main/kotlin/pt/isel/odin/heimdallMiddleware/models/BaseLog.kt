@@ -6,7 +6,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 /**
  * Represents the input model for saving a department.
  *
@@ -19,7 +18,6 @@ enum class LogType {
     Lock
 }
 
-
 data class BaseLogInputModel(
     val _id: String,
     val identifier: String,
@@ -29,6 +27,7 @@ data class BaseLogInputModel(
 )
 
 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+
 data class BaseLog(
     val _id: String,
     val identifier: String,
@@ -49,7 +48,6 @@ fun dtParser(timestamp: String): LocalDateTime {
     val instant = Instant.parse(timestamp)
     return instant.toLocalDateTime(TimeZone.UTC)
 }
-
 
 data class LogPair(
     val logon: BaseLog,

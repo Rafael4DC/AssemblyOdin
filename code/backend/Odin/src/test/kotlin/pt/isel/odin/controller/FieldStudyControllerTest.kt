@@ -2,7 +2,6 @@ package pt.isel.odin.controller
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -240,31 +239,6 @@ class FieldStudyControllerTest {
     }
 
     @Test
-    @Disabled
-    fun `Delete field study`() {
-        // given: a field study
-        val fieldStudy = testUtils.createFieldStudy()
-
-        // when: deleting the field study
-        val result = client.delete()
-            .uri("/${fieldStudy.id}")
-            .exchange()
-            .expectStatus().isOk
-            .expectBody(GetFieldStudyOutputModel::class.java)
-            .returnResult()
-            .responseBody
-
-        client.get().uri("/${fieldStudy.id}")
-            .exchange()
-            .expectStatus().isNotFound
-            .expectBody()
-            .jsonPath("$.title").isEqualTo("Field Study Not Found")
-
-        // then: the field study matches the expected field study
-        assertEquals(fieldStudy.name, result!!.name)
-    }
-
-    @Test
     fun `Delete field study - not found`() {
         // when: deleting a non-existent field study
         // then: a not found error is returned
@@ -274,31 +248,5 @@ class FieldStudyControllerTest {
             .expectStatus().isNotFound
             .expectBody()
             .jsonPath("$.title").isEqualTo("Field Study Not Found")
-    }
-
-    @Test
-    @Disabled
-    fun `Delete field study that has module`() {
-        // given: a field study
-        val module = testUtils.createModule()
-        val fieldStudy = module.fieldStudy
-
-        // when: deleting the field study
-        val result = client.delete()
-            .uri("/${fieldStudy.id}")
-            .exchange()
-            .expectStatus().isOk
-            .expectBody(GetFieldStudyOutputModel::class.java)
-            .returnResult()
-            .responseBody
-
-        client.get().uri("/${fieldStudy.id}")
-            .exchange()
-            .expectStatus().isNotFound
-            .expectBody()
-            .jsonPath("$.title").isEqualTo("Field Study Not Found")
-
-        // then: the field study matches the expected field study
-        assertEquals(fieldStudy.name, result!!.name)
     }
 }

@@ -14,10 +14,8 @@ class HeimdallUpdateScheduler @Autowired constructor(private val logHandler: Log
         logHandler.calculateUserLogonTime()
     }
 
-
-    //@Scheduled(cron = "*/30 * * * * *")
-    //fun periodicLogonTimeCalculation() {
+    // @Scheduled(cron = "*/30 * * * * *")
+    // fun periodicLogonTimeCalculation() {
     //    logHandler.calculateUserLogonTime()
-    //}
-
+    // }
 }

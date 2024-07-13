@@ -38,7 +38,7 @@ async function apiRequest<T>(method: string, url: string, data?: any): Promise<F
         }
     } else {
         if (res.redirected) {
-            window.location.href = res.url.replace('1337', '8080');
+            window.location.href = addPortToUrl(res.url);
             return;
         }
 
@@ -49,6 +49,14 @@ async function apiRequest<T>(method: string, url: string, data?: any): Promise<F
             return success(await res.json());
         }
     }
+}
+
+function addPortToUrl(url: string): string {
+    // Regular expression to match the domain part of the URL
+    const regex = /^(http:\/\/[^\/]+)(\/.*)$/;
+
+    // Replace the matched part and add :8080
+    return url.replace(regex, '$1:8080$2');
 }
 
 /**

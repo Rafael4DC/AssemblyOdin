@@ -11,4 +11,5 @@ RUN npm install
 # Copy source files
 COPY . /app
 
+RUN ["npm", "run", "build"]
 CMD ["npm","start"]

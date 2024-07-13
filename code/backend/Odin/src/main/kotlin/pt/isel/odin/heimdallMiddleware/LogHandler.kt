@@ -17,14 +17,16 @@ import pt.isel.odin.repository.UserRepository
 import kotlin.math.ceil
 
 @Service
-class LogHandler(private val logRepository: MongoRepo,
-                 private val userRepository: UserRepository,
-                 private val creditLogRepository: CreditLogRepository) {
+class LogHandler(
+    private val logRepository: MongoRepo,
+    private val userRepository: UserRepository,
+    private val creditLogRepository: CreditLogRepository
+) {
 
     private val logger = LoggerFactory.getLogger(LogHandler::class.java)
 
     fun calculateUserLogonTime() {
-        val logs : List<BaseLog> = logRepository.findAllUnprocessedLogs().map { BaseLog(it) }
+        val logs: List<BaseLog> = logRepository.findAllUnprocessedLogs().map { BaseLog(it) }
 
         logger.info("Fetching logs, ${logs.size} entries found.")
 
@@ -33,7 +35,7 @@ class LogHandler(private val logRepository: MongoRepo,
         val users: List<User> = logins
             .map { userRepository.findByEmail(it.identifier) }
             .filter { it.isPresent }
-            .map { it.get()}
+            .map { it.get() }
 
         val groupedLogs: Map<String, List<BaseLog>> = logs.groupBy { it.identifier }
 
@@ -43,7 +45,7 @@ class LogHandler(private val logRepository: MongoRepo,
 
         logger.info("Fetching logs, ${userLogMap.size} done.")
 
-        var unprocessedLogs : List<BaseLog> = emptyList()
+        var unprocessedLogs: List<BaseLog> = emptyList()
         val processedLogs = userLogMap.flatMap { (user, logs) ->
             val (pairedLogs, unpairedLogs) = pairLogs(logs)
             unprocessedLogs = unpairedLogs
@@ -54,17 +56,17 @@ class LogHandler(private val logRepository: MongoRepo,
             verifiedPairedLogs
         }
 
-
-        processedLogs.forEach {pLog->
-            creditLogRepository.save(CreditLog(
-                null,
-                "Points added for gaming",
-                pLog.pointValue,
-                pLog.timestamp.second.toJavaLocalDateTime(),
-                pLog.user)
+        processedLogs.forEach { pLog ->
+            creditLogRepository.save(
+                CreditLog(
+                    null,
+                    "Points added for gaming",
+                    pLog.pointValue,
+                    pLog.timestamp.second.toJavaLocalDateTime(),
+                    pLog.user
+                )
             )
         }
-
     }
 
     fun pairLogs(logs: List<BaseLog>): Pair<List<LogPair>, List<BaseLog>> {
@@ -84,7 +86,6 @@ class LogHandler(private val logRepository: MongoRepo,
                         unpairedLogs.add(log)
                     }
                 }
-
             }
         }
         unpairedLogs.addAll(logonStack)
@@ -99,7 +100,6 @@ class LogHandler(private val logRepository: MongoRepo,
         return pairs
     }
 
-
     fun calculatePoints(start: LocalDateTime, end: LocalDateTime): Int {
         val startInstant = start.toInstant(TimeZone.UTC)
         val endInstant = end.toInstant(TimeZone.UTC)
@@ -108,10 +108,10 @@ class LogHandler(private val logRepository: MongoRepo,
     }
 
     fun storeUnprocessedLog(log: BaseLog) {
-        //logRepository.saveUnprocessedLog(log)
+        // logRepository.saveUnprocessedLog(log)
     }
 
     fun storeProcessedLog(log: ProcessedLog) {
-       // logRepository.saveProcessedLog(log)
+        // logRepository.saveProcessedLog(log)
     }
 }
