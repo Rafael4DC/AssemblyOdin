@@ -1,12 +1,13 @@
 package pt.isel.odin.config.security
 
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache
+import org.springframework.security.web.savedrequest.RequestCache
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -21,8 +22,10 @@ class SecurityConfig(
     private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler
 ) {
 
-    @Value("\${frontend.url}")
-    private lateinit var frontendUrl: String
+    @Bean
+    fun requestCache(): RequestCache {
+        return HttpSessionRequestCache()
+    }
 
     @Bean
     @Throws(Exception::class)
@@ -47,13 +50,16 @@ class SecurityConfig(
             .logout { logout ->
                 logout.logoutSuccessUrl("/").permitAll()
             }
+            .requestCache { cache ->
+                cache.requestCache(requestCache())
+            }
             .build()
     }
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf(frontendUrl)
+        //configuration.allowedOrigins = listOf(frontendUrl, "http://192.168.1.72:1337")
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
