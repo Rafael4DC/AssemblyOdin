@@ -10,11 +10,19 @@ import {Section} from "../../services/section/models/Section";
 import useVocForm from "./useVocForm";
 import {Failure, Success} from "../../services/_utils/Either";
 
+/**
+ * State for the manage voc
+ */
 type ManageVocState =
     | { type: 'loading' }
     | { type: 'success'; filteredVocs: Voc[]; sections: Section[]; loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to manage the voc
+ *
+ * @returns the state and the functions to manage the voc
+ */
 const useManageVoc = () => {
     const [state, setState] = useState<ManageVocState>({type: 'loading'});
     const [searchQuery, setSearchQuery] = useState('');

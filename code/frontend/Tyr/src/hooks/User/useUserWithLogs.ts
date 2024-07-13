@@ -4,6 +4,19 @@ import {UserService} from "../../services/user/UserService";
 import {GetUserWithLogsOutputModel} from "../../services/user/models/GetUserWithLogsOutputModel";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the user with logs
+ */
+type UserWithLogsState =
+    | { type: 'loading' }
+    | { type: 'success'; userWithLogs: GetUserWithLogsOutputModel }
+    | { type: 'error'; message: string };
+
+/**
+ * Hook to get the user with logs
+ *
+ * @returns the state with the user with logs
+ */
 const useUserWithLogs = () => {
     const [state, setState] = useState<UserWithLogsState>({type: 'loading'});
 
@@ -25,10 +38,5 @@ const useUserWithLogs = () => {
         state
     };
 };
-
-type UserWithLogsState =
-    | { type: 'loading' }
-    | { type: 'success'; userWithLogs: GetUserWithLogsOutputModel }
-    | { type: 'error'; message: string };
 
 export default useUserWithLogs;

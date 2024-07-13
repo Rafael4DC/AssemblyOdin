@@ -4,11 +4,19 @@ import {DepartmentService} from "../../services/department/DepartmentService";
 import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the departments
+ */
 type DepartmentsState =
     | { type: 'loading' }
     | { type: 'success'; departments: Department[], loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to manage departments
+ *
+ * @returns state and functions to manage departments
+ */
 const useDepartments = () => {
     const [state, setState] = useState<DepartmentsState>({type: 'loading'});
 

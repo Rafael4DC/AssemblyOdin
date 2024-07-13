@@ -4,6 +4,19 @@ import {UserService} from "../../services/user/UserService";
 import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the students
+ */
+type StudentsState =
+    | { type: 'loading' }
+    | { type: 'success'; students: User[] }
+    | { type: 'error'; message: string };
+
+/**
+ * Hook to get the students
+ *
+ * @returns the state with the students
+ */
 const useStudents = () => {
     const [state, setState] = useState<StudentsState>({type: 'loading'});
 
@@ -25,10 +38,5 @@ const useStudents = () => {
         state
     };
 };
-
-type StudentsState =
-    | { type: 'loading' }
-    | { type: 'success'; students: User[] }
-    | { type: 'error'; message: string };
 
 export default useStudents;

@@ -13,11 +13,19 @@ import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 import SECTION = WebUris.SECTION;
 
+/**
+ * State for the creation section
+ */
 type CreateSectionState =
     | { type: 'loading' }
     | { type: 'success'; modules: Module[]; filteredStudents: User[]; loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to create a section
+ *
+ * @returns the state and functions to create a section
+ */
 const useCreateSection = () => {
     const navigate = useNavigate();
 

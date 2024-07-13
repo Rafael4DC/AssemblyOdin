@@ -73,6 +73,15 @@ const VocTableContainer = (props: VocTableContainerProps) => {
     )
 }
 
+/**
+ * Props for the VocTableContainer component
+ *
+ * @param filteredVocs - list of filtered vocs to display
+ * @param handleVocClick - function to handle when a voc is clicked
+ * @param handleDeleteVoc - function to handle when a voc is deleted
+ * @param handleApprovedChange - function to handle when a voc is approved
+ * @param loading - boolean to show loading state
+ */
 interface VocTableContainerProps {
     filteredVocs: Voc[];
     handleVocClick: (voc: Voc) => void;

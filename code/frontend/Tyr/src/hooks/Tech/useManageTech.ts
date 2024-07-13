@@ -10,11 +10,19 @@ import useTechs from "./useTechs";
 import {Section} from "../../services/section/models/Section";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the manage tech
+ */
 type ManageTechState =
     | { type: 'loading' }
     | { type: 'success'; filteredTechs: Tech[]; sections: Section[]; loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to manage tech
+ *
+ * @returns the state and functions to manage tech
+ */
 const useManageTech = () => {
     const [state, setState] = useState<ManageTechState>({type: 'loading'});
     const [filter, setFilter] = useState('all');
@@ -25,8 +33,7 @@ const useManageTech = () => {
         handleInputChange,
         handleSectionChange,
         handleDateChange,
-        handleTimeChange,
-        handleMultiChange
+        handleTimeChange
     } = useTechForm();
 
     const {state: sectionsState} = useSections();

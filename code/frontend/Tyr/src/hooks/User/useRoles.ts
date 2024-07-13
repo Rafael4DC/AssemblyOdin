@@ -4,6 +4,19 @@ import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 import {Role} from "../../services/user/models/Role";
 
+/**
+ * State for the roles
+ */
+type RolesState =
+    | { type: 'loading' }
+    | { type: 'success'; roles: Role[] }
+    | { type: 'error'; message: string };
+
+/**
+ * Hook to get the roles
+ *
+ * @returns the state with the roles
+ */
 const useRoles = () => {
     const [state, setState] = useState<RolesState>({type: 'loading'});
 
@@ -25,10 +38,5 @@ const useRoles = () => {
         state
     };
 };
-
-type RolesState =
-    | { type: 'loading' }
-    | { type: 'success'; roles: Role[] }
-    | { type: 'error'; message: string };
 
 export default useRoles;

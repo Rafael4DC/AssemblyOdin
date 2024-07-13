@@ -5,6 +5,9 @@ import {differenceInMinutes, format, parseISO} from "date-fns";
 import * as React from "react";
 
 
+/**
+ * Grid for the timetable class
+ */
 const TimeTableGridClass = (props: TimeTableGridClassProps) => {
     const {
         filteredEvents,
@@ -75,6 +78,14 @@ const TimeTableGridClass = (props: TimeTableGridClassProps) => {
     )
 }
 
+/**
+ * Props for the TimeTableGridClass component
+ *
+ * @param filteredEvents - list of events to display
+ * @param day - the day to display
+ * @param dayIndex - the index of the day
+ * @param handleClickOpen - function to handle when an event is clicked
+ */
 interface TimeTableGridClassProps {
     filteredEvents: any[];
     day: string;

@@ -9,11 +9,19 @@ import useUserForm from "./useUserForm";
 import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the manage users
+ */
 type ManageUsersState =
     | { type: 'loading' }
     | { type: 'success'; filteredUsers: User[]; roles: Role[]; loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to manage users
+ *
+ * @returns the state and functions to manage users
+ */
 const useManageUsers = () => {
     const [state, setState] = useState<ManageUsersState>({type: 'loading'});
     const [searchQuery, setSearchQuery] = useState<string>('');

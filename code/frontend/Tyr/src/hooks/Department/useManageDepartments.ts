@@ -14,7 +14,6 @@ import {Failure} from "../../services/_utils/Either";
  *
  * @returns the departments, error and handles to save and delete a category
  */
-
 const useManageDepartments = () => {
     const {state, setState, getDepartments} = useDepartments();
 

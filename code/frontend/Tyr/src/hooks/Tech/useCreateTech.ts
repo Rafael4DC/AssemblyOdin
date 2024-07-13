@@ -11,11 +11,19 @@ import {Section} from "../../services/section/models/Section";
 import {handleError} from "../../utils/Utils";
 import TIMETABLE = WebUris.TIMETABLE;
 
+/**
+ * State for the creation tech
+ */
 type CreateTechClassState =
     | { type: 'loading' }
     | { type: 'success'; sections: Section[]; loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to create a tech
+ *
+ * @returns the state and functions to create a tech
+ */
 const useCreateTech = () => {
     const navigate = useNavigate();
 
@@ -26,8 +34,7 @@ const useCreateTech = () => {
         handleInputChange,
         handleSectionChange,
         handleDateChange,
-        handleTimeChange,
-        handleMultiChange
+        handleTimeChange
     } = useTechForm(initTech());
 
     const {state: sectionsState} = useSections();
@@ -71,7 +78,6 @@ const useCreateTech = () => {
         handleSubmit,
         handleSectionChange,
         handleInputChange,
-        handleMultiChange,
         handleDateChange,
         handleTimeChange,
         isMultiple,

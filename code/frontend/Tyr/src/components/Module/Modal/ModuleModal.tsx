@@ -51,6 +51,16 @@ const ModuleModal = (props: ModuleModalProps) => {
     )
 }
 
+/**
+ * Props for the ModuleModal component
+ *
+ * @param show - boolean to show the modal
+ * @param onHide - function to close the modal
+ * @param module - the module to edit
+ * @param setModule - function to set the module
+ * @param onSave - function to save the module
+ * @param loading - boolean to show loading spinner
+ */
 interface ModuleModalProps {
     show: boolean;
     onHide: () => void;

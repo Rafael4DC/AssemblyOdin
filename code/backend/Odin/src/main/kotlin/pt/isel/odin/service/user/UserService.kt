@@ -144,11 +144,7 @@ class UserService(
      *
      * @return the [GetAllUsersResult] with the list of [User]
      */
-    fun getStudents(): GetAllUsersResult {
-        return success(userRepository.findUserByRole_NameIs("STUDENT"))
-        /*.map<GetAllUsersResult> { users -> success(users) }
-        .orElse(failure(GetUserError.NotFoundUser))*/
-    }
+    fun getStudents(): GetAllUsersResult = success(userRepository.findUserByRole_NameIs(Role.RoleEnum.STUDENT.name))
 
     /**
      * Gets all roles.

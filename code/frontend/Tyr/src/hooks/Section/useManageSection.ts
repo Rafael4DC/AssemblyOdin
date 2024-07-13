@@ -11,11 +11,19 @@ import {User} from "../../services/user/models/User";
 import {Module} from "../../services/module/models/Module";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for the manage sections
+ */
 type ManageSectionsState =
     | { type: 'loading' }
     | { type: 'success'; modules: Module[]; filteredStudents: User[]; sections: Section[], loading: boolean }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to manage sections
+ *
+ * @returns the state and functions to manage sections
+ */
 const useManageSections = () => {
     const [state, setState] = useState<ManageSectionsState>({type: 'loading'});
     const [searchQuery, setSearchQuery] = useState("");

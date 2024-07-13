@@ -1,6 +1,9 @@
 import {Dialog, DialogContent, DialogTitle, Typography} from "@mui/material";
 import * as React from "react";
 
+/**
+ * Dialog to display information about a timetable event
+ */
 const TimeTableDialog = (props: TimeTableDialogProps) => {
     const {
         open,
@@ -23,6 +26,13 @@ const TimeTableDialog = (props: TimeTableDialogProps) => {
     )
 }
 
+/**
+ * Props for the TimeTableDialog component
+ *
+ * @param open - boolean to show the dialog
+ * @param handleClose - function to close the dialog
+ * @param selectedEvent - the selected event to display
+ */
 interface TimeTableDialogProps {
     open: boolean;
     handleClose: () => void;

@@ -4,7 +4,19 @@ import {Voc} from "../../services/voc/models/Voc";
 import {VocService} from "../../services/voc/VocService";
 import {handleError} from "../../utils/Utils";
 
+/**
+ * State for my vocs
+ */
+type MyVocsState =
+    | { type: 'loading' }
+    | { type: 'success'; vocs: Voc[] }
+    | { type: 'error'; message: string };
 
+/**
+ * Hook to get my vocs
+ *
+ * @returns the state with my vocs
+ */
 const useMyVocs = () => {
     const [state, setState] = useState<MyVocsState>({type: 'loading'});
 
@@ -26,11 +38,5 @@ const useMyVocs = () => {
         state
     };
 };
-
-type MyVocsState =
-    | { type: 'loading' }
-    | { type: 'success'; vocs: Voc[] }
-    | { type: 'error'; message: string };
-
 
 export default useMyVocs;

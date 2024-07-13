@@ -5,9 +5,17 @@ import {Failure, Success} from "../../services/_utils/Either";
 import {handleError} from "../../utils/Utils";
 
 /**
+ * State for the user info
+ */
+type UserInfoState =
+    | { type: 'loading' }
+    | { type: 'success'; userInfo: User }
+    | { type: 'error'; message: string };
+
+/**
  * Hook to get the user info
  *
- * @returns the user info
+ * @returns the satate with the user info
  */
 const useUserInfo = () => {
     const [state, setState] = useState<UserInfoState>({type: 'loading'});
@@ -31,9 +39,5 @@ const useUserInfo = () => {
     };
 };
 
-type UserInfoState =
-    | { type: 'loading' }
-    | { type: 'success'; userInfo: User }
-    | { type: 'error'; message: string };
 
 export default useUserInfo;

@@ -1,20 +1,23 @@
 import {styled} from "@mui/material/styles";
 import {Box} from "@mui/material";
 
+/**
+ * Custom scrollbar component
+ */
 export const CustomScrollbar = styled(Box)(({theme}) => ({
-    maxHeight: 400,  // Increase the max height for the logs container
-    overflowY: 'auto',  // Enable vertical scrolling
+    maxHeight: 400,
+    overflowY: 'auto',
     '&::-webkit-scrollbar': {
-        width: '10px',  // Width of the scrollbar
+        width: '10px',
     },
     '&::-webkit-scrollbar-track': {
-        background: '#555',  // Scrollbar track color (slightly lighter than the background)
+        background: '#555',
     },
     '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.azulEscuro.main,  // Scrollbar thumb color
+        backgroundColor: theme.palette.azulEscuro.main,
         borderRadius: '10px',
     },
     '&::-webkit-scrollbar-thumb:hover': {
-        background: '#888',  // Scrollbar thumb hover color
+        background: '#888',
     },
 }));

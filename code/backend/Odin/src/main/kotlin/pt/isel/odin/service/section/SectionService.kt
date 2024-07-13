@@ -113,6 +113,7 @@ class SectionService(
                 success(section)
             }.orElse(failure(DeleteSectionError.NotFoundSection))
 
+
     private fun getModule(moduleId: Long): Module? {
         val module = moduleRepository.findById(moduleId)
         return if (module.isEmpty) {

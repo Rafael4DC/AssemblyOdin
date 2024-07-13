@@ -15,6 +15,9 @@ import {useTheme} from '@mui/material/styles';
 import {Spinner} from '../../utils/Spinner';
 import {AlertDialog} from '../../utils/AlertDialog';
 
+/**
+ * Page to manage the departments
+ */
 const ManageDepartments = () => {
     const theme = useTheme();
     const customColor = theme.palette.custom.main;

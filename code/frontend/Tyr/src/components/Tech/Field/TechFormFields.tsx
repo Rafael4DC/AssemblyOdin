@@ -90,6 +90,16 @@ const TechFormFields = (props: TechFormFieldsProps) => {
     )
 }
 
+/**
+ * Props for the TechFormFields component
+ *
+ * @param techData - the tech data
+ * @param sections - the sections
+ * @param handleInputChange - function to handle input change
+ * @param handleDateChange - function to handle date change
+ * @param handleTimeChange - function to handle time change
+ * @param handleSectionChange - function to handle section change
+ */
 interface TechFormFieldsProps {
     techData: Tech;
     sections: Section[];

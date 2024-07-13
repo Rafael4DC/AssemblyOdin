@@ -3,6 +3,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import * as React from "react";
 import {Section} from "../../../services/section/models/Section";
 
+/**
+ * Table to display a list of sections
+ */
 const SectionTableContainer = (props: SectionTableContainerProps) => {
     const {
         sections,
@@ -37,6 +40,12 @@ const SectionTableContainer = (props: SectionTableContainerProps) => {
     )
 }
 
+/**
+ * Props for the SectionTableContainer component
+ *
+ * @param sections - list of sections to display
+ * @param handleSectionClick - function to handle when a section is clicked
+ */
 interface SectionTableContainerProps {
     sections: Section[];
     handleSectionClick: (section: Section) => void;

@@ -4,11 +4,19 @@ import {handleError} from "../../utils/Utils";
 import {Tech} from "../../services/tech/models/Tech";
 import {TechService} from "../../services/tech/TechService";
 
+/**
+ * State for the techs
+ */
 type TechsState =
     | { type: 'loading' }
     | { type: 'success'; techs: Tech[] }
     | { type: 'error'; message: string };
 
+/**
+ * Hook to get the techs
+ *
+ * @returns the state with the techs
+ */
 const useTechs = () => {
     const [state, setState] = useState<TechsState>({type: 'loading'});
 
