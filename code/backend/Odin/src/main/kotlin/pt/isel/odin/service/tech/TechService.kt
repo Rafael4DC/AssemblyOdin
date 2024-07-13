@@ -12,6 +12,7 @@ import pt.isel.odin.model.user.User
 import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.TechRepository
 import pt.isel.odin.repository.UserRepository
+import pt.isel.odin.service.ServiceUtils
 import pt.isel.odin.service.tech.error.DeleteTechError
 import pt.isel.odin.service.tech.error.GetTechError
 import pt.isel.odin.service.tech.error.SaveUpdateTechError
@@ -28,7 +29,7 @@ import java.time.temporal.TemporalAdjusters
 class TechService(
     private val techRepository: TechRepository,
     private val userRepository: UserRepository,
-    private val sectionRepository: SectionRepository
+    private val serviceUtils: ServiceUtils
 ) {
 
     /**
@@ -60,8 +61,8 @@ class TechService(
      */
     @Transactional
     fun save(saveTechInputModel: SaveTechInputModel, email: String): CreationTechResult {
-        val user = getUser(saveTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
-        val section = getSection(saveTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
+        val user = serviceUtils.getUser(saveTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
+        val section = serviceUtils.getSection(saveTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
 
         val studentsMissTech = userRepository.findAllById(saveTechInputModel.missTech)
 
@@ -78,8 +79,8 @@ class TechService(
      */
     @Transactional
     fun saveMultipleClasses(input: SaveScheduleTechInputModel, email: String): List<CreationTechResult> {
-        val user = getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
-        val section = getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
+        val user = serviceUtils.getUser(input.teacher, email) ?: return listOf(failure(SaveUpdateTechError.NotFoundUser))
+        val section = serviceUtils.getSection(input.section) ?: return listOf(failure(SaveUpdateTechError.NotFoundSection))
 
         val results = mutableListOf<CreationTechResult>()
 
@@ -112,8 +113,8 @@ class TechService(
      */
     @Transactional
     fun update(updateTechInputModel: UpdateTechInputModel, email: String): CreationTechResult {
-        val user = getUser(updateTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
-        val section = getSection(updateTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
+        val user = serviceUtils.getUser(updateTechInputModel.teacher, email) ?: return failure(SaveUpdateTechError.NotFoundUser)
+        val section = serviceUtils.getSection(updateTechInputModel.section) ?: return failure(SaveUpdateTechError.NotFoundSection)
 
         val studentsMissTech = userRepository.findAllById(updateTechInputModel.missTech)
 
@@ -150,7 +151,7 @@ class TechService(
             }.orElse(failure(DeleteTechError.NotFoundTech))
 
     fun getByUser(email: String): GetAllTechsResult {
-        val user = getUser(email = email) ?: return failure(GetTechError.NotFoundUser) // Diferenciar Teacher de Student
+        val user = serviceUtils.getUser(email = email) ?: return failure(GetTechError.NotFoundUser) // Diferenciar Teacher de Student
         val optionalTech =
             if (Role.RoleEnum.valueOf(user.role.name!!) == Role.RoleEnum.TEACHER) {
                 techRepository.findByTeacher(user)
@@ -161,27 +162,5 @@ class TechService(
         return optionalTech
             .map { success(it) }
             .orElse(success(emptyList()))
-    }
-
-    private fun getUser(userId: Long? = null, email: String): User? {
-        val user = if (userId == null || userId == 0L) {
-            userRepository.findByEmail(email)
-        } else {
-            userRepository.findById(userId)
-        }
-        return if (user.isEmpty) {
-            null
-        } else {
-            user.get()
-        }
-    }
-
-    private fun getSection(sectionId: Long): Section? {
-        val section = sectionRepository.findById(sectionId)
-        return if (section.isEmpty) {
-            null
-        } else {
-            section.get()
-        }
     }
 }

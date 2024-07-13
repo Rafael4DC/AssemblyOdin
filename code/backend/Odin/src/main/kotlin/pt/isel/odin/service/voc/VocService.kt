@@ -10,6 +10,7 @@ import pt.isel.odin.model.user.User
 import pt.isel.odin.repository.SectionRepository
 import pt.isel.odin.repository.UserRepository
 import pt.isel.odin.repository.VocRepository
+import pt.isel.odin.service.ServiceUtils
 import pt.isel.odin.service.voc.error.DeleteVocError
 import pt.isel.odin.service.voc.error.GetVocError
 import pt.isel.odin.service.voc.error.SaveUpdateVocError
@@ -24,7 +25,7 @@ import java.time.LocalDateTime
 class VocService(
     private val vocRepository: VocRepository,
     private val userRepository: UserRepository,
-    private val sectionRepository: SectionRepository
+    private val serviceUtils: ServiceUtils
 ) {
 
     /**
@@ -56,8 +57,8 @@ class VocService(
      */
     @Transactional
     fun save(saveVocInputModel: SaveVocInputModel, email: String): CreationVocResult {
-        val user = getUser(saveVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
-        val section = getSection(saveVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
+        val user = serviceUtils.getUser(saveVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
+        val section = serviceUtils.getSection(saveVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
 
         return success(vocRepository.save(saveVocInputModel.toVoc(user, section)))
     }
@@ -72,8 +73,8 @@ class VocService(
      */
     @Transactional
     fun update(updateVocInputModel: UpdateVocInputModel, email: String): CreationVocResult {
-        val user = getUser(updateVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
-        val section = getSection(updateVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
+        val user = serviceUtils.getUser(updateVocInputModel.user, email) ?: return failure(SaveUpdateVocError.NotFoundUser)
+        val section = serviceUtils.getSection(updateVocInputModel.section) ?: return failure(SaveUpdateVocError.NotFoundSection)
 
         return vocRepository.findById(updateVocInputModel.id)
             .map<CreationVocResult> { voc ->
@@ -115,27 +116,5 @@ class VocService(
                     .map<GetAllVocsResult> { success(it) }
                     .orElse(failure(GetVocError.NotFoundVoc))
             }.orElse(failure(GetVocError.NotFoundUser))
-    }
-
-    private fun getUser(userId: Long?, email: String): User? {
-        val user = if (userId == null || userId == 0L) {
-            userRepository.findByEmail(email)
-        } else {
-            userRepository.findById(userId)
-        }
-        return if (user.isEmpty) {
-            null
-        } else {
-            user.get()
-        }
-    }
-
-    private fun getSection(sectionId: Long): Section? {
-        val section = sectionRepository.findById(sectionId)
-        return if (section.isEmpty) {
-            null
-        } else {
-            section.get()
-        }
     }
 }
