@@ -56,6 +56,7 @@ if (System.getenv("DISABLE_KTLINT") != null) {
     tasks.named("ktlintKotlinScriptCheck").configure { enabled = false }
     tasks.named("ktlintCheck").configure { enabled = false }
     tasks.named("ktlintFormat").configure { enabled = false }
+    tasks.named("ktlintMainSourceSetCheck").configure { enabled = false }
 }
 
 tasks.withType<Test> {
