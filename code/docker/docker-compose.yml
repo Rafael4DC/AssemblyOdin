@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  postgresdb:
+    build:
+      context: ./DB/
+      dockerfile: Dockerfile-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pass123
+    ports:
+      - "5432:5432"
+    networks:
+      - backend-network
+
+  backend:
+    build:
+      context: ../backend/Odin
+      dockerfile: Dockerfile-backend
+    env_file:
+      - .env
+    depends_on:
+      - postgresdb
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+      - frontend-network
+
+  frontend:
+    build:
+      context: ../frontend/Tyr
+      dockerfile: Dockerfile-frontend
+    env_file:
+      - .env
+    ports:
+      - "1337:1337"
+    networks:
+      - frontend-network
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - frontend-network
+    depends_on:
+      - frontend
+      - backend
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge

@@ -1,0 +1,15 @@
+# Use an official Node.js image toResOrError build and run the app
+FROM node:14.18.1
+
+# Set working directory
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json /app/
+RUN npm install
+
+# Copy source files
+COPY . /app
+
+RUN ["npm", "run", "build"]
+CMD ["npm","start"]

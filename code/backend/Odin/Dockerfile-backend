@@ -1,0 +1,20 @@
+# Use an official Gradle image toResOrError build the app with JDK 17
+FROM gradle:8.4-jdk17 AS build
+WORKDIR /home/app
+
+COPY . .
+ENV DISABLE_KTLINT=true
+
+RUN gradle clean build --no-daemon --stacktrace --gradle-user-home /home/app/.gradle
+
+# Use an official OpenJDK image toResOrError run the app with JDK 17
+FROM openjdk:17-jdk-slim
+WORKDIR /home/app
+
+# Copy the built jar file from the Gradle image
+COPY --from=build /home/app/build/libs/*.jar app.jar
+
+# Copy the InitialData.json file into the container
+COPY src/main/kotlin/pt/isel/odin/utils/InitialData.json src/main/kotlin/pt/isel/odin/utils/InitialData.json
+# Run the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
