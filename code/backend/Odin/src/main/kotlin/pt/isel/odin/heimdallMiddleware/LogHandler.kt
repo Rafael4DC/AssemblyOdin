@@ -31,25 +31,33 @@ class LogHandler(
 
         //logger.info("Fetching logs, ${logs.size} entries found.")
 
+        //get the identifier for all the logs
         val logins = logs.filter { it.type == LogType.Login }.distinctBy { it.identifier }
 
+        //get all users from their identifiers
         val users: List<User> = logins
             .map { userRepository.findByEmail(it.identifier) }
             .filter { it.isPresent }
             .map { it.get() }
 
+
+        //group logs by identifier
         val groupedLogs: Map<String, List<BaseLog>> = logs.groupBy { it.identifier }
 
+
+        //associate each user with their logs
         val userLogMap: Map<User, List<BaseLog>> = users.associateWith { user ->
             groupedLogs[user.username.filterNot { it.isWhitespace() }].orEmpty() + groupedLogs[user.email].orEmpty()
         }
 
        // logger.info("Fetching logs, ${userLogMap.size} done.")
 
-        var unprocessedLogs: List<BaseLog> = emptyList()
+        val unprocessedLogs: MutableList<BaseLog> = mutableListOf()
+
+        //for each user, pair logs and calculate points
         val processedLogs = userLogMap.flatMap { (user, logs) ->
             val (pairedLogs, unpairedLogs) = pairLogs(logs)
-            unprocessedLogs = unpairedLogs
+            unprocessedLogs += unpairedLogs
             val verifiedPairedLogs = verifyPairs(pairedLogs).map { pair ->
                 val points = calculatePoints(pair.logon.timestamp, pair.logout.timestamp)
                 ProcessedLog(user, points, pair.logon.timestamp to pair.logout.timestamp, pair.logon.machineName)
@@ -66,7 +74,11 @@ class LogHandler(
                 pLog.user
             )
             serviceUtils.changePointsToUser(creditLog,-pLog.pointValue)
+            logRepository.saveProcessedLog(pLog)
         }
+
+        val binLogs = logs.filterNot { it in unprocessedLogs }
+        binLogs.forEach { logRepository.deleteUnprocessed(it) }
     }
 
     fun pairLogs(logs: List<BaseLog>): Pair<List<LogPair>, List<BaseLog>> {
@@ -105,13 +117,5 @@ class LogHandler(
         val endInstant = end.toInstant(TimeZone.UTC)
         val duration = endInstant.minus(startInstant).inWholeMinutes
         return ceil(duration / 30.0).toInt()
-    }
-
-    fun storeUnprocessedLog(log: BaseLog) {
-        // logRepository.saveUnprocessedLog(log)
-    }
-
-    fun storeProcessedLog(log: ProcessedLog) {
-        // logRepository.saveProcessedLog(log)
     }
 }

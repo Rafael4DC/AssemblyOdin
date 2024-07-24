@@ -11,7 +11,7 @@ import pt.isel.odin.heimdallMiddleware.models.ProcessedLog
 class MongoRepo(
     private val mongoTemplate: MongoTemplate,
     @Value("\${spring.data.mongodb.collection-unprocessed}") private val unprocessedCollection: String,
-    @Value("\${spring.data.mongodb.collection-preprocessed}") private val preprocessedCollection: String,
+    @Value("\${spring.data.mongodb.collection-bin}") private val binCollection: String,
     @Value("\${spring.data.mongodb.collection-processed}") private val processedCollection: String
 ) {
 
@@ -20,7 +20,7 @@ class MongoRepo(
     }
 
     fun findAllPreprocessedLogs(): List<BaseLog> {
-        return mongoTemplate.findAll(BaseLog::class.java, preprocessedCollection)
+        return mongoTemplate.findAll(BaseLog::class.java, binCollection)
     }
 
     fun findAllProcessedLogs(): List<ProcessedLog> {
@@ -32,10 +32,15 @@ class MongoRepo(
     }
 
     fun savePreprocessedLog(log: BaseLog) {
-        mongoTemplate.save(log, preprocessedCollection)
+        mongoTemplate.save(log, binCollection)
     }
 
     fun saveProcessedLog(log: ProcessedLog) {
         mongoTemplate.save(log, processedCollection)
     }
+
+    fun deleteUnprocessed(log: BaseLog) {
+        mongoTemplate.remove(log, unprocessedCollection)
+    }
+
 }

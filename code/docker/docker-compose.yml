@@ -13,6 +13,16 @@ services:
     networks:
       - backend-network
 
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongoDB/scripts:/docker-entrypoint-initdb.d
+    networks:
+      - backend-network
+
   backend:
     build:
       context: ../backend/Odin
@@ -21,6 +31,7 @@ services:
       - .env
     depends_on:
       - postgresdb
+      - mongodb
     ports:
       - "8080:8080"
     networks:
