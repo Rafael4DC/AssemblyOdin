@@ -62,10 +62,11 @@ export default function Dashboard({children}: { children: React.ReactNode }) {
     };
 
     const handleLogout = () => {
-        fetch('http://localhost:8080/logout', {
+        fetch('api/logout', {
             method: 'POST',
             credentials: 'same-origin',
         }).then(() => {
+            document.cookie = 'JSESSIONID=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax;';
             window.location.href = '/';
         })
     };

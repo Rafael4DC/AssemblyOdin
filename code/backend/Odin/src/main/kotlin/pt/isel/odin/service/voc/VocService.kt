@@ -79,6 +79,7 @@ class VocService(
 
         return vocRepository.findById(updateVocInputModel.id)
             .map<CreationVocResult> { voc ->
+                serviceUtils.vocPointsToUser(user, updateVocInputModel, voc)
                 success(
                     vocRepository.save(
                         voc.copy(

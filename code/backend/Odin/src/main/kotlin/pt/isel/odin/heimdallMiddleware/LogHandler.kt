@@ -14,13 +14,14 @@ import pt.isel.odin.model.CreditLog
 import pt.isel.odin.model.user.User
 import pt.isel.odin.repository.CreditLogRepository
 import pt.isel.odin.repository.UserRepository
+import pt.isel.odin.service.ServiceUtils
 import kotlin.math.ceil
 
 @Service
 class LogHandler(
     private val logRepository: MongoRepo,
     private val userRepository: UserRepository,
-    private val creditLogRepository: CreditLogRepository
+    private val serviceUtils: ServiceUtils
 ) {
 
     private val logger = LoggerFactory.getLogger(LogHandler::class.java)
@@ -28,7 +29,7 @@ class LogHandler(
     fun calculateUserLogonTime() {
         val logs: List<BaseLog> = logRepository.findAllUnprocessedLogs().map { BaseLog(it) }
 
-        logger.info("Fetching logs, ${logs.size} entries found.")
+        //logger.info("Fetching logs, ${logs.size} entries found.")
 
         val logins = logs.filter { it.type == LogType.Login }.distinctBy { it.identifier }
 
@@ -43,7 +44,7 @@ class LogHandler(
             groupedLogs[user.username.filterNot { it.isWhitespace() }].orEmpty() + groupedLogs[user.email].orEmpty()
         }
 
-        logger.info("Fetching logs, ${userLogMap.size} done.")
+       // logger.info("Fetching logs, ${userLogMap.size} done.")
 
         var unprocessedLogs: List<BaseLog> = emptyList()
         val processedLogs = userLogMap.flatMap { (user, logs) ->
@@ -57,15 +58,14 @@ class LogHandler(
         }
 
         processedLogs.forEach { pLog ->
-            creditLogRepository.save(
-                CreditLog(
-                    null,
-                    "Points added for gaming",
-                    pLog.pointValue,
-                    pLog.timestamp.second.toJavaLocalDateTime(),
-                    pLog.user
-                )
+            val creditLog = CreditLog(
+                null,
+                "Points removed due to gaming",
+                pLog.pointValue,
+                pLog.timestamp.second.toJavaLocalDateTime(),
+                pLog.user
             )
+            serviceUtils.changePointsToUser(creditLog,-pLog.pointValue)
         }
     }
 
