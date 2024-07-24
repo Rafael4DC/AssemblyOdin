@@ -35,12 +35,11 @@ class DataInitializer(
                 val mapper = jacksonObjectMapper()
                 val data: InitialData = mapper.readValue(File(dataFilePath))
                 dataPopulationService.populateData(data)
-            } else if (rolePopulationService.roleRepository.count() == 0L) {
+            }
+            if (rolePopulationService.roleRepository.count() == 0L) {
                 val mapper = jacksonObjectMapper()
                 val data: InitialData = mapper.readValue(File(dataFilePath))
                 rolePopulationService.populateRoles(data)
-            } else {
-                println("Data already populated")
             }
         }
     }
