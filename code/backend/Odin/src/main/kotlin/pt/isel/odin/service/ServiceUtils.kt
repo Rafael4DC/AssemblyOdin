@@ -54,13 +54,7 @@ class ServiceUtils(
 
     fun changePointsToUser(clog: CreditLog, credits:Int) {
         userRepository.save(clog.user.copy(credits = clog.user.credits + clog.value))
-        creditLogRepository.save(CreditLog(
-            null,
-            "Points added for class",
-            1,
-            LocalDateTime.now(),
-            clog.user
-        ))
+        creditLogRepository.save(clog)
     }
 
 }

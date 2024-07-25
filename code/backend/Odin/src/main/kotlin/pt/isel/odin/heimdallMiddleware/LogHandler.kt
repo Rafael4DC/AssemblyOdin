@@ -47,10 +47,12 @@ class LogHandler(
 
         //associate each user with their logs
         val userLogMap: Map<User, List<BaseLog>> = users.associateWith { user ->
-            groupedLogs[user.username.filterNot { it.isWhitespace() }].orEmpty() + groupedLogs[user.email].orEmpty()
+            val logs = groupedLogs[user.username.filterNot { it.isWhitespace() }].orEmpty() + groupedLogs[user.email].orEmpty()
+            logs.forEach { logRepository.deleteUnprocessed(it) }
+            logs
         }
 
-       // logger.info("Fetching logs, ${userLogMap.size} done.")
+       //logger.info("Fetching logs, ${userLogMap.size} done.")
 
         val unprocessedLogs: MutableList<BaseLog> = mutableListOf()
 
@@ -69,7 +71,7 @@ class LogHandler(
             val creditLog = CreditLog(
                 null,
                 "Points removed due to gaming",
-                pLog.pointValue,
+                -pLog.pointValue,
                 pLog.timestamp.second.toJavaLocalDateTime(),
                 pLog.user
             )
@@ -78,7 +80,10 @@ class LogHandler(
         }
 
         val binLogs = logs.filterNot { it in unprocessedLogs }
-        binLogs.forEach { logRepository.deleteUnprocessed(it) }
+
+        logger.info("Fetching logs, ${unprocessedLogs.size} up found.")
+        logger.info("Fetching logs, ${binLogs.size} bin found.")
+        //binLogs
     }
 
     fun pairLogs(logs: List<BaseLog>): Pair<List<LogPair>, List<BaseLog>> {

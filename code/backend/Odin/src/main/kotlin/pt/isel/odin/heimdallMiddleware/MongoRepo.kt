@@ -1,11 +1,14 @@
 package pt.isel.odin.heimdallMiddleware
 
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Repository
 import pt.isel.odin.heimdallMiddleware.models.BaseLog
 import pt.isel.odin.heimdallMiddleware.models.BaseLogInputModel
 import pt.isel.odin.heimdallMiddleware.models.ProcessedLog
+
 
 @Repository
 class MongoRepo(
@@ -42,5 +45,6 @@ class MongoRepo(
     fun deleteUnprocessed(log: BaseLog) {
         mongoTemplate.remove(log, unprocessedCollection)
     }
+
 
 }

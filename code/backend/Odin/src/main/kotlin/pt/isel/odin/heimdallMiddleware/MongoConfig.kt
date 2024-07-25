@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 @Configuration
-@EnableMongoRepositories(basePackages = ["pt.isel.odin"])
+@EnableMongoRepositories(basePackages = ["pt.isel.odin.heimdallMiddleware"])
 class MongoConfig : AbstractMongoClientConfiguration() {
 
     @Value("\${spring.data.mongodb.uri}")
